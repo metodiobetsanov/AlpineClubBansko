@@ -1,0 +1,78 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{5E078E9D-18FD-497C-A717-CCBFD5E5EBC3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlpineClubBansko.Web", "Web\AlpineClubBansko.Web\AlpineClubBansko.Web.csproj", "{0CC49FAF-287A-476A-AC2C-A669221D109A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{3018E3BF-4621-4CB0-ACD0-6281B221E322}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlpineClubBansko.Data", "Data\AlpineClubBansko.Data\AlpineClubBansko.Data.csproj", "{51C3793F-D8F5-4CD3-8003-96CD1B5A261E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlpineClubBansko.Data.Models", "Data\AlpineClubBansko.Data.Models\AlpineClubBansko.Data.Models.csproj", "{92EEBF68-AB7C-4A6C-A40F-A9C98630B4D8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{1E566D08-F5FE-4C0B-A42E-DB7AB93DCE99}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{15B96377-6E9B-47AC-9679-340DA983A42D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlpineClubBansko.Services", "Services\AlpineClubBansko.Services\AlpineClubBansko.Services.csproj", "{A3AC79D6-4811-45F8-920B-0C11743017D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlpineClubBansko.Services.Models", "Services\AlpineClubBansko.Services.Models\AlpineClubBansko.Services.Models.csproj", "{64F9BF04-24D4-48D9-9FF0-3B3CFCD840AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlpineClubBansko.Services.Mapping", "Services\AlpineClubBansko.Services.Mapping\AlpineClubBansko.Services.Mapping.csproj", "{B5B34A66-99E7-4E65-94EF-DE10EEE44F15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlpineClubBansko.Servies.Test", "Tests\AlpineClubBansko.Servies.Test\AlpineClubBansko.Servies.Test.csproj", "{E022A0CB-62C3-4D47-9E8D-80DD8550B974}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0CC49FAF-287A-476A-AC2C-A669221D109A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CC49FAF-287A-476A-AC2C-A669221D109A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CC49FAF-287A-476A-AC2C-A669221D109A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CC49FAF-287A-476A-AC2C-A669221D109A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51C3793F-D8F5-4CD3-8003-96CD1B5A261E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51C3793F-D8F5-4CD3-8003-96CD1B5A261E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51C3793F-D8F5-4CD3-8003-96CD1B5A261E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51C3793F-D8F5-4CD3-8003-96CD1B5A261E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92EEBF68-AB7C-4A6C-A40F-A9C98630B4D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92EEBF68-AB7C-4A6C-A40F-A9C98630B4D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92EEBF68-AB7C-4A6C-A40F-A9C98630B4D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92EEBF68-AB7C-4A6C-A40F-A9C98630B4D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3AC79D6-4811-45F8-920B-0C11743017D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3AC79D6-4811-45F8-920B-0C11743017D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3AC79D6-4811-45F8-920B-0C11743017D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3AC79D6-4811-45F8-920B-0C11743017D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64F9BF04-24D4-48D9-9FF0-3B3CFCD840AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64F9BF04-24D4-48D9-9FF0-3B3CFCD840AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64F9BF04-24D4-48D9-9FF0-3B3CFCD840AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64F9BF04-24D4-48D9-9FF0-3B3CFCD840AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5B34A66-99E7-4E65-94EF-DE10EEE44F15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5B34A66-99E7-4E65-94EF-DE10EEE44F15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5B34A66-99E7-4E65-94EF-DE10EEE44F15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5B34A66-99E7-4E65-94EF-DE10EEE44F15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E022A0CB-62C3-4D47-9E8D-80DD8550B974}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E022A0CB-62C3-4D47-9E8D-80DD8550B974}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E022A0CB-62C3-4D47-9E8D-80DD8550B974}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E022A0CB-62C3-4D47-9E8D-80DD8550B974}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0CC49FAF-287A-476A-AC2C-A669221D109A} = {5E078E9D-18FD-497C-A717-CCBFD5E5EBC3}
+		{51C3793F-D8F5-4CD3-8003-96CD1B5A261E} = {3018E3BF-4621-4CB0-ACD0-6281B221E322}
+		{92EEBF68-AB7C-4A6C-A40F-A9C98630B4D8} = {3018E3BF-4621-4CB0-ACD0-6281B221E322}
+		{A3AC79D6-4811-45F8-920B-0C11743017D5} = {15B96377-6E9B-47AC-9679-340DA983A42D}
+		{64F9BF04-24D4-48D9-9FF0-3B3CFCD840AD} = {15B96377-6E9B-47AC-9679-340DA983A42D}
+		{B5B34A66-99E7-4E65-94EF-DE10EEE44F15} = {15B96377-6E9B-47AC-9679-340DA983A42D}
+		{E022A0CB-62C3-4D47-9E8D-80DD8550B974} = {1E566D08-F5FE-4C0B-A42E-DB7AB93DCE99}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0EFEF8EF-A734-45D3-AA2E-AE1AC882EB32}
+	EndGlobalSection
+EndGlobal
