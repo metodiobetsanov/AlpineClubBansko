@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <UserSecretsId>aspnet-AlpineClubBansko.Web-EEBD8795-FB85-4A64-9BD4-AA3F6742BFF9</UserSecretsId>
+    <UserSecretsId>aspnet-AlpineClubBansko.Web-851D6934-3769-4806-9B6A-931E2C8078AE</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-    <ApplicationInsightsResourceId>/subscriptions/10b6c03a-36cd-47f4-8c4e-139f1e35ebb9/resourcegroups/acb-rg/providers/microsoft.insights/components/alpineclubbansko</ApplicationInsightsResourceId>
-    <ApplicationInsightsAnnotationResourceId>/subscriptions/10b6c03a-36cd-47f4-8c4e-139f1e35ebb9/resourcegroups/acb-rg/providers/microsoft.insights/components/alpineclubbansko</ApplicationInsightsAnnotationResourceId>
+    <ApplicationInsightsResourceId>/subscriptions/10b6c03a-36cd-47f4-8c4e-139f1e35ebb9/resourcegroups/acb-rg/providers/microsoft.insights/components/AlpineClubBanskoWeb</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/10b6c03a-36cd-47f4-8c4e-139f1e35ebb9/resourcegroups/acb-rg/providers/microsoft.insights/components/AlpineClubBanskoWeb</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
 
 
@@ -13,7 +13,6 @@
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
   </ItemGroup>
 
 

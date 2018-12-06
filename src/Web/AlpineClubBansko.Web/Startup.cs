@@ -11,9 +11,9 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AlpineClubBansko.Data;
+using AlpineClubBansko.Data.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using AlpineClubBansko.Data.Models;
 
 namespace AlpineClubBansko.Web
 {
@@ -52,8 +52,6 @@ namespace AlpineClubBansko.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -74,10 +72,6 @@ namespace AlpineClubBansko.Web
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
-                   name: "area",
-                   template: "{area:exists}/{controller}/{action}/{id?}");
-
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
