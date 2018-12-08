@@ -8,7 +8,7 @@ namespace AlpineClubBansko.Data.Models
 
         public string Content { get; set; }
 
-        public virtual List<Photo> Photos { get; set; }
+        public virtual IEnumerable<Photo> Photos { get; set; }
 
         public int Rating { get; set; }
     }

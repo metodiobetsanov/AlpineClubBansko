@@ -1,5 +1,4 @@
 ﻿using AlpineClubBansko.Data.Models;
-using AlpineClubBansko.Services.Extensions;
 using AlpineClubBansko.Services.Contracts;
 using AlpineClubBansko.Services.Models.StoryViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -27,7 +26,7 @@ namespace AlpineClubBansko.Web.Controllers.Stories
         {
             List<StoryViewModel> list = this.storyService.GetAllStories().ToList();
 
-            list.ForEach(i => i.Content = i.Content.StorySubstring(300));
+            list.ForEach(i => i.Content.Substring(1, 10));
 
             return View(list);
         }
@@ -48,14 +47,14 @@ namespace AlpineClubBansko.Web.Controllers.Stories
                 User user = await this.userManager.GetUserAsync(User);
                 string storyId = await storyService.CreateAsync(model, user);
 
-                return Redirect($"/Stories/Details/{storyId}");
+                return Redirect($"/Stories/Read/{storyId}");
             }
 
             return View(model);
         }
 
         [HttpGet]
-        public IActionResult Details(string id)
+        public IActionResult Read(string id)
         {
             StoryViewModel model = this.storyService.GetStoryById(id);
 
@@ -79,7 +78,7 @@ namespace AlpineClubBansko.Web.Controllers.Stories
             {
                 string storyId = await storyService.UpdateAsync(model);
 
-                return Redirect($"/Stories/Details/{storyId}");
+                return Redirect($"/Stories/Read/{storyId}");
             }
 
             return View(model);
