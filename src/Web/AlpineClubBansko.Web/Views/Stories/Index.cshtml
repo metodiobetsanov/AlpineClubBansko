@@ -1,24 +1,26 @@
-﻿@using AlpineClubBansko.Data.Models
+﻿@model List<AlpineClubBansko.Services.Models.StoryViewModels.StoryViewModel>
+
+@using AlpineClubBansko.Data.Models
 @using Microsoft.AspNetCore.Identity
-@model List<AlpineClubBansko.Services.Models.StoryViewModels.StoryViewModel>
 
 @inject SignInManager<User> SignInManager
 @{
     ViewData["Title"] = " - Истории - ";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <div class="container">
-    <div class="row">
+    <div class="row mt-5">
         <div class="col-8 offset-1 justify-content-start">
             <p class="blog-header">Готов ли си да разкаш твоя история?</p>
         </div>
         <div class="d-flex justify-content-end align-self-center">
-            <a asp-area="" asp-controller="Stories" asp-action="Create" class="btn btn-info">Разкажи история</a>
+            <a asp-area="" asp-controller="Stories" asp-action="Create" class="btn btn-info">Създай история</a>
         </div>
     </div>
 
-    <hr/>
-    <br/>
+    <hr />
+    <br />
 
     @if (Model != null)
     {
@@ -34,10 +36,10 @@
                         </div>
                         <div class="card-body">
 
-                            <p class="card-text text-justify text-truncate text-story">@story.Content</p>
+                            <p class="card-text text-justify text-story">@story.Content</p>
                         </div>
                         <div class="card-footer text-right">
-                            <small class="text-muted">@Html.ActionLink("Покажи цялата", "Read", "Stories", new {id = story.Id})</small>
+                            <small class="text-muted">@Html.ActionLink("Покажи цялата", "Read", "Stories", new { id = story.Id })</small>
                         </div>
                     </div>
                 </div>
