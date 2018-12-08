@@ -1,7 +1,6 @@
 ﻿using AlpineClubBansko.Data.Models;
-using AlpineClubBansko.Services.Extensions;
 using AlpineClubBansko.Services.Contracts;
-using AlpineClubBansko.Services.Models.StoryViewModels;
+using AlpineClubBansko.Services.Models.AlbumViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,27 +8,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AlpineClubBansko.Web.Controllers.Stories
+namespace AlpineClubBansko.Web.Controllers.Albums
 {
-    public class StoriesController : Controller
+    public class AlbumsController : Controller
     {
-        private readonly IStoryService storyService;
+        private readonly IAlbumService albumService;
         private readonly UserManager<User> userManager;
 
-        public StoriesController(IStoryService storyService,
+        public AlbumsController(IAlbumService albumService,
             UserManager<User> userManager)
         {
-            this.storyService = storyService;
+            this.albumService = albumService;
             this.userManager = userManager;
         }
-
+        
+        [HttpGet]
         public IActionResult Index()
         {
-            List<StoryViewModel> list = this.storyService.GetAllStories().ToList();
+           List<AlbumViewModel> list = albumService.GetAllAlbums().ToList();
 
-            list.ForEach(i => i.Content = i.Content.StorySubstring(300));
-
-            return View(list);
+           return View(list);
         }
 
         [HttpGet]
@@ -41,14 +39,14 @@ namespace AlpineClubBansko.Web.Controllers.Stories
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Create(StoryViewModel model)
+        public async Task<IActionResult> Create(AlbumViewModel model)
         {
             if (this.ModelState.IsValid)
             {
                 User user = await this.userManager.GetUserAsync(User);
-                string storyId = await storyService.CreateAsync(model, user);
+                string albumId = await this.albumService.CreateAsync(model, user);
 
-                return Redirect($"/Stories/Details/{storyId}");
+                return Redirect($"/Albums/Details/{albumId}");
             }
 
             return View(model);
@@ -57,7 +55,7 @@ namespace AlpineClubBansko.Web.Controllers.Stories
         [HttpGet]
         public IActionResult Details(string id)
         {
-            StoryViewModel model = this.storyService.GetStoryById(id);
+            AlbumViewModel model = this.albumService.GetAlbumById(id);
 
             return View(model);
         }
@@ -66,20 +64,20 @@ namespace AlpineClubBansko.Web.Controllers.Stories
         [Authorize]
         public IActionResult Update(string id)
         {
-            StoryViewModel model = this.storyService.GetStoryById(id);
+            AlbumViewModel model = this.albumService.GetAlbumById(id); 
 
             return View(model);
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Update(StoryViewModel model)
+        public async Task<IActionResult> Update(AlbumViewModel model)
         {
             if (this.ModelState.IsValid)
             {
-                string storyId = await storyService.UpdateAsync(model);
+                string albumId = await this.albumService.UpdateAsync(model);
 
-                return Redirect($"/Stories/Details/{storyId}");
+                return Redirect($"/Albums/Read/{albumId}");
             }
 
             return View(model);
@@ -89,9 +87,9 @@ namespace AlpineClubBansko.Web.Controllers.Stories
         [Authorize]
         public async Task<IActionResult> Delete(string id)
         {
-            await storyService.DeleteAsync(id);
+            await this.albumService.DeleteAsync(id);
 
-            return Redirect($"/Stories");
+            return Redirect($"/Albums");
         }
     }
 }

@@ -9,4 +9,8 @@
     <ProjectReference Include="..\AlpineClubBansko.Services.Mapping\AlpineClubBansko.Services.Mapping.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="AlbumViewModels\" />
+  </ItemGroup>
+
 </Project>

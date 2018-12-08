@@ -21,7 +21,7 @@ namespace AlpineClubBansko.Services
 
         public IEnumerable<StoryViewModel> GetAllStories()
         {
-            return this.storyRepository.All().To<StoryViewModel>().ToList();
+            return this.storyRepository.All().To<StoryViewModel>();
         }
 
         public StoryViewModel GetStoryById(string id)
@@ -38,7 +38,6 @@ namespace AlpineClubBansko.Services
             };
 
             await this.storyRepository.AddAsync(story);
-
             await this.storyRepository.SaveChangesAsync();
 
             return story.Id;
@@ -46,7 +45,7 @@ namespace AlpineClubBansko.Services
 
         public async Task<string> UpdateAsync(StoryViewModel model)
         {
-            Story story = this.storyRepository.All().FirstOrDefault(s => s.Id == model.Id);
+            Story story = this.storyRepository.GetById(model.Id);
             story.Title = model.Title;
             story.Content = model.Content;
             story.ModifiedOn = DateTime.UtcNow;
