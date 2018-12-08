@@ -4,4 +4,9 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\AlpineClubBansko.Data.Models\AlpineClubBansko.Data.Models.csproj" />
+    <ProjectReference Include="..\AlpineClubBansko.Services.Mapping\AlpineClubBansko.Services.Mapping.csproj" />
+  </ItemGroup>
+
 </Project>

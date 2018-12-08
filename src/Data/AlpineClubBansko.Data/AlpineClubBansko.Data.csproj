@@ -14,4 +14,10 @@
     <ProjectReference Include="..\AlpineClubBansko.Data.Models\AlpineClubBansko.Data.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Migrations\20181206192133_Initial.Designer.cs">
+      <DependentUpon>20181206192133_Initial.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>
