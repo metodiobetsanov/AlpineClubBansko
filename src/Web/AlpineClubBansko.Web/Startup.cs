@@ -15,6 +15,8 @@ using AlpineClubBansko.Data.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AlpineClubBansko.Data.Contracts;
+using AlpineClubBansko.Services;
+using AlpineClubBansko.Services.Contracts;
 using AlpineClubBansko.Services.Mapping;
 using AlpineClubBansko.Services.Models;
 
@@ -52,10 +54,12 @@ namespace AlpineClubBansko.Web
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<IStoryService, StoryService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+            public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             AutoMapperConfig.RegisterMappings(
                   typeof(ErrorViewModel).Assembly

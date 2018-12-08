@@ -1,0 +1,36 @@
+﻿@model AlpineClubBansko.Services.Models.StoryViewModels.StoryViewModel
+@{
+    ViewData["Title"] = "Разкажи твоята история";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <form asp-action="Create" method="post">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="blog-post pt-md-3">
+                    <h2 class="blog-post-title text-center">Разкажи твоята история</h2>
+                    <br/>
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Title"></label>
+                        <input asp-for="Title" class="form-control"/>
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Content"></label>
+                        <textarea asp-for="Content" rows="5" class="form-control"></textarea>
+                        <span asp-validation-for="Content" class="text-danger"></span>
+                    </div>
+                    <br/>
+                    <button type="submit" class="btn btn-info">Запиши</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}

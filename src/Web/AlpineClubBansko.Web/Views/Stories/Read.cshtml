@@ -1,0 +1,72 @@
+﻿@using AlpineClubBansko.Data.Models
+@using Microsoft.AspNetCore.Identity
+@model AlpineClubBansko.Services.Models.StoryViewModels.StoryViewModel
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@{
+    ViewData["Title"] = $" - {Model.Title} - ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    @if (TempData["OwnerError"] != null)
+    {
+        <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+            @TempData["OwnerError"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="blog-post pt-md-3">
+                <h2 class="blog-post-title">@Model.Title</h2>
+                <p class="blockquote-footer">Разказана от <a>@Model.Author</a> на @Model.CreatedOn</p>
+            </div>
+            <p class="text-justify text-story">@Html.Raw(Model.Content)</p>
+            <br/>
+            <nav class="blog-pagination row">
+                <div class="col-8">
+                </div>
+                <div class="col-4">
+                    @if (SignInManager.IsSignedIn(User) && Model.Author.ToString() == UserManager.GetUserName(User))
+                    {
+                        <div class="d-flex justify-content-end btn-group btn-group-sm">
+
+                            <a asp-area="" asp-controller="Stories" asp-action="Update" asp-route-id="@Model.Id" class="btn btn-info">Промени</a>
+                            <a class="btn btn-danger" data-toggle="modal" data-target="#confirmModal">
+                                Изтрий
+                            </a>
+                        </div>
+                    }
+                </div>
+            </nav>
+        </div>
+
+
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Внимание!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Изтриването на историята ще я премахне напълно и вече няма да бъде достъпна! Сигурен ли си, че искаш да продължиш?
+            </div>
+            <div class="modal-footer">
+                <div class="d-flex justify-content-end btn-group btn-group-sm">
+                    <a asp-area="" asp-controller="Stories" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Да</a>
+                    <a class="btn btn-info" data-dismiss="modal">Не</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

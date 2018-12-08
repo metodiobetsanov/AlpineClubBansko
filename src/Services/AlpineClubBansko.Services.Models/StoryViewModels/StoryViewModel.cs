@@ -1,20 +1,19 @@
 ﻿using AlpineClubBansko.Data.Models;
 using AlpineClubBansko.Services.Mapping.Contracts;
-using AutoMapper;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
-namespace AlpineClubBansko.Services.Models.StoryVM
+namespace AlpineClubBansko.Services.Models.StoryViewModels
 {
-    public class StoryViewModel : IMapFrom<Story>
+    public class StoryViewModel : IMapTo<Story>, IMapFrom<Story>
     {
         public string Id { get; set; }
 
-        public string Content { get; set; }
-
+        [Required]
         public string Title { get; set; }
+
+        [Required]
+        public string Content { get; set; }
 
         public User Author { get; set; }
 

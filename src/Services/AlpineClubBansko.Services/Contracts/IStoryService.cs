@@ -1,20 +1,19 @@
-﻿using AlpineClubBansko.Services.Models.StoryVM;
-using System;
+﻿using AlpineClubBansko.Data.Models;
+using AlpineClubBansko.Services.Models.StoryViewModels;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AlpineClubBansko.Services.Contracts
 {
-    interface IStoryService
+    public interface IStoryService
     {
         IEnumerable<StoryViewModel> GetAllStories();
 
         StoryViewModel GetStoryById(string id);
 
-        Task<int> CreateAsync(StoryViewModel model);
+        Task<string> CreateAsync(StoryViewModel model, User user);
 
-        Task<int> UpdateAsync(StoryViewModel model);
+        Task<string> UpdateAsync(StoryViewModel model);
 
         Task<int> DeleteAsync(string id);
     }

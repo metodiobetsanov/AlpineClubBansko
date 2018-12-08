@@ -20,10 +20,13 @@
     @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <header class="blog-header py-3">
+        <div class="text-center">
+            <span class="blog-header-logo text-dark">Алпийски клуб Банско</span>
+        </div>
+    </header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 sticky-top">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">AlpineClubBansko.Web</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -34,14 +37,26 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+                        <li class="nav-item d-none">
+                            <a class="nav-link" asp-area="" asp-controller="Activities" asp-action="Index">Събития</a>
+                        </li>
+                        <li class="nav-item d-none">
+                            <a class="nav-link" asp-area="" asp-controller="Routes" asp-action="Index">Преходи</a>
+                        </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" asp-area="" asp-controller="Stories" asp-action="Index">Истории</a>
+                        </li>
+                        <li class="nav-item d-none">
+                            <a class="nav-link" asp-area="" asp-controller="Albums" asp-action="Index">Снимки</a>
+                        </li>
+                        <li class="nav-item d-none">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">За Клуба</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-    </header>
+
     <div class="container">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
@@ -51,7 +66,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2018 - AlpineClubBansko.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2018 - Alpine Club Bansko - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 
