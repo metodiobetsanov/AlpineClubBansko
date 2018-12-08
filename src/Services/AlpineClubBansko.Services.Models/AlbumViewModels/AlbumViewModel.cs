@@ -16,7 +16,7 @@ namespace AlpineClubBansko.Services.Models.AlbumViewModels
         [Required]
         public string Content { get; set; }
 
-        public IEnumerable<Photo> Photos { get; set; }
+        public List<Photo> Photos { get; set; }
 
         public User Author { get; set; }
 
