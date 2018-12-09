@@ -50,6 +50,8 @@ namespace AlpineClubBansko.Web
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.Configure<AzureStorageConfig>(Configuration.GetSection("AzureStorageConfig"));
+
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 

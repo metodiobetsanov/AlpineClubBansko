@@ -13,6 +13,8 @@
 
         public string LocationUrl { get; set; }
 
+        public string ThumbnailUrl { get; set; }
+
         public int Rating { get; set; }
     }
 }
