@@ -13,7 +13,7 @@ namespace AlpineClubBansko.Data.Models
         public string AlbumId { get; set; }
         public virtual Album Album { get; set; }
 
-        public virtual IEnumerable<Location> Locations { get; set; }
+        public virtual List<Location> Locations { get; set; }
 
         public int Rating { get; set; }
     }
