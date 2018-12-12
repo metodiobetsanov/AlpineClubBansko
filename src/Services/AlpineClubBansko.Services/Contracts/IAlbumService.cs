@@ -12,6 +12,8 @@ namespace AlpineClubBansko.Services.Contracts
 
         AlbumViewModel GetAlbumById(string id);
 
+        Album GetAlbum(string id);
+
         Task<string> CreateAsync(AlbumViewModel model, User user);
 
         Task<string> UpdateAsync(AlbumViewModel model);

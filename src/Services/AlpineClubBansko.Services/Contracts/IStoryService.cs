@@ -11,6 +11,8 @@ namespace AlpineClubBansko.Services.Contracts
 
         StoryViewModel GetStoryById(string id);
 
+        Story GetStory(string id);
+
         Task<string> CreateAsync(StoryViewModel model, User user);
 
         Task<string> UpdateAsync(StoryViewModel model);

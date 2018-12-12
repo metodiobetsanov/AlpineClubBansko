@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace AlpineClubBansko.Services
 {
-    public class PhotoService
+    public class PhotoService : IPhotoService
     {
         private readonly IRepository<Photo> photoRepository;
         private readonly IAlbumService albumService;
@@ -30,10 +30,11 @@ namespace AlpineClubBansko.Services
             this.storageConfig = config.Value;
         }
 
-        public async Task<bool> UploadImages(IFormFile file, string albumId)
+        public async Task<bool> UploadImages(IFormFile file, Album album, User user)
         {
-            var isUploaded = false;
-            var counter = this.albumService.GetAlbumById(albumId).Photos.Count();
+            bool isUploaded = false;
+            int counter = album.Photos == null ? 0 : album.Photos.Count();
+            string albumId = album.Id;
 
             if (this.IsImage(file) && file.Length > 0)
             {
@@ -52,7 +53,8 @@ namespace AlpineClubBansko.Services
                 {
                     var photo = new Photo
                     {
-                        AlbumId = albumId,
+                        Album = album,
+                        Author = user,
                         LocationUrl = $"https://acbimagestorage.blob.core.windows.net/{albumId}/{name}",
                         ThumbnailUrl = $"https://acbimagestorage.blob.core.windows.net/{albumId}/thumbnail_{name}",
                     };

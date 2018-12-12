@@ -15,7 +15,7 @@
         @foreach (var photo in Model.Photos)
         {
             <a href="@photo.LocationUrl">
-                <img src="img/thumb1.jpg" />
+                <img src="@photo.ThumbnailUrl" />
             </a>
         }
     </div>

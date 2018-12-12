@@ -24,6 +24,11 @@ namespace AlpineClubBansko.Services
             return this.storyRepository.All().To<StoryViewModel>();
         }
 
+        public Story GetStory(string id)
+        {
+            return this.storyRepository.GetById(id);
+        }
+
         public StoryViewModel GetStoryById(string id)
         {
             return this.GetAllStories().FirstOrDefault(s => s.Id == id);

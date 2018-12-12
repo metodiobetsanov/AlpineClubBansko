@@ -25,6 +25,11 @@ namespace AlpineClubBansko.Services
             return this.albumRepository.All().To<AlbumViewModel>();
         }
 
+        public Album GetAlbum(string id)
+        {
+            return this.albumRepository.GetById(id);
+        }
+
         public AlbumViewModel GetAlbumById(string id)
         {
             return this.GetAllAlbums().FirstOrDefault(a => a.Id == id);
