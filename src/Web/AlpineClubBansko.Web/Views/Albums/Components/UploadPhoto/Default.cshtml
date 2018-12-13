@@ -1,0 +1,56 @@
+﻿@model AlpineClubBansko.Services.Models.AlbumViewModels.PhotoViewModel
+
+<a class="btn bg-white" data-toggle="modal" data-target="#uploadPhoto" alt="Добави снимка">
+    <i class="fas fa-2x fa-cloud-upload-alt text-info"></i>
+</a>
+
+<div class="modal fade" id="uploadPhoto" tabindex="-1" role="dialog" aria-labelledby="uploadPhoto" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Добави снимка към албум</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="container">
+                <form id="FileUploadForm" action="/Albums/Upload"
+                      data-ajax="true"
+                      data-ajax-method="post"
+                      data-ajax-update="#gallery"
+                      data-ajax-success="Success"
+                      data-ajax-failure="Failure"
+                      enctype="multipart/form-data">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Title"></label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Content"></label>
+                        <input asp-for="Content" class="form-control" />
+                        <span asp-validation-for="Content" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Photographer"></label>
+                        <input asp-for="Photographer" class="form-control" />
+                        <span asp-validation-for="Photographer" class="text-danger"></span>
+                    </div>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" name="file" class="custom-file-input" id="inputGroupFile04">
+                            <label class="custom-file-label" for="inputGroupFile04">Снимка</label>
+                        </div>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-info" type="submit" >Качи</button>
+                        </div>
+                    </div>
+                    <input name="albumid" value="@Model.Album.Id" hidden />
+
+                </form>
+                <br />
+            </div>
+        </div>
+    </div>
+</div>

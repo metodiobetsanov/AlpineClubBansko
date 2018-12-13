@@ -1,4 +1,5 @@
 ﻿using AlpineClubBansko.Data.Models;
+using AlpineClubBansko.Services.Models.AlbumViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System;
@@ -11,6 +12,6 @@ namespace AlpineClubBansko.Services.Contracts
 {
     public interface IPhotoService
     {
-        Task<bool> UploadImages(IFormFile file, Album album, User user);
+        Task<bool> UploadImages(IFormFile file, PhotoViewModel model);
     }
 }

@@ -25,7 +25,7 @@ namespace AlpineClubBansko.Data.Models
 
         [ProtectedPersonalData] public string Country { get; set; }
 
-        public Level Level { get; set; }
+        public virtual Level Level { get; set; }
 
         public virtual List<Story> Stories { get; set; }
 

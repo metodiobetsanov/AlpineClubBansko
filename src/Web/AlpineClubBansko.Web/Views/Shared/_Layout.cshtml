@@ -14,10 +14,11 @@
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
               crossorigin="anonymous"
-              integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE="/>
+              integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" />
     </environment>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
     <link rel="stylesheet" href="~/css/site.css" />
-    @Html.Raw(JavaScriptSnippet.FullScript)
+    <link href="~/lib/lightgallery/dist/css/lightgallery.min.css" rel="stylesheet" />
 </head>
 <body>
     <header class="blog-header py-3">
@@ -25,41 +26,41 @@
             <span class="blog-header-logo text-dark">Алпийски клуб Банско</span>
         </div>
     </header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 sticky-top">
-            <div class="container">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item d-none">
-                            <a class="nav-link" asp-area="" asp-controller="Activities" asp-action="Index">Събития</a>
-                        </li>
-                        <li class="nav-item d-none">
-                            <a class="nav-link" asp-area="" asp-controller="Routes" asp-action="Index">Преходи</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Stories" asp-action="Index">Истории</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Albums" asp-action="Index">Албуми</a>
-                        </li>
-                        <li class="nav-item d-none">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">За Клуба</a>
-                        </li>
-                    </ul>
-                </div>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 sticky-top">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <partial name="_LoginPartial" />
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Начало</a>
+                    </li>
+                    <li class="nav-item d-none">
+                        <a class="nav-link" asp-area="" asp-controller="Activities" asp-action="Index">Събития</a>
+                    </li>
+                    <li class="nav-item d-none">
+                        <a class="nav-link" asp-area="" asp-controller="Routes" asp-action="Index">Преходи</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Stories" asp-action="Index">Истории</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Albums" asp-action="Index">Албуми</a>
+                    </li>
+                    <li class="nav-item d-none">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">За Клуба</a>
+                    </li>
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
 
     <div class="container">
         <partial name="_CookieConsentPartial" />
-        <main role="main" class="pb-3">
+        <main role="main" class="container-fluid">
             @RenderBody()
         </main>
     </div>
@@ -89,7 +90,8 @@
         </script>
     </environment>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
+    <script src="~/lib/lightgallery/dist/js/lightgallery-all.js"></script>
     @RenderSection("Scripts", required: false)
+
 </body>
 </html>

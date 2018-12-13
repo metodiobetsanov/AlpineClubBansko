@@ -2,6 +2,7 @@
 using AlpineClubBansko.Data.Models;
 using AlpineClubBansko.Services.Contracts;
 using AlpineClubBansko.Services.Models;
+using AlpineClubBansko.Services.Models.AlbumViewModels;
 using ImageMagick;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -30,15 +31,15 @@ namespace AlpineClubBansko.Services
             this.storageConfig = config.Value;
         }
 
-        public async Task<bool> UploadImages(IFormFile file, Album album, User user)
+        public async Task<bool> UploadImages(IFormFile file, PhotoViewModel model)
         {
             bool isUploaded = false;
-            int counter = album.Photos == null ? 0 : album.Photos.Count();
-            string albumId = album.Id;
+            int counter = model.Album.Photos == null ? 0 : model.Album.Photos.Count();
+            string albumId = model.Album.Id;
 
             if (this.IsImage(file) && file.Length > 0)
             {
-                var name = $"{albumId}-{++counter}.{file.FileName.Split(".")[1]}";
+                var name = $"{albumId}-{++counter}.{file.FileName.Split(".").Last()}";
 
                 using (var stream = file.OpenReadStream())
                 {
@@ -53,8 +54,11 @@ namespace AlpineClubBansko.Services
                 {
                     var photo = new Photo
                     {
-                        Album = album,
-                        Author = user,
+                        Title = model.Title,
+                        Content = model.Content,
+                        Photographer = model.Photographer,
+                        Album = model.Album,
+                        Author = model.Author,
                         LocationUrl = $"https://acbimagestorage.blob.core.windows.net/{albumId}/{name}",
                         ThumbnailUrl = $"https://acbimagestorage.blob.core.windows.net/{albumId}/thumbnail_{name}",
                     };
@@ -99,8 +103,10 @@ namespace AlpineClubBansko.Services
 
             using (var image = new MagickImage(fileStream))
             {
-                image.Resize(300, 300);
-                image.Strip();
+                MagickGeometry size = new MagickGeometry(200);
+                size.IgnoreAspectRatio = true;
+
+                image.Resize(size);
                 image.Quality = 75;
                 thumbnail = image.ToByteArray();
             }

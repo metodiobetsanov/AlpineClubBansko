@@ -1,0 +1,16 @@
+﻿@model List<Photo>
+
+@using AlpineClubBansko.Data.Models
+
+@if (Model != null)
+{
+   
+        @foreach (var photo in Model)
+        {
+
+            <a href="@photo.LocationUrl" class="col-lg-2 col-md-4 col-sm-6 mb-3" data-sub-html="#@photo.Id">
+                <img src="@photo.ThumbnailUrl" class="img-fluid img-thumbnail" />
+            </a>
+
+        }
+}

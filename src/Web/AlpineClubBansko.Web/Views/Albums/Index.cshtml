@@ -8,7 +8,7 @@
 <div class="container">
     <div class="row mt-5">
         <div class="col-8 offset-1 justify-content-start">
-            <p class="blog-header">ala-bala</p>
+            <p class="blog-header">Сподели спомен от твое приклчение</p>
         </div>
         <div class="d-flex justify-content-end align-self-center">
             <a asp-area="" asp-controller="Albums" asp-action="Create" class="btn btn-info">Създай албум</a>
@@ -27,9 +27,11 @@
         <div class="card-deck">
             @foreach (var album in Model)
             {
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-md-5 mb-lg-5">
+                <div class="col-sm-6 col-md-6 col-lg-4 mb-md-5 mb-lg-5">
                     <div class="card">
-                        <img class="card-img-top" src="@album.Photos.FirstOrDefault()" alt="Card image cap">
+                        <a asp-controller="Albums" asp-action="Details" asp-route-id="@album.Id">
+                            <img class="card-img-top img-fluid" src="@album.Cover" alt="Card image cap">
+                        </a>
                         <div class="card-body pb-0">
                             <h5 class="card-title">@album.Title</h5>
                             <p class="blockquote-footer text-right">Създаден от <a href="/Users/Profile/@album.Author">@album.Author</a></p>

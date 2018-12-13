@@ -5,19 +5,48 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="row">
-    @Model.Id
-    @Model.Photos.Count()
-    <a asp-controller="Albums" asp-action="Upload" asp-route-id="@Model.Id">upload</a>
-    @if (Model.Photos != null)
-    {
-    <div id="lightgallery">
-        @foreach (var photo in Model.Photos)
-        {
-            <a href="@photo.LocationUrl">
-                <img src="@photo.ThumbnailUrl" />
-            </a>
-        }
+<div class="container-fluid pt-3 pb-3 mt-2 mb-2 ">
+    <div class="row justify-content-center">
+        <h2 class="text-center mb-2">@Model.Title</h2>
     </div>
-    }
+    <div class="row mt-3 mb-3">
+        <div class="col-12 col-sm-6 d-flex align-items-center">
+            @await Component.InvokeAsync("UploadPhoto", new { albumId = Model.Id })
+        </div>
+        <div class="col-12 col-sm-6 d-flex flex-column">
+            <span class="blockquote-footer ml-auto">
+                Създаден от
+                <a href="/Users/Profile/@Model.Author">
+                    @Model.Author
+                </a>
+                на @Model.CreatedOn.ToString("d.MM.yyyy г.")
+            </span>
+            <span class="text-muted ml-auto">
+                @Model.Rating харесвания | <a href="#"><i class="far fa-heart"></i></a>
+            </span>
+        </div>
+    </div>
 </div>
+
+<div class="justify-content-center mb-4">
+    <div id="gallery" class="row align-items-center">
+        @await Component.InvokeAsync("ViewPhotos", new { list = Model.Photos })
+        </div>
+    </div>
+    @section Scripts {
+
+        <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#gallery").lightGallery();
+            });
+        </script>
+        <script>
+            Success = function () {
+                $('#uploadPhoto').modal('hide');
+                $("#gallery").data("lightGallery").destroy(true);
+                $("#gallery").lightGallery();
+            };
+        </script>
+
+    }

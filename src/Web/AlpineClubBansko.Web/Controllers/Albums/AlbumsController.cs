@@ -97,40 +97,27 @@ namespace AlpineClubBansko.Web.Controllers.Albums
             return Redirect($"/Albums");
         }
 
-        [HttpGet]
-        [Authorize]
-        public IActionResult Upload(string id) {
-
-            var model = this.albumService.GetAlbumById(id);
-
-            return this.View(model);
-        }
-
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Upload(ICollection<IFormFile> files,  string id)
+        public async Task<ViewComponentResult> Upload(IFormFile file,  PhotoViewModel model, string albumId)
         {
             bool isUploaded = false;
+            
+            model.Author = await this.userManager.GetUserAsync(User);
+            model.Album = this.albumService.GetAlbum(albumId);
 
-            User user = await this.userManager.GetUserAsync(User);
-            Album album = this.albumService.GetAlbum(id);
             try
             {
-                foreach (var file in files)
-                {
-                    isUploaded = await this.photoService.UploadImages(file, album, user);
-                }
-
-                if (!isUploaded)
-                {
-                    return this.View();
-                }
+                isUploaded = await this.photoService.UploadImages(file, model);
             }
             catch(Exception e)
             {
-                return BadRequest(e.Message);
+                return null;
             }
-            return Ok();
+
+            AlbumViewModel album = this.albumService.GetAlbumById(albumId);
+
+            return ViewComponent("ViewPhotos", album.Photos);
         }
     }
 }
