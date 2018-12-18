@@ -48,14 +48,14 @@ namespace AlpineClubBansko.Web.Controllers.Stories
                 User user = await this.userManager.GetUserAsync(User);
                 string storyId = await storyService.CreateAsync(model, user);
 
-                return Redirect($"/Stories/Details/{storyId}");
+                return Redirect($"/Stories/Read/{storyId}");
             }
 
             return View(model);
         }
 
         [HttpGet]
-        public IActionResult Details(string id)
+        public IActionResult Read(string id)
         {
             StoryViewModel model = this.storyService.GetStoryById(id);
 
@@ -79,7 +79,7 @@ namespace AlpineClubBansko.Web.Controllers.Stories
             {
                 string storyId = await storyService.UpdateAsync(model);
 
-                return Redirect($"/Stories/Details/{storyId}");
+                return Redirect($"/Stories/Read/{storyId}");
             }
 
             return View(model);

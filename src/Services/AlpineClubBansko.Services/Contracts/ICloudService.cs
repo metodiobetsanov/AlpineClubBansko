@@ -10,8 +10,14 @@ using System.Threading.Tasks;
 
 namespace AlpineClubBansko.Services.Contracts
 {
-    public interface IPhotoService
+    public interface ICloudService
     {
-        Task<bool> UploadImages(IFormFile file, PhotoViewModel model);
+        Task<bool> UploadImage(IFormFile file, PhotoViewModel model);
+
+        Task<bool> DeleteImage(string photoId);
+
+        Task CreateContainer(string name);
+
+        Task<bool> DeleteContainer(string name);
     }
 }

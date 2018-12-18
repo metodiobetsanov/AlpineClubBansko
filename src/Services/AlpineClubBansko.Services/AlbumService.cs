@@ -14,9 +14,12 @@ namespace AlpineClubBansko.Services
     public class AlbumService : IAlbumService
     {
         private readonly IRepository<Album> albumRepository;
+        private readonly ICloudService cloudService;
 
-        public AlbumService(IRepository<Album> albumRepository)
+        public AlbumService(IRepository<Album> albumRepository,
+            ICloudService cloudService)
         {
+            this.cloudService = cloudService;
             this.albumRepository = albumRepository;
         }
 
@@ -47,6 +50,8 @@ namespace AlpineClubBansko.Services
             await this.albumRepository.AddAsync(album);
             await this.albumRepository.SaveChangesAsync();
 
+            await this.cloudService.CreateContainer(album.Id);
+
             return album.Id;
         }
 
@@ -68,42 +73,19 @@ namespace AlpineClubBansko.Services
         {
             Album album = this.albumRepository.GetById(id);
 
+            if (album.Photos != null || album.Photos.Count > 0)
+            {
+                foreach (var photo in album.Photos.ToList())
+                {
+                    await this.cloudService.DeleteImage(photo.Id);
+                }
+            }
+
+            await this.cloudService.DeleteContainer(id);
+
             this.albumRepository.Delete(album);
 
             return await this.albumRepository.SaveChangesAsync();
         }
-
-        //public async Task<bool> UploadImages(ICollection<IFormFile> files, string id)
-        //{
-        //    var isUploaded = false;
-        //    var counter = GetById(id).Photos.Count();
-
-        //    foreach (var formFile in files)
-        //        if (_uploadService.IsImage(formFile))
-        //            if (formFile.Length > 0)
-        //            {
-        //                var name = $"{id}-{++counter}.{formFile.FileName.Split(".")[1]}";
-
-        //                using (var stream = formFile.OpenReadStream())
-        //                {
-        //                    isUploaded = await _uploadService.UploadFileToStorage(
-        //                        stream,
-        //                        name,
-        //                        _storageConfig
-        //                    );
-        //                }
-
-        //                var photo = new Photo
-        //                {
-        //                    AlbumId = id,
-        //                    LocationUrl = $"https://alpineclubbanskofs.blob.core.windows.net/images/{name}"
-        //                };
-
-        //                await _context.Photos.AddAsync(photo);
-        //                await _context.SaveChangesAsync();
-        //            }
-
-        //    return isUploaded;
-        //}
     }
 }

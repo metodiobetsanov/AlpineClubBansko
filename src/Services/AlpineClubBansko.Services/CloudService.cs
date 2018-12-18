@@ -16,22 +16,19 @@ using System.Threading.Tasks;
 
 namespace AlpineClubBansko.Services
 {
-    public class PhotoService : IPhotoService
+    public class CloudService : ICloudService
     {
         private readonly IRepository<Photo> photoRepository;
-        private readonly IAlbumService albumService;
         private readonly AzureStorageConfig storageConfig;
 
-        public PhotoService(IRepository<Photo> photoRepository,
-            IAlbumService albumService,
+        public CloudService(IRepository<Photo> photoRepository,
             IOptions<AzureStorageConfig> config)
         {
             this.photoRepository = photoRepository;
-            this.albumService = albumService;
             this.storageConfig = config.Value;
         }
 
-        public async Task<bool> UploadImages(IFormFile file, PhotoViewModel model)
+        public async Task<bool> UploadImage(IFormFile file, PhotoViewModel model)
         {
             bool isUploaded = false;
             int counter = model.Album.Photos == null ? 0 : model.Album.Photos.Count();
@@ -71,6 +68,47 @@ namespace AlpineClubBansko.Services
             return isUploaded;
         }
 
+        public async Task<bool> DeleteImage(string photoId)
+        {
+            bool isDeleted = false;
+
+            Photo photo = this.photoRepository.GetById(photoId);
+
+            isDeleted = await this.DeleteImageFromStorage(photo);
+
+
+            if (isDeleted)
+            {
+                this.photoRepository.Delete(photo);
+                await this.photoRepository.SaveChangesAsync();
+            }
+
+            return isDeleted;
+        }
+
+        public async Task CreateContainer(string name)
+        {
+            var blobClient = this.GetClient();
+
+            var container = blobClient.GetContainerReference(name);
+
+            await container.CreateAsync();
+            await container.SetPermissionsAsync(
+                new BlobContainerPermissions()
+                {
+                    PublicAccess = BlobContainerPublicAccessType.Blob
+                });
+        }
+
+        public async Task<bool> DeleteContainer(string name)
+        {
+            var blobClient = this.GetClient();
+
+            var container = blobClient.GetContainerReference(name);
+
+            return await container.DeleteIfExistsAsync();
+        }
+
         private bool IsImage(IFormFile file)
         {
             if (file.ContentType.Contains("image")) return true;
@@ -85,16 +123,6 @@ namespace AlpineClubBansko.Services
             var blobClient = this.GetClient();
 
             var container = blobClient.GetContainerReference(albumName);
-
-            if (!(await container.ExistsAsync()))
-            {
-                await container.CreateAsync();
-                await container.SetPermissionsAsync(
-                    new BlobContainerPermissions()
-                    {
-                        PublicAccess = BlobContainerPublicAccessType.Blob
-                    });
-            }
 
             var imageBlob = container.GetBlockBlobReference(fileName);
             var thumbnailBlob = container.GetBlockBlobReference($"thumbnail_{fileName}");
@@ -115,6 +143,23 @@ namespace AlpineClubBansko.Services
 
             await imageBlob.UploadFromStreamAsync(fileStream);
             await thumbnailBlob.UploadFromByteArrayAsync(thumbnail, 0, thumbnail.Count());
+
+            return await Task.FromResult(true);
+        }
+
+        public async Task<bool> DeleteImageFromStorage(Photo photo)
+        {
+            var blobClient = this.GetClient();
+
+            var container = blobClient.GetContainerReference(photo.Album.Id);
+
+            var image = container.GetBlockBlobReference(photo.LocationUrl.Split("/").Last());
+
+            await image.DeleteIfExistsAsync();
+
+            var thumbnail = container.GetBlockBlobReference(photo.ThumbnailUrl.Split("/").Last());
+
+            await thumbnail.DeleteIfExistsAsync();
 
             return await Task.FromResult(true);
         }

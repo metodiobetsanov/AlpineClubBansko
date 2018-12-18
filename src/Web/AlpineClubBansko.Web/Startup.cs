@@ -58,7 +58,7 @@ namespace AlpineClubBansko.Web
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IStoryService, StoryService>();
             services.AddScoped<IAlbumService, AlbumService>();
-            services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<ICloudService, CloudService>();
 
         }
 

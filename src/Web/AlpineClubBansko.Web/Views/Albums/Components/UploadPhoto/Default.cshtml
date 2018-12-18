@@ -1,7 +1,15 @@
 ﻿@model AlpineClubBansko.Services.Models.AlbumViewModels.PhotoViewModel
 
 <a class="btn bg-white" data-toggle="modal" data-target="#uploadPhoto" alt="Добави снимка">
-    <i class="fas fa-2x fa-cloud-upload-alt text-info"></i>
+    <i class="fas fa-2x fa-cloud-upload-alt text-success"></i>
+</a>
+
+<a class="btn bg-white" asp-controller="Albums" asp-action="Update" asp-route-id="@Model.Album.Id">
+    <i class="fas fa-2x fa-edit text-info"></i>
+</a>
+
+<a class="btn bg-white" asp-controller="Albums" asp-action="Delete" asp-route-id="@Model.Album.Id">
+    <i class="fas fa-2x fa-trash-alt text-danger"></i>
 </a>
 
 <div class="modal fade" id="uploadPhoto" tabindex="-1" role="dialog" aria-labelledby="uploadPhoto" aria-hidden="true">
@@ -14,7 +22,7 @@
                 </button>
             </div>
             <div class="container">
-                <form id="FileUploadForm" action="/Albums/Upload"
+                <form id="FileUploadForm" action="/Albums/UploadPhoto"
                       data-ajax="true"
                       data-ajax-method="post"
                       data-ajax-update="#gallery"

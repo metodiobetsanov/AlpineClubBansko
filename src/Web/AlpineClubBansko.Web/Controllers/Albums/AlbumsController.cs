@@ -15,15 +15,15 @@ namespace AlpineClubBansko.Web.Controllers.Albums
     public class AlbumsController : Controller
     {
         private readonly IAlbumService albumService;
-        private readonly IPhotoService photoService;
+        private readonly ICloudService cloudService;
         private readonly UserManager<User> userManager;
 
         public AlbumsController(IAlbumService albumService,
-            IPhotoService photoService,
+            ICloudService cloudService,
             UserManager<User> userManager)
         {
             this.albumService = albumService;
-            this.photoService = photoService;
+            this.cloudService = cloudService;
             this.userManager = userManager;
         }
         
@@ -99,25 +99,34 @@ namespace AlpineClubBansko.Web.Controllers.Albums
 
         [HttpPost]
         [Authorize]
-        public async Task<ViewComponentResult> Upload(IFormFile file,  PhotoViewModel model, string albumId)
+        public async Task<ViewComponentResult> UploadPhoto(IFormFile file, PhotoViewModel model, string albumId)
         {
             bool isUploaded = false;
-            
-            model.Author = await this.userManager.GetUserAsync(User);
-            model.Album = this.albumService.GetAlbum(albumId);
 
-            try
+            if (ModelState.IsValid)
             {
-                isUploaded = await this.photoService.UploadImages(file, model);
-            }
-            catch(Exception e)
-            {
-                return null;
+                model.Author = await this.userManager.GetUserAsync(User);
+                model.Album = this.albumService.GetAlbum(albumId);
+
+                isUploaded = await this.cloudService.UploadImage(file, model);
             }
 
             AlbumViewModel album = this.albumService.GetAlbumById(albumId);
 
             return ViewComponent("ViewPhotos", album.Photos);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<ViewComponentResult> DeletePhoto(string photoId, string albumId)
+        {
+            bool isDeleted = false;
+
+            isDeleted = await this.cloudService.DeleteImage(photoId);
+
+            AlbumViewModel album = this.albumService.GetAlbumById(albumId);
+
+            return ViewComponent("UpdatePhoto", album.Photos);
         }
     }
 }
