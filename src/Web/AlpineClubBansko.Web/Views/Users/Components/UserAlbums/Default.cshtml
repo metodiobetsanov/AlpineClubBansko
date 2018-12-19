@@ -1,0 +1,31 @@
+﻿@model List<AlpineClubBansko.Services.Models.AlbumViewModels.AlbumViewModel>
+
+@{
+    var index = 1;
+}
+
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Заглавие</th>
+        <th scope="col" class="text-center">Снимки</th>
+        <th scope="col" class="text-center">Рейтинг</th>
+        <th scope="col" class="text-center"></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var album in Model)
+    {
+        <tr>
+            <th scope="row">@(index++)</th>
+            <td>@album.Title</td>
+            <td class="text-center">@album.Photos.Count()</td>
+            <td class="text-center">@album.Rating</td>
+            <td class="text-center">
+                <a asp-area="" asp-controller="Albums" asp-action="Details" asp-route-id="@album.Id">Разгледай</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

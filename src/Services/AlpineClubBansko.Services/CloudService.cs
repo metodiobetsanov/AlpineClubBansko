@@ -76,7 +76,6 @@ namespace AlpineClubBansko.Services
 
             isDeleted = await this.DeleteImageFromStorage(photo);
 
-
             if (isDeleted)
             {
                 this.photoRepository.Delete(photo);

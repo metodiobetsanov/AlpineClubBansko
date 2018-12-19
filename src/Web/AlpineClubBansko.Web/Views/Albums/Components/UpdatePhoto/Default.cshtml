@@ -1,4 +1,4 @@
-﻿@model List<Photo>
+﻿@model List<AlpineClubBansko.Services.Models.AlbumViewModels.PhotoViewModel>
 
 @using AlpineClubBansko.Data.Models
 
@@ -26,7 +26,7 @@
                         @photo.Photographer
                     </div>
                     <div class="col-3">
-                        @photo.Author
+                        @photo.Author.UserName
                     </div>
                     <div class="col-6">
                         @photo.CreatedOn

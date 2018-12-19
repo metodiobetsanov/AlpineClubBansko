@@ -29,7 +29,7 @@ namespace AlpineClubBansko.Services.Models.AlbumViewModels
             }
         }
 
-        public List<Photo> Photos { get; set; }
+        public List<PhotoViewModel> Photos { get; set; }
 
         public User Author { get; set; }
 

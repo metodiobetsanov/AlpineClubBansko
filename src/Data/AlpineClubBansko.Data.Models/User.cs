@@ -27,10 +27,12 @@ namespace AlpineClubBansko.Data.Models
 
         public virtual Level Level { get; set; }
 
-        public virtual List<Story> Stories { get; set; }
+        public virtual ICollection<UsersEvents> EventsParticipations { get; set; }
 
-        public virtual List<Album> Albums { get; set; }
+        public virtual ICollection<Story> Stories { get; set; }
 
-        public virtual List<Route> Routes { get; set; }
+        public virtual ICollection<Route> Routes { get; set; }
+
+        public virtual ICollection<Album> Albums { get; set; }
     }
 }

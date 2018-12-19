@@ -34,11 +34,23 @@ namespace AlpineClubBansko.Data.Migrations
 
                     b.Property<int>("Rating");
 
+                    b.Property<string>("RouteId");
+
+                    b.Property<string>("StoryId");
+
                     b.Property<string>("Title");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("RouteId")
+                        .IsUnique()
+                        .HasFilter("[RouteId] IS NOT NULL");
+
+                    b.HasIndex("StoryId")
+                        .IsUnique()
+                        .HasFilter("[StoryId] IS NOT NULL");
 
                     b.ToTable("Albums");
                 });
@@ -158,8 +170,6 @@ namespace AlpineClubBansko.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AlbumId");
-
                     b.Property<string>("AuthorId");
 
                     b.Property<string>("Content");
@@ -170,13 +180,17 @@ namespace AlpineClubBansko.Data.Migrations
 
                     b.Property<int>("Rating");
 
+                    b.Property<string>("StoryId");
+
                     b.Property<string>("Title");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AlbumId");
-
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("StoryId")
+                        .IsUnique()
+                        .HasFilter("[StoryId] IS NOT NULL");
 
                     b.ToTable("Routes");
                 });
@@ -186,8 +200,6 @@ namespace AlpineClubBansko.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AlbumId");
-
                     b.Property<string>("AuthorId");
 
                     b.Property<string>("Content");
@@ -201,8 +213,6 @@ namespace AlpineClubBansko.Data.Migrations
                     b.Property<string>("Title");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AlbumId");
 
                     b.HasIndex("AuthorId");
 
@@ -231,8 +241,6 @@ namespace AlpineClubBansko.Data.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
-
-                    b.Property<string>("EventId");
 
                     b.Property<string>("FirstName");
 
@@ -265,8 +273,6 @@ namespace AlpineClubBansko.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EventId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
 
@@ -276,6 +282,24 @@ namespace AlpineClubBansko.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("AlpineClubBansko.Data.Models.UsersEvents", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("EventId");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UsersEvents");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -393,6 +417,14 @@ namespace AlpineClubBansko.Data.Migrations
                     b.HasOne("AlpineClubBansko.Data.Models.User", "Author")
                         .WithMany("Albums")
                         .HasForeignKey("AuthorId");
+
+                    b.HasOne("AlpineClubBansko.Data.Models.Route", "Route")
+                        .WithOne("Album")
+                        .HasForeignKey("AlpineClubBansko.Data.Models.Album", "RouteId");
+
+                    b.HasOne("AlpineClubBansko.Data.Models.Story", "Story")
+                        .WithOne("Album")
+                        .HasForeignKey("AlpineClubBansko.Data.Models.Album", "StoryId");
                 });
 
             modelBuilder.Entity("AlpineClubBansko.Data.Models.Event", b =>
@@ -437,31 +469,31 @@ namespace AlpineClubBansko.Data.Migrations
 
             modelBuilder.Entity("AlpineClubBansko.Data.Models.Route", b =>
                 {
-                    b.HasOne("AlpineClubBansko.Data.Models.Album", "Album")
-                        .WithMany()
-                        .HasForeignKey("AlbumId");
-
                     b.HasOne("AlpineClubBansko.Data.Models.User", "Author")
                         .WithMany("Routes")
                         .HasForeignKey("AuthorId");
+
+                    b.HasOne("AlpineClubBansko.Data.Models.Story", "Story")
+                        .WithOne("Route")
+                        .HasForeignKey("AlpineClubBansko.Data.Models.Route", "StoryId");
                 });
 
             modelBuilder.Entity("AlpineClubBansko.Data.Models.Story", b =>
                 {
-                    b.HasOne("AlpineClubBansko.Data.Models.Album", "Album")
-                        .WithMany()
-                        .HasForeignKey("AlbumId");
-
                     b.HasOne("AlpineClubBansko.Data.Models.User", "Author")
                         .WithMany("Stories")
                         .HasForeignKey("AuthorId");
                 });
 
-            modelBuilder.Entity("AlpineClubBansko.Data.Models.User", b =>
+            modelBuilder.Entity("AlpineClubBansko.Data.Models.UsersEvents", b =>
                 {
-                    b.HasOne("AlpineClubBansko.Data.Models.Event")
+                    b.HasOne("AlpineClubBansko.Data.Models.Event", "Event")
                         .WithMany("Participants")
                         .HasForeignKey("EventId");
+
+                    b.HasOne("AlpineClubBansko.Data.Models.User", "User")
+                        .WithMany("EventsParticipations")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -23,47 +23,6 @@ namespace AlpineClubBansko.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetRoleClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    RoleId = table.Column<string>(nullable: false),
-                    ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Events",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    ModifiedOn = table.Column<DateTime>(nullable: true),
-                    AuthorId = table.Column<string>(nullable: true),
-                    Title = table.Column<string>(nullable: true),
-                    Content = table.Column<string>(nullable: true),
-                    StartDate = table.Column<DateTime>(nullable: false),
-                    EndDate = table.Column<DateTime>(nullable: false),
-                    AlbumId = table.Column<string>(nullable: true),
-                    Rating = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Events", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
@@ -88,41 +47,32 @@ namespace AlpineClubBansko.Data.Migrations
                     LastName = table.Column<string>(nullable: true),
                     PostCode = table.Column<int>(nullable: false),
                     City = table.Column<string>(nullable: true),
-                    Country = table.Column<string>(nullable: true),
-                    EventId = table.Column<string>(nullable: true)
+                    Country = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Events_EventId",
-                        column: x => x.EventId,
-                        principalTable: "Events",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Albums",
+                name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    ModifiedOn = table.Column<DateTime>(nullable: true),
-                    AuthorId = table.Column<string>(nullable: true),
-                    Title = table.Column<string>(nullable: true),
-                    Content = table.Column<string>(nullable: true),
-                    Rating = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    RoleId = table.Column<string>(nullable: false),
+                    ClaimType = table.Column<string>(nullable: true),
+                    ClaimValue = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Albums", x => x.Id);
+                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Albums_AspNetUsers_AuthorId",
-                        column: x => x.AuthorId,
-                        principalTable: "AspNetUsers",
+                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -232,7 +182,7 @@ namespace AlpineClubBansko.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Photos",
+                name: "Stories",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
@@ -241,22 +191,13 @@ namespace AlpineClubBansko.Data.Migrations
                     AuthorId = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true),
                     Content = table.Column<string>(nullable: true),
-                    Photographer = table.Column<string>(nullable: true),
-                    AlbumId = table.Column<string>(nullable: true),
-                    LocationUrl = table.Column<string>(nullable: true),
                     Rating = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Photos", x => x.Id);
+                    table.PrimaryKey("PK_Stories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Photos_Albums_AlbumId",
-                        column: x => x.AlbumId,
-                        principalTable: "Albums",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Photos_AspNetUsers_AuthorId",
+                        name: "FK_Stories_AspNetUsers_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -273,28 +214,28 @@ namespace AlpineClubBansko.Data.Migrations
                     AuthorId = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true),
                     Content = table.Column<string>(nullable: true),
-                    AlbumId = table.Column<string>(nullable: true),
+                    StoryId = table.Column<string>(nullable: true),
                     Rating = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Routes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Routes_Albums_AlbumId",
-                        column: x => x.AlbumId,
-                        principalTable: "Albums",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_Routes_AspNetUsers_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Routes_Stories_StoryId",
+                        column: x => x.StoryId,
+                        principalTable: "Stories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Stories",
+                name: "Albums",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
@@ -303,22 +244,29 @@ namespace AlpineClubBansko.Data.Migrations
                     AuthorId = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true),
                     Content = table.Column<string>(nullable: true),
-                    AlbumId = table.Column<string>(nullable: true),
+                    StoryId = table.Column<string>(nullable: true),
+                    RouteId = table.Column<string>(nullable: true),
                     Rating = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Stories", x => x.Id);
+                    table.PrimaryKey("PK_Albums", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Stories_Albums_AlbumId",
-                        column: x => x.AlbumId,
-                        principalTable: "Albums",
+                        name: "FK_Albums_AspNetUsers_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Stories_AspNetUsers_AuthorId",
-                        column: x => x.AuthorId,
-                        principalTable: "AspNetUsers",
+                        name: "FK_Albums_Routes_RouteId",
+                        column: x => x.RouteId,
+                        principalTable: "Routes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Albums_Stories_StoryId",
+                        column: x => x.StoryId,
+                        principalTable: "Stories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -350,10 +298,114 @@ namespace AlpineClubBansko.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Events",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    AuthorId = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(nullable: true),
+                    Content = table.Column<string>(nullable: true),
+                    StartDate = table.Column<DateTime>(nullable: false),
+                    EndDate = table.Column<DateTime>(nullable: false),
+                    AlbumId = table.Column<string>(nullable: true),
+                    Rating = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Events", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Events_Albums_AlbumId",
+                        column: x => x.AlbumId,
+                        principalTable: "Albums",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Events_AspNetUsers_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Photos",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    AuthorId = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(nullable: true),
+                    Content = table.Column<string>(nullable: true),
+                    Photographer = table.Column<string>(nullable: true),
+                    AlbumId = table.Column<string>(nullable: true),
+                    LocationUrl = table.Column<string>(nullable: true),
+                    ThumbnailUrl = table.Column<string>(nullable: true),
+                    Rating = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Photos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Photos_Albums_AlbumId",
+                        column: x => x.AlbumId,
+                        principalTable: "Albums",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Photos_AspNetUsers_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UsersEvents",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
+                    EventId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UsersEvents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UsersEvents_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UsersEvents_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Albums_AuthorId",
                 table: "Albums",
                 column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Albums_RouteId",
+                table: "Albums",
+                column: "RouteId",
+                unique: true,
+                filter: "[RouteId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Albums_StoryId",
+                table: "Albums",
+                column: "StoryId",
+                unique: true,
+                filter: "[StoryId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -381,11 +433,6 @@ namespace AlpineClubBansko.Data.Migrations
                 name: "IX_AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_EventId",
-                table: "AspNetUsers",
-                column: "EventId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -437,52 +484,35 @@ namespace AlpineClubBansko.Data.Migrations
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Routes_AlbumId",
-                table: "Routes",
-                column: "AlbumId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Routes_AuthorId",
                 table: "Routes",
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Stories_AlbumId",
-                table: "Stories",
-                column: "AlbumId");
+                name: "IX_Routes_StoryId",
+                table: "Routes",
+                column: "StoryId",
+                unique: true,
+                filter: "[StoryId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Stories_AuthorId",
                 table: "Stories",
                 column: "AuthorId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Events_AspNetUsers_AuthorId",
-                table: "Events",
-                column: "AuthorId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.CreateIndex(
+                name: "IX_UsersEvents_EventId",
+                table: "UsersEvents",
+                column: "EventId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Events_Albums_AlbumId",
-                table: "Events",
-                column: "AlbumId",
-                principalTable: "Albums",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.CreateIndex(
+                name: "IX_UsersEvents_UserId",
+                table: "UsersEvents",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Albums_AspNetUsers_AuthorId",
-                table: "Albums");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Events_AspNetUsers_AuthorId",
-                table: "Events");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -508,22 +538,25 @@ namespace AlpineClubBansko.Data.Migrations
                 name: "Photos");
 
             migrationBuilder.DropTable(
-                name: "Stories");
+                name: "UsersEvents");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "Routes");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Events");
 
             migrationBuilder.DropTable(
                 name: "Albums");
+
+            migrationBuilder.DropTable(
+                name: "Routes");
+
+            migrationBuilder.DropTable(
+                name: "Stories");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

@@ -18,6 +18,8 @@ namespace AlpineClubBansko.Data
 
         public DbSet<Event> Events { get; set; }
 
+        public DbSet<UsersEvents> UsersEvents { get; set; }
+
         public DbSet<Level> Levels { get; set; }
 
         public DbSet<Location> Locations { get; set; }

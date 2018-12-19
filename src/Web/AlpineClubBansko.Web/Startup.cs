@@ -19,6 +19,8 @@ using AlpineClubBansko.Services;
 using AlpineClubBansko.Services.Contracts;
 using AlpineClubBansko.Services.Mapping;
 using AlpineClubBansko.Services.Models;
+using AlpineClubBansko.Web.Middleware.MiddlewareExtensions;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace AlpineClubBansko.Web
 {
@@ -45,10 +47,18 @@ namespace AlpineClubBansko.Web
                 options.UseLazyLoadingProxies()
                     .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, IdentityRole>()
-                .AddDefaultTokenProviders()
-                .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                services.AddIdentity<User, IdentityRole>(options =>
+                    {
+                        options.Password.RequireDigit = false;
+                        options.Password.RequireUppercase = false;
+                        options.Password.RequireLowercase = false;
+                        options.Password.RequireNonAlphanumeric = false;
+                        options.Password.RequiredUniqueChars = 0;
+                        options.Password.RequiredLength = 3;
+                    })
+                    .AddDefaultTokenProviders()
+                    .AddDefaultUI(UIFramework.Bootstrap4)
+                    .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.Configure<AzureStorageConfig>(Configuration.GetSection("AzureStorageConfig"));
 
@@ -56,6 +66,7 @@ namespace AlpineClubBansko.Web
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IStoryService, StoryService>();
             services.AddScoped<IAlbumService, AlbumService>();
             services.AddScoped<ICloudService, CloudService>();
@@ -81,6 +92,7 @@ namespace AlpineClubBansko.Web
                 app.UseHsts();
             }
 
+            app.UseSeedDataMiddleware();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
