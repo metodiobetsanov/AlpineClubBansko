@@ -38,10 +38,10 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Начало</a>
                     </li>
-                    <li class="nav-item d-none">
+                    <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Activities" asp-action="Index">Събития</a>
                     </li>
-                    <li class="nav-item d-none">
+                    <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Routes" asp-action="Index">Преходи</a>
                     </li>
                     <li class="nav-item">
@@ -50,25 +50,27 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Albums" asp-action="Index">Албуми</a>
                     </li>
-                    <li class="nav-item d-none">
-                        <a class="nav-link" asp-area="" asp-controller="Club" asp-action="Index">За Клуба</a>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Club" asp-action="Index">Клуба</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container pb-4">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="container">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2018 - Alpine Club Bansko - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    <footer class="border-top footer text-muted bg-light">
+            <div class="container">
+                <div class="col-9">
+                    &copy; 2018 - Alpine Club Bansko - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                </div>
+            </div>
     </footer>
 
     <environment include="Development">

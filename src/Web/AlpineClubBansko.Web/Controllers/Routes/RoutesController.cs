@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace AlpineClubBansko.Web.Controllers
+namespace AlpineClubBansko.Web.Controllers.Routes
 {
     public class RoutesController : Controller
     {

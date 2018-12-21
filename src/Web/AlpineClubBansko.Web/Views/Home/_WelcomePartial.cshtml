@@ -1,27 +1,17 @@
 ﻿<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
-        <li data-target="#carouselExampleIndicators" data-slide-to="0"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
     </ol>
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <div class="jumbotron text-white rounded bg-dark" id="index_jumbotron">
-                <div class="col-md-8 offset-2 text-center">
-                    <h1 class="display-4 font-italic">Прочети някоя от историите ни за покорени върхове</h1>
-                    <br/>
-                    <p class="lead mb-0">
-                        <a asp-controller="Posts" asp-action="Index" class="btn btn-info text-white font-weight-bold">Разгледай</a>
-                    </p>
-                </div>
+    <div class="carousel-inner ">
+        <div class="carousel-item bg-secondary rounded active min-height-400" id="firstSlide">
+            <div class="offset-lg-1 col-lg-7">
+               <p class="display-4 font-italic">Прочети някоя от историите ни за покорени върхове</p>
+            </div>
+            <div class="carousel-caption">
+                <a asp-controller="Stories" asp-action="Index" class="btn btn-outline-info text-white font-weight-bold">Заведи ме</a>
             </div>
         </div>
     </div>
-    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
-</div>
 </div>

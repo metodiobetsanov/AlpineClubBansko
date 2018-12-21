@@ -7,10 +7,18 @@ for details on configuring this project to bundle and minify static web assets. 
 }
 
 
+.min-height-300{
+    min-height: 300px;
+}
+
+.min-height-400 {
+    min-height: 400px;
+}
+
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
 }
 
 /* Sticky footer styles
@@ -43,14 +51,21 @@ button.accept-policy {
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
+    
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    background-image: url('../images/pirin-648.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
+
+.container{
+    background: white;
+}
+
 .footer {
   position: absolute;
   bottom: 0;
@@ -63,4 +78,13 @@ body {
 
 p.text-story{
     text-indent: 10px;
+}
+
+/* Index Carousel Item Backgrounds */
+#firstSlide {
+    background-image: url('../images/mountaineering-altitude-climber-silhouette-by-vexels.svg');
+    background-size:  auto;
+    background-position-x: right;
+    background-position-y: 20px;
+    background-repeat: no-repeat;
 }
