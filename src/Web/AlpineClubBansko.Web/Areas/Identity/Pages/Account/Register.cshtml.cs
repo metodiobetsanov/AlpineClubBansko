@@ -71,7 +71,9 @@ namespace AlpineClubBansko.Web.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    _logger.LogInformation($"User created a new account with password: {user.UserName}");
+                    await _userManager.AddToRoleAsync(user, "User");
+                    _logger.LogInformation($"The role 'User' is given to User {user.UserName}");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Page(

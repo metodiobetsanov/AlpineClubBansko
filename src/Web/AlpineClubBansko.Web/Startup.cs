@@ -22,6 +22,7 @@ using AlpineClubBansko.Services.Models;
 using AlpineClubBansko.Web.Middleware.MiddlewareExtensions;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
+
 namespace AlpineClubBansko.Web
 {
     public class Startup
@@ -70,11 +71,13 @@ namespace AlpineClubBansko.Web
             services.AddScoped<IStoryService, StoryService>();
             services.AddScoped<IAlbumService, AlbumService>();
             services.AddScoped<ICloudService, CloudService>();
+            services.AddScoped<IRouteService, RouteService>();
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-            public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+            public void Configure(IApplicationBuilder app,
+                IHostingEnvironment env)
         {
             AutoMapperConfig.RegisterMappings(
                   typeof(ErrorViewModel).Assembly

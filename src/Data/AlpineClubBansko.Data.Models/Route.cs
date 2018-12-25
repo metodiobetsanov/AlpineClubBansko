@@ -11,6 +11,8 @@ namespace AlpineClubBansko.Data.Models
 
         public string Content { get; set; }
 
+        public string TimeNeeded { get; set; }
+
         public string StoryId { get; set; }
         public virtual Story Story { get; set; }
 

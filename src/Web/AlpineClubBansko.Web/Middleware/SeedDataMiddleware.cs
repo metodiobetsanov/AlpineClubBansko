@@ -59,6 +59,7 @@ namespace AlpineClubBansko.Web.Middleware
 
                     if (result.Succeeded)
                     {
+                        await userManager.AddToRolesAsync(user, new[] { "Owner", "Administrator" });
                         seedDone = true;
                     }
                 }

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlpineClubBansko.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181219120812_Initial")]
+    [Migration("20181225152811_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -120,7 +120,13 @@ namespace AlpineClubBansko.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<decimal>("Latitude");
+
+                    b.Property<decimal>("Longitude");
+
                     b.Property<DateTime?>("ModifiedOn");
+
+                    b.Property<string>("Name");
 
                     b.Property<string>("RouteId");
 
@@ -183,6 +189,8 @@ namespace AlpineClubBansko.Data.Migrations
                     b.Property<int>("Rating");
 
                     b.Property<string>("StoryId");
+
+                    b.Property<string>("TimeNeeded");
 
                     b.Property<string>("Title");
 
@@ -453,7 +461,7 @@ namespace AlpineClubBansko.Data.Migrations
                         .WithMany()
                         .HasForeignKey("AuthorId");
 
-                    b.HasOne("AlpineClubBansko.Data.Models.Route")
+                    b.HasOne("AlpineClubBansko.Data.Models.Route", "Route")
                         .WithMany("Locations")
                         .HasForeignKey("RouteId");
                 });

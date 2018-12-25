@@ -214,6 +214,7 @@ namespace AlpineClubBansko.Data.Migrations
                     AuthorId = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true),
                     Content = table.Column<string>(nullable: true),
+                    TimeNeeded = table.Column<string>(nullable: true),
                     StoryId = table.Column<string>(nullable: true),
                     Rating = table.Column<int>(nullable: false)
                 },
@@ -279,6 +280,9 @@ namespace AlpineClubBansko.Data.Migrations
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: true),
                     AuthorId = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Latitude = table.Column<decimal>(nullable: false),
+                    Longitude = table.Column<decimal>(nullable: false),
                     RouteId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

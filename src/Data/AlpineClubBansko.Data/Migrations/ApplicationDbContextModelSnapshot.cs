@@ -118,7 +118,13 @@ namespace AlpineClubBansko.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<decimal>("Latitude");
+
+                    b.Property<decimal>("Longitude");
+
                     b.Property<DateTime?>("ModifiedOn");
+
+                    b.Property<string>("Name");
 
                     b.Property<string>("RouteId");
 
@@ -181,6 +187,8 @@ namespace AlpineClubBansko.Data.Migrations
                     b.Property<int>("Rating");
 
                     b.Property<string>("StoryId");
+
+                    b.Property<string>("TimeNeeded");
 
                     b.Property<string>("Title");
 
@@ -451,7 +459,7 @@ namespace AlpineClubBansko.Data.Migrations
                         .WithMany()
                         .HasForeignKey("AuthorId");
 
-                    b.HasOne("AlpineClubBansko.Data.Models.Route")
+                    b.HasOne("AlpineClubBansko.Data.Models.Route", "Route")
                         .WithMany("Locations")
                         .HasForeignKey("RouteId");
                 });

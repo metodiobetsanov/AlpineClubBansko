@@ -6,7 +6,6 @@ for details on configuring this project to bundle and minify static web assets. 
     background-size: cover;
 }
 
-
 .min-height-300{
     min-height: 300px;
 }
@@ -21,15 +20,32 @@ a.navbar-brand {
     word-break: break-all;
 }
 
-/* Sticky footer styles
+/* Main
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 @media (min-width: 768px) {
   html {
     font-size: 16px;
   }
+}
+
+body {
+    min-height: 100%;
+    background-image: url('../images/pirin-648.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+main {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.container {
+    background: white;
 }
 
 .border-top {
@@ -48,43 +64,24 @@ button.accept-policy {
   line-height: inherit;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-    position: relative;
-    min-height: 100%;
-    
-}
-
-body {
-    background-image: url('../images/pirin-648.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.container{
-    background: white;
-}
-
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-  line-height: 60px; /* Vertically center the text there */
-}
-
-p.text-story{
+p.text-story {
     text-indent: 10px;
 }
 
-/* Index Carousel Item Backgrounds */
+
+
+
+/* Index Carousel Item Backgrounds 
+-------------------------------------------------- */
 #firstSlide {
     background-image: url('../images/mountaineering-altitude-climber-silhouette-by-vexels.svg');
     background-size:  auto;
     background-position-x: right;
     background-position-y: 20px;
     background-repeat: no-repeat;
+}
+
+#map {
+    height: 400px; /* The height is 400 pixels */
+    width: 100%; /* The width is the width of the web page */
 }
