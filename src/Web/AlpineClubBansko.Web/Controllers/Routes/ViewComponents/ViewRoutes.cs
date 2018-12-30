@@ -1,12 +1,10 @@
-﻿using AlpineClubBansko.Data.Models;
-using AlpineClubBansko.Services.Models.AlbumViewModels;
-using AlpineClubBansko.Services.Models.RouteViewModels;
+﻿using AlpineClubBansko.Services.Models.RouteViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AlpineClubBansko.Web.Controllers.Albums
+namespace AlpineClubBansko.Web.Controllers.Albums.ViewComponents
 {
     public class ViewRoutes : ViewComponent
     {
@@ -16,10 +14,10 @@ namespace AlpineClubBansko.Web.Controllers.Albums
 
         public async Task<IViewComponentResult> InvokeAsync(List<RouteViewModel> list, string searchCriteria = null)
         {
-            if (!string.IsNullOrEmpty(searchCriteria) 
+            if (!string.IsNullOrEmpty(searchCriteria)
                 && !string.IsNullOrWhiteSpace(searchCriteria))
             {
-                list = list.Where(r => 
+                list = list.Where(r =>
                 r.Title.Contains(searchCriteria)
                 || r.Content.Contains(searchCriteria)
                 || r.Locations.Any(l => l.Name == searchCriteria)
@@ -28,7 +26,7 @@ namespace AlpineClubBansko.Web.Controllers.Albums
                 return View(list);
             }
 
-            return View(list);
+            return View(list.OrderByDescending(r => r.CreatedOn).ToList());
         }
     }
 }

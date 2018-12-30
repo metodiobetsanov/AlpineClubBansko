@@ -1,9 +1,6 @@
 ﻿using AlpineClubBansko.Data.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace AlpineClubBansko.Web.Middleware
@@ -25,7 +22,6 @@ namespace AlpineClubBansko.Web.Middleware
         {
             if (!seedDone)
             {
-
                 if (!(await roleManager.RoleExistsAsync("Owner")))
                 {
                     await roleManager.CreateAsync(

@@ -1,28 +1,34 @@
 ﻿@model List<AlpineClubBansko.Services.Models.RouteViewModels.RouteViewModel>
 
-@{ 
+@{
     int counter = 0;
 }
 
-<table class="table">
+<table class="table table-bordered table-striped">
     <thead>
         <tr>
-            <th scope="col">#</th>
+            <th scope="col" class="text-center">#</th>
             <th scope="col">Име</th>
-            <th scope="col">Маршрут</th>
-            <th scope="col">Време</th>
-            <th scope="col">Рейтинг</th>
+            <th scope="col" class="d-none d-lg-table-cell">Маршрут</th>
+            <th scope="col" class="d-none d-lg-table-cell">Време</th>
+            <th scope="col" class="d-none d-md-table-cell">Рейтинг</th>
+            <th scope="col" >Опции</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var route in Model)
         {
         <tr>
-            <th scope="row">@(++counter)</th>
-            <td>@route.Title</td>
-            <td>@route.RoutePoints</td>
-            <td>@route.TimeNeeded</td>
-            <td>@route.Rating</td>
+            <th scope="row" class="text-center align-middle">@(++counter)</th>
+            <td class="align-middle">@route.Title</td>
+            <td class="align-middle d-none d-lg-table-cell">@route.RoutePoints</td>
+            <td class="align-middle d-none d-lg-table-cell">@route.TimeNeeded</td>
+            <td class="align-middle d-none d-md-table-cell">@route.Rating</td>
+            <td>
+                <ul class="nav  align-content-center">
+                    <li class="nav-item"><a class="nav-link " asp-area="" asp-controller="Routes" asp-action="Details" asp-route-id="@route.Id">Разгледай</a></li>
+                </ul>
+            </td>
         </tr>
         }
     </tbody>

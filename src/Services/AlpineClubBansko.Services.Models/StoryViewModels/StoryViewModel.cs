@@ -1,6 +1,8 @@
 ﻿using AlpineClubBansko.Data.Models;
 using AlpineClubBansko.Services.Mapping.Contracts;
+using MagicStrings;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace AlpineClubBansko.Services.Models.StoryViewModels
@@ -9,10 +11,15 @@ namespace AlpineClubBansko.Services.Models.StoryViewModels
     {
         public string Id { get; set; }
 
-        [Required]
+        [Display(Name = "Заглавие", Prompt = Validations.Placeholder)]
+        [Required(ErrorMessage = Validations.Required)]
+        [StringLength(60, ErrorMessage = Validations.StringLength, MinimumLength = 10)]
         public string Title { get; set; }
 
-        [Required]
+        [Display(Name = "Съдържание")]
+        [Required(ErrorMessage = Validations.Required)]
+        [MinLength(60, ErrorMessage = Validations.MinLength)]
+        [DataType(DataType.MultilineText)]
         public string Content { get; set; }
 
         public User Author { get; set; }
@@ -21,6 +28,11 @@ namespace AlpineClubBansko.Services.Models.StoryViewModels
 
         public DateTime? ModifiedOn { get; set; }
 
-        public int Rating { get; set; }
+        public List<StoryCommentViewModel> StoryComments { get; set; }
+
+        public List<LikedStories> Favorite { get; set; }
+
+        public int Views { get; set; }
+
     }
 }

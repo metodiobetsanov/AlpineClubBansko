@@ -15,8 +15,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Migrations\20181225152811_Initial.Designer.cs">
-      <DependentUpon>20181225152811_Initial.cs</DependentUpon>
+    <Compile Update="Migrations\20181226154852_First.Designer.cs">
+      <DependentUpon>20181226154852_First.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20181230100211_Added-Like-To-Story.Designer.cs">
+      <DependentUpon>20181230100211_Added-Like-To-Story.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20181230114354_favorite.Designer.cs">
+      <DependentUpon>20181230114354_favorite.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20181230134657_Story-Comments.Designer.cs">
+      <DependentUpon>20181230134657_Story-Comments.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

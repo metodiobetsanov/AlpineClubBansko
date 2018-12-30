@@ -1,22 +1,20 @@
-﻿using AlpineClubBansko.Services.Models;
+﻿using AlpineClubBansko.Data.Models;
+using AlpineClubBansko.Services.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
 namespace AlpineClubBansko.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(UserManager<User> userManager)
+            : base(userManager)
         {
-            _logger = logger;
         }
 
         public IActionResult Index()
         {
-            _logger.LogInformation("Index page called");
             return View();
         }
 

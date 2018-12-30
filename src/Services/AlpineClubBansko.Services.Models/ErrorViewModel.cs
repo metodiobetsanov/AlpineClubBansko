@@ -1,5 +1,3 @@
-using System;
-
 namespace AlpineClubBansko.Services.Models
 {
     public class ErrorViewModel

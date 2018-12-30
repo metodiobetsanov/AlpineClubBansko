@@ -1,8 +1,6 @@
 ﻿using AlpineClubBansko.Data.Models;
 using AlpineClubBansko.Services.Models.UserViewModels;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace AlpineClubBansko.Services.Contracts
 {

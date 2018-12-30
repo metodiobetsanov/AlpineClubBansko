@@ -3,7 +3,6 @@ using AlpineClubBansko.Data.Models;
 using AlpineClubBansko.Services.Contracts;
 using AlpineClubBansko.Services.Mapping;
 using AlpineClubBansko.Services.Models.AlbumViewModels;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,7 +61,7 @@ namespace AlpineClubBansko.Services
             album.Title = model.Title;
             album.Content = model.Content;
             album.ModifiedOn = DateTime.UtcNow;
-        
+
             this.albumRepository.Update(album);
             await this.albumRepository.SaveChangesAsync();
 

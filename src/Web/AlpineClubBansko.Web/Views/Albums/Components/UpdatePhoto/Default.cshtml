@@ -35,9 +35,9 @@
                 <div class="row">
                     <div class="btn-group btn-group-sm" role="group">
                         <button type="button" class="btn btn-secondary">Edit</button>
-                        <a class="btn btn-danger" 
-                           asp-controller="Albums" 
-                           asp-action="DeletePhoto" 
+                        <a class="btn btn-danger"
+                           asp-controller="Albums"
+                           asp-action="DeletePhoto"
                            asp-route-photoId="@photo.Id"
                            asp-route-albumId="@photo.Album.Id"
                            data-ajax="true"
@@ -51,8 +51,5 @@
             </div>
         </div>
     }
-
 </div>
 }
-
-

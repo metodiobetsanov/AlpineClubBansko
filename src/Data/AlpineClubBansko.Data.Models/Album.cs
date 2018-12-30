@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AlpineClubBansko.Data.Models
 {
@@ -14,8 +13,10 @@ namespace AlpineClubBansko.Data.Models
         public string StoryId { get; set; }
         public virtual Story Story { get; set; }
 
-        public string RouteId { get; set; }
-        public virtual Route Route { get; set; }
+        public string EventId { get; set; }
+        public virtual Event Event { get; set; }
+
+        public virtual ICollection<RoutesAlbums> Routes { get; set; }
 
         public int Rating { get; set; }
     }

@@ -3,7 +3,6 @@ using AlpineClubBansko.Services.Mapping.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace AlpineClubBansko.Services.Models.RouteViewModels
 {

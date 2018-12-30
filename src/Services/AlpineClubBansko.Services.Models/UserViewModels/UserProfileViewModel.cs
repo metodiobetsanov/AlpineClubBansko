@@ -5,7 +5,6 @@ using AlpineClubBansko.Services.Models.StoryViewModels;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace AlpineClubBansko.Services.Models.UserViewModels
 {

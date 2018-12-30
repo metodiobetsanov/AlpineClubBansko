@@ -1,9 +1,6 @@
 ﻿using AlpineClubBansko.Data.Models;
 using AlpineClubBansko.Services.Mapping.Contracts;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace AlpineClubBansko.Services.Models.AlbumViewModels
 {
@@ -30,6 +27,5 @@ namespace AlpineClubBansko.Services.Models.AlbumViewModels
         public string ThumbnailUrl { get; set; }
 
         public int Rating { get; set; }
-
     }
 }

@@ -1,0 +1,17 @@
+﻿@model AlpineClubBansko.Services.Models.RouteViewModels.RouteViewModel
+
+<div class="row options-nav bg-light shadow-sm" id="optionsNav">
+    <div class="col-lg-4 py-2">
+        <h5>@Model.Title</h5>
+        <p class="blockquote-footer">Добавен от <a href="/Users/Profile/@Model.Author.Id">@Model.Author</a> на @Model.CreatedOn</p>
+    </div>
+    <div class="col-lg-8 d-flex align-items-center justify-content-around justify-content-lg-end">
+        <ul class="nav">
+            <li class="nav-item">
+                <a href="#" class="nav-link add-link hvr-underline-from-center" data-toggle="modal" data-target="#createRoute"><i class="far fa-plus-square"></i> Създай нов</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+@await Component.InvokeAsync("CreateRoute")

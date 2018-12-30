@@ -1,0 +1,84 @@
+﻿@model AlpineClubBansko.Services.Models.RouteViewModels.RouteViewModel
+
+@{
+    ViewData["Title"] = Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid content">
+    <hr />
+    @await Component.InvokeAsync("RouteOptions", Model)
+    <hr />
+    <div class="row">
+        <div class="col-md-7" id="map"></div>
+        <div class="col-md-5">
+            @if (Model.Locations != null)
+            {
+                <p class="text-center">Маршрут</p>
+                <hr />
+                <ol>
+                    @foreach (var location in Model.Locations)
+                    {
+                        <li>@location.Name</li>
+                    }
+                </ol>
+            }
+            else
+            {
+                <p>Няма въведен маршрут за този преход</p>
+            }
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="offset-2 col-8">
+            @if (Model.Content != null)
+            {
+                @Model.Content;
+            }
+            else
+            {
+                <p>Автора не е въвел описание за този преход</p>
+            }
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        @if (Model.Album != null)
+        {
+            <ul id="lightSlider">
+                @foreach (var photo in Model.Album.Photos)
+                {
+                    <li><img src="@photo.ThumbnailUrl" /></li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>Автора не е създал албум за този преход</p>
+        }
+    </div>
+    <hr />
+</div>
+
+@section Scripts{
+    <script src="~/lib/lightslider/dist/js/lightslider.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#lightSlider").lightSlider();
+        });
+    </script>
+
+    <script>
+        var map;
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: -34.397, lng: 150.644 },
+                zoom: 8
+            });
+        }
+    </script>
+    <partial name="_OptionsNavScriptsPartial" />
+    <partial name="_GoogleMapsScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
+}

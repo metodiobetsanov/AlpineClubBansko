@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\MagicStrings\MagicStrings.csproj" />
     <ProjectReference Include="..\..\Data\AlpineClubBansko.Data.Models\AlpineClubBansko.Data.Models.csproj" />
     <ProjectReference Include="..\AlpineClubBansko.Services.Mapping\AlpineClubBansko.Services.Mapping.csproj" />
   </ItemGroup>

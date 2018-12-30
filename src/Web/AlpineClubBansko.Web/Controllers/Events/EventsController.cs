@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace AlpineClubBansko.Web.Controllers.Activities
+namespace AlpineClubBansko.Web.Controllers.Events
 {
-    public class ActivitiesController : Controller
+    public class EventsController : Controller
     {
         public IActionResult Index()
         {

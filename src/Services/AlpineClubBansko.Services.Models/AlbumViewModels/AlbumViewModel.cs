@@ -1,9 +1,9 @@
-﻿using System;
+﻿using AlpineClubBansko.Data.Models;
+using AlpineClubBansko.Services.Mapping.Contracts;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using AlpineClubBansko.Data.Models;
-using AlpineClubBansko.Services.Mapping.Contracts;
 
 namespace AlpineClubBansko.Services.Models.AlbumViewModels
 {
@@ -17,7 +17,8 @@ namespace AlpineClubBansko.Services.Models.AlbumViewModels
         [Required]
         public string Content { get; set; }
 
-        public string Cover {
+        public string Cover
+        {
             get
             {
                 if (Photos == null || Photos.Count == 0)

@@ -1,5 +1,4 @@
-﻿using AlpineClubBansko.Services.Mapping.Contracts;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
 
 namespace AlpineClubBansko.Data.Models
 {
@@ -11,8 +10,13 @@ namespace AlpineClubBansko.Data.Models
 
         public virtual Album Album { get; set; }
 
-        public virtual Route Route { get; set; }
+        public virtual ICollection<RoutesStories> Routes { get; set; }
 
-        public int Rating { get; set; }
+        public virtual ICollection<LikedStories> Favorite { get; set; }
+
+        public virtual ICollection<StoryComment> StoryComments { get; set; }
+
+        public int Views { get; set; }
+
     }
 }

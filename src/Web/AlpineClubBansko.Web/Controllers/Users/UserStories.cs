@@ -1,7 +1,6 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using AlpineClubBansko.Services.Models.UserViewModels;
+﻿using AlpineClubBansko.Services.Models.UserViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace AlpineClubBansko.Web.Controllers.ViewComponents.Users
 {

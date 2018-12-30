@@ -1,7 +1,5 @@
 ﻿using AlpineClubBansko.Data.Models;
-using AlpineClubBansko.Services.Models.AlbumViewModels;
 using AlpineClubBansko.Services.Models.RouteViewModels;
-using AlpineClubBansko.Services.Models.StoryViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,5 +12,7 @@ namespace AlpineClubBansko.Services.Contracts
         Route GetRoute(string id);
 
         RouteViewModel GetRouteById(string id);
+
+        Task<string> CreateRouteAsync(string name, User user);
     }
 }

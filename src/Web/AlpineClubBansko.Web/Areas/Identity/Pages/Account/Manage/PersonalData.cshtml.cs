@@ -1,9 +1,9 @@
-﻿using System.Threading.Tasks;
-using AlpineClubBansko.Data.Models;
+﻿using AlpineClubBansko.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace AlpineClubBansko.Web.Areas.Identity.Pages.Account.Manage
 {

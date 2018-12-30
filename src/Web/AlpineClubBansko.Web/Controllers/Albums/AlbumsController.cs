@@ -5,34 +5,32 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace AlpineClubBansko.Web.Controllers.Albums
 {
-    public class AlbumsController : Controller
+    public class AlbumsController : BaseController
     {
         private readonly IAlbumService albumService;
         private readonly ICloudService cloudService;
-        private readonly UserManager<User> userManager;
 
         public AlbumsController(IAlbumService albumService,
             ICloudService cloudService,
             UserManager<User> userManager)
+            : base(userManager)
         {
             this.albumService = albumService;
             this.cloudService = cloudService;
-            this.userManager = userManager;
         }
-        
+
         [HttpGet]
         public IActionResult Index()
         {
-           List<AlbumViewModel> list = albumService.GetAllAlbums().ToList();
+            List<AlbumViewModel> list = albumService.GetAllAlbums().ToList();
 
-           return View(list);
+            return View(list);
         }
 
         [HttpGet]
@@ -48,8 +46,7 @@ namespace AlpineClubBansko.Web.Controllers.Albums
         {
             if (this.ModelState.IsValid)
             {
-                User user = await this.userManager.GetUserAsync(User);
-                string albumId = await this.albumService.CreateAsync(model, user);
+                string albumId = await this.albumService.CreateAsync(model, CurrentUser);
 
                 return Redirect($"/Albums/Details/{albumId}");
             }
@@ -69,7 +66,7 @@ namespace AlpineClubBansko.Web.Controllers.Albums
         [Authorize]
         public IActionResult Update(string id)
         {
-            AlbumViewModel model = this.albumService.GetAlbumById(id); 
+            AlbumViewModel model = this.albumService.GetAlbumById(id);
 
             return View(model);
         }
@@ -105,7 +102,7 @@ namespace AlpineClubBansko.Web.Controllers.Albums
 
             if (ModelState.IsValid)
             {
-                model.Author = await this.userManager.GetUserAsync(User);
+                model.Author = CurrentUser;
                 model.Album = this.albumService.GetAlbum(albumId);
 
                 isUploaded = await this.cloudService.UploadImage(file, model);

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace AlpineClubBansko.Data.Models
 {
@@ -13,10 +10,11 @@ namespace AlpineClubBansko.Data.Models
 
         public string TimeNeeded { get; set; }
 
-        public string StoryId { get; set; }
-        public virtual Story Story { get; set; }
+        public virtual ICollection<RoutesStories> Stories { get; set; }
 
-        public virtual Album Album { get; set; }
+        public virtual ICollection<RoutesAlbums> Albums { get; set; }
+
+        public virtual ICollection<RoutesEvents> Events { get; set; }
 
         public virtual ICollection<Location> Locations { get; set; }
 

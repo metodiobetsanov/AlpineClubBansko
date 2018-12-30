@@ -131,10 +131,10 @@ namespace AlpineClubBansko.Services
             using (var image = new MagickImage(fileStream))
             {
                 MagickGeometry size = new MagickGeometry(200);
-                size.IgnoreAspectRatio = true;
+                size.IgnoreAspectRatio = false;
 
                 image.Resize(size);
-                image.Quality = 75;
+                image.Quality = 100;
                 thumbnail = image.ToByteArray();
             }
 
@@ -175,4 +175,3 @@ namespace AlpineClubBansko.Services
         }
     }
 }
-

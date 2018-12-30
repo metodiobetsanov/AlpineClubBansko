@@ -1,0 +1,38 @@
+﻿<nav class="navbar navbar-expand-lg navbar-toggleable-lg navbar-light bg-white border-bottom box-shadow mb-3 sticky-top" id="mainNav">
+    <div class="container">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="order-lg-1">
+            <partial name="_LoginPartial" />
+        </div>
+        <div class="navbar-collapse collapse d-lg-inline-flex flex-lg-row-reverse">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link hvr-underline-from-center" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> Начало</a>
+                </li>
+                <li class="nav-item d-none d-lg-block align-self-center">|</li>
+                <li class="nav-item">
+                    <a class="nav-link hvr-underline-from-center)" asp-area="" asp-controller="Events" asp-action="Index"><i class="fas fa-calendar-alt"></i> Събития</a>
+                </li>
+                <li class="nav-item d-none d-lg-block align-self-center">|</li>
+                <li class="nav-item">
+                    <a class="nav-link hvr-underline-from-center" asp-area="" asp-controller="Routes" asp-action="Index"><i class="fas fa-route"></i> Преходи</a>
+                </li>
+                <li class="nav-item d-none d-lg-block align-self-center">|</li>
+                <li class="nav-item">
+                    <a class="nav-link hvr-underline-from-center" asp-area="" asp-controller="Stories" asp-action="Index"><i class="fas fa-book-open"></i> Истории</a>
+                </li>
+                <li class="nav-item d-none d-lg-block align-self-center">|</li>
+                <li class="nav-item">
+                    <a class="nav-link hvr-underline-from-center" asp-area="" asp-controller="Albums" asp-action="Index"><i class="fas fa-camera-retro"></i> Албуми</a>
+                </li>
+                <li class="nav-item d-none d-lg-block align-self-center">|</li>
+                <li class="nav-item">
+                    <a class="nav-link hvr-underline-from-center" asp-area="" asp-controller="Club" asp-action="Index"><i class="fas fa-mountain"></i> АКБанско</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

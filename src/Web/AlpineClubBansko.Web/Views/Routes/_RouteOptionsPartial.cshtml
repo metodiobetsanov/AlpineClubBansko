@@ -1,0 +1,44 @@
+﻿@model AlpineClubBansko.Services.Models.RouteViewModels.RouteViewModel
+
+@using Microsoft.AspNetCore.Identity
+@using AlpineClubBansko.Data.Models
+
+@inject UserManager<User> UserManager
+@inject SignInManager<User> SignInManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <ul class="nav">
+        <li class="nav-item">
+            <a href="#" class="nav-link add-link" data-toggle="modal" data-target="#createRoute"><i class="far fa-plus-square"></i> Създай нов</a>
+        </li>
+
+        @if (UserManager.GetUserId(User) == Model.Author.Id)
+        {
+            <li class="nav-item d-none d-lg-block align-self-center"> || </li>
+            <li class="nav-item">
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-code-branch"></i> Свържи с
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="#">Албум</a>
+                        <a class="dropdown-item" href="#">История</a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item d-none d-lg-block align-self-center"> || </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-action="Update" asp-route-id="@Model.Id"><i class="far fa-edit"></i> Редактирай</a>
+            </li>
+            <li class="nav-item d-none d-lg-block align-self-center"> || </li>
+            <li class="nav-item">
+                <a class="nav-link del-link" asp-action="Delete" asp-route-id="@Model.Id"><i class="far fa-trash-alt"></i> Премахни</a>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <span>За повече опции влезте с потребителско име или се регистрирайте</span>
+}

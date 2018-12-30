@@ -1,42 +1,127 @@
 ﻿@model List<AlpineClubBansko.Services.Models.RouteViewModels.RouteViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Преходи";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container-fluid mb-5">
+<div class="container-fluid content">
+    <hr />
+    @await Component.InvokeAsync("RouteOptions")
     <hr />
     <div class="row">
-        <div class="offset-1 col-8  justify-content-start">
-            <h5>Моите координати:</h5>
-            <p id="myCoords"></p>
-        </div>
-        <div class="d-flex justify-content-end align-self-center">
-            <a asp-area="" asp-controller="Routes" asp-action="Create" class="btn btn-info">Създай преход</a>
+        <div class="col-md-7" id="map"></div>
+        <div class="col-md-5">
+            <p class="text-center">Най-посещавани места</p>
+            <hr />
+            <ol>
+                @foreach (var route in Model.OrderBy(x => x.Rating))
+                {
+                    <li>
+                        @route.Title - @route.TimeNeeded -
+                        <a asp-action="Details" asp-route-id="@route.Id"><i class="fas fa-link"></i></a>
+                    </li>
+                }
+            </ol>
         </div>
     </div>
     <hr />
-    <div class="row">
-        <div class="offset-md-1 col-md-7" id="map"></div>
-        <div class="offset-md-1 col-md-3">
-            Най-посещавани места
+    <div class="row mb-3">
+        <div class="col-6 d-flex justify-content-start">
+            <p class="align-self-center font-italic">Намерени прехода: <span class="text-info font-weight-bold">@Model.Count</span></p>
         </div>
-    </div>
-    <hr />
-    <div class="row">
-        <div class="col-12 d-flex justify-content-end">
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        <div class="col-6 d-flex justify-content-end">
+            <form class="form-inline ">
+                <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Намери</button>
             </form>
         </div>
     </div>
     <div class="row" id="routes">
         @await Component.InvokeAsync("ViewRoutes", new { list = Model })
     </div>
+    <hr />
 </div>
 
 @section Scripts{
+
+    <script>
+        var map;
+        var x = document.getElementById('myCoords');
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: -34.397, lng: 150.644 },
+                zoom: 10,
+            });
+
+            // Try HTML5 geolocation.
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    x.innerHTML = "Latitude: " + position.coords.latitude +
+                        ", Longitude: " + position.coords.longitude;
+
+                    var pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    var marker = new google.maps.Marker({
+                        animation: google.maps.Animation.DROP,
+                        position: pos,
+                        map: map,
+                        title: "Моето местоположение",
+                    });
+                    marker.addListener('click', function () {
+                        if (marker.getAnimation() !== null) {
+                            marker.setAnimation(null);
+                        } else {
+                            marker.setAnimation(google.maps.Animation.BOUNCE);
+                        }
+                    });
+
+                    map.setCenter(pos);
+
+                    getData();
+                });
+            } else {
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+
+            function getData() {
+                $.ajax({
+                    url: "/Routes/GetListCoords",
+                    type: 'GET',
+                    contentType: "application/json",
+                    success: function (data) {
+                        if (data != null) {
+                            getMarkers(data);
+                        } else {
+                            console.log("No data")
+                        }
+
+                    },
+                })
+            }
+
+            function getMarkers(data) {
+                for (var i = 0; i < data.length; i++) {
+                    var coords = data[i];
+                    var latLng = new google.maps.LatLng(coords["latitude"], coords["longitude"]);
+                    var marker = new google.maps.Marker({
+                        position: latLng,
+                        map: map
+                    });
+                    marker.addListener('click', function () {
+                        map.panTo(marker.position);
+                        map.setZoom(14);
+                    });
+                }
+            }
+
+        }
+    </script>
+    <partial name="_OptionsNavScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
     <partial name="_GoogleMapsScriptsPartial" />
 }

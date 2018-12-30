@@ -1,10 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AlpineClubBansko.Data.Models;
-using AlpineClubBansko.Services.Models.AlbumViewModels;
-using AlpineClubBansko.Services.Models.UserViewModels;
+﻿using AlpineClubBansko.Services.Models.UserViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace AlpineClubBansko.Web.Controllers.ViewComponents.Users
 {

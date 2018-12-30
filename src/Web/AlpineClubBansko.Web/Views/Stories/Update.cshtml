@@ -1,36 +1,48 @@
 ﻿@model AlpineClubBansko.Services.Models.StoryViewModels.StoryViewModel
 @{
-    ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    TempData["AuthorId"] = Model.Author.Id;
 }
 
-<div class="container">
-    <form asp-controller="Stories" asp-action="Edit" method="post">
-        <div class="row">
-            <div class="col-lg-8 offset-lg-2">
-                <div class="blog-post pt-md-3">
-                    <h2 class="blog-post-title text-center">Редактиране на история</h2>
-                    <br/>
+<div class="container-fluid content">
+    <hr />
+    <vc:story-options model="@Model"></vc:story-options>
+    <hr />
+    <div class="row">
+        <div class="col-12">
+            <form asp-controller="Stories" asp-action="Update" method="post" id="updateForm" class="needs-validation">
+                <div class="col-lg-8 offset-lg-2 ">
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-group">
                         <label asp-for="Title"></label>
-                        <input asp-for="Title" class="form-control"/>
+                        <input asp-for="Title" type="text" class="form-control " />
                         <span asp-validation-for="Title" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
                         <label asp-for="Content"></label>
-                        <textarea asp-for="Content" rows="8" class="form-control"></textarea>
-                        <span asp-validation-for="Content" class="text-danger"></span>
+                        <textarea asp-for="Content" rows="8" class="form-control" id="textEditor"></textarea>
                     </div>
-                    <br/>
-                    <button type="submit" class="btn btn-info">Запиши</button>
+                    <span asp-validation-for="Content" class="text-danger"></span>
                 </div>
-            </div>
+            </form>
         </div>
-    </form>
+    </div>
+    <hr />
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial"/>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=1h9zbrpyrsgirdzgwk74x0ydlcghp34o257t2ljvorvi9n6q"></script>
+    <script>
+        tinymce.init({
+            selector: '#textEditor',
+        });
+    </script>
+    <script>
+        function SubmitForm() {
+            tinyMCE.triggerSave();
+            $('#updateForm').submit();
+        };
+    </script>
 }

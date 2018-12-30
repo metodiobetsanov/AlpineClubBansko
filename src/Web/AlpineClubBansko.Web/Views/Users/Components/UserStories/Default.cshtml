@@ -20,7 +20,7 @@
         <tr>
             <th scope="row">@(index++)</th>
             <td>@story.Title</td>
-            <td class="text-center">@story.Rating</td>
+            <td class="text-center">@story.Favorite.Count</td>
             <td class="text-center">
                 <a asp-area="" asp-controller="Posts" asp-action="Details" asp-route-id="@story.Id">Разгледай</a>
             </td>

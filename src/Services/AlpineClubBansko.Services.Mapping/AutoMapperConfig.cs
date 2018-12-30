@@ -44,6 +44,7 @@ namespace AlpineClubBansko.Services.Mapping
                 }
             });
         }
+
         private static IEnumerable<TypesMap> GetFromMaps(
             IEnumerable<Type> types)
         {

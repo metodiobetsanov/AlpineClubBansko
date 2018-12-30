@@ -4,32 +4,38 @@
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 
-<ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
-    {
-        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new {area = ""})" method="post" id="logoutForm">
-            <div class="dropdown ">
-                <a class="btn dropdown-toggle p-2 text-muted" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Здравей @UserManager.GetUserName(User)!
+@if (SignInManager.IsSignedIn(User))
+{
+<form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new {area = ""})" method="post" id="logoutForm">
+    <div class="dropdown ">
+        <a class="btn dropdown-toggle p-2 text-muted hvr-underline-from-center" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Здравей @UserManager.GetUserName(User)!
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+            @if (User.IsInRole("Administrator") || User.IsInRole("Owner"))
+            {
+                <a asp-area="Admin" asp-controller="Manage" asp-action="Dashboard" class="dropdown-item p-2 text-muted">
+                    <i class="fas fa-tools"></i> Админ зона
                 </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                    @if (User.IsInRole("Administrator"))
-                    {
-                        <a asp-area="Admin" asp-controller="App" asp-action="Dashboard" title="Manage" class="dropdown-item p-2 text-muted">Админ зона</a>
-                    }
-                    <a asp-area="" asp-controller="Users" asp-action="Profile" asp-route-id="@UserManager.GetUserId(User)" title="My Profile" class="dropdown-item p-2 text-muted">Моя Профил</a>
-                    <button type="submit" class="dropdown-item p-2 text-muted">Излез</button>
-                </div>
-            </div>
-        </form>
-    }
-    else
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-        </li>
-    }
+            }
+            <a asp-area="" asp-controller="Users" asp-action="Profile" asp-route-id="@UserManager.GetUserId(User)" class="dropdown-item p-2 text-muted">
+                <i class="fas fa-user-alt"></i> Моя Профил
+            </a>
+            <div class="dropdown-divider"></div>
+            <button type="submit" class="dropdown-item p-2 text-danger"><i class="fas fa-sign-out-alt"></i> Излез</button>
+        </div>
+    </div>
+</form>
+}
+else
+{
+<ul class="nav">
+    <li class="nav-item">
+        <a class="nav-link text-muted hvr-underline-from-center" asp-area="Identity" asp-page="/Account/Register"><i class="fas fa-user"></i> Register</a>
+    </li>
+    <li class="nav-item align-self-center">|</li>
+    <li class="nav-item">
+        <a class="nav-link text-muted hvr-underline-from-center" asp-area="Identity" asp-page="/Account/Login"><i class="fas fa-sign-in-alt"></i> Login</a>
+    </li>
 </ul>
+}

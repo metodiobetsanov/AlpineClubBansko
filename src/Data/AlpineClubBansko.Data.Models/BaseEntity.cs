@@ -5,11 +5,6 @@ namespace AlpineClubBansko.Data.Models
 {
     public abstract class BaseEntity
     {
-        protected BaseEntity()
-        {
-            CreatedOn = DateTime.UtcNow;
-        }
-
         [Key]
         [Required]
         public string Id { get; set; }
@@ -19,6 +14,7 @@ namespace AlpineClubBansko.Data.Models
 
         public DateTime? ModifiedOn { get; set; }
 
+        [Required]
         public string AuthorId { get; set; }
         public virtual User Author { get; set; }
     }

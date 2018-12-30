@@ -1,0 +1,110 @@
+2018-12-30 12:02:10.8062 Info Message Template Auto Format enabled
+2018-12-30 12:02:10.8261 Info Loading assembly: NLog.Web.AspNetCore
+2018-12-30 12:02:10.8983 Info Adding target File Target[allfile]
+2018-12-30 12:02:10.8983 Info Adding target File Target[ownFile-web]
+2018-12-30 12:02:10.9102 Info Configured from an XML element in C:\Users\htcse\OneDrive\Работен плот\AlpineClubBansko\src\Web\AlpineClubBansko.Web\bin\Debug\netcoreapp2.2\NLog.config...
+2018-12-30 12:02:10.9329 Info Found 45 configuration items
+2018-12-30 12:02:10.9602 Info Configuration initialized.
+2018-12-30 12:02:10.9602 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.5.11.8645. Product version: 4.5.11.
+2018-12-30 12:02:11.8668 Info Shutting down logging...
+2018-12-30 12:02:11.8968 Info Logger has been shut down.
+2018-12-30 12:02:26.3735 Info Message Template Auto Format enabled
+2018-12-30 12:02:26.3911 Info Loading assembly: NLog.Web.AspNetCore
+2018-12-30 12:02:26.4630 Info Adding target File Target[allfile]
+2018-12-30 12:02:26.4630 Info Adding target File Target[ownFile-web]
+2018-12-30 12:02:26.4801 Info Configured from an XML element in C:\Users\htcse\OneDrive\Работен плот\AlpineClubBansko\src\Web\AlpineClubBansko.Web\bin\Debug\netcoreapp2.2\NLog.config...
+2018-12-30 12:02:26.5041 Info Found 45 configuration items
+2018-12-30 12:02:26.5348 Info Configuration initialized.
+2018-12-30 12:02:26.5348 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.5.11.8645. Product version: 4.5.11.
+2018-12-30 12:02:27.5903 Info Shutting down logging...
+2018-12-30 12:02:27.6284 Info Logger has been shut down.
+2018-12-30 12:03:02.3993 Info Message Template Auto Format enabled
+2018-12-30 12:03:02.4156 Info Loading assembly: NLog.Web.AspNetCore
+2018-12-30 12:03:02.4775 Info Adding target File Target[allfile]
+2018-12-30 12:03:02.4775 Info Adding target File Target[ownFile-web]
+2018-12-30 12:03:02.4886 Info Configured from an XML element in C:\Users\htcse\OneDrive\Работен плот\AlpineClubBansko\src\Web\AlpineClubBansko.Web\bin\Debug\netcoreapp2.2\NLog.config...
+2018-12-30 12:03:02.5149 Info Found 45 configuration items
+2018-12-30 12:03:02.5383 Info Configuration initialized.
+2018-12-30 12:03:02.5383 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.5.11.8645. Product version: 4.5.11.
+2018-12-30 12:03:03.5648 Info Shutting down logging...
+2018-12-30 12:03:03.5902 Info Logger has been shut down.
+2018-12-30 12:03:12.6521 Info Message Template Auto Format enabled
+2018-12-30 12:03:12.6660 Info Loading assembly: NLog.Web.AspNetCore
+2018-12-30 12:03:12.7283 Info Adding target File Target[allfile]
+2018-12-30 12:03:12.7283 Info Adding target File Target[ownFile-web]
+2018-12-30 12:03:12.7393 Info Configured from an XML element in C:\Users\htcse\OneDrive\Работен плот\AlpineClubBansko\src\Web\AlpineClubBansko.Web\bin\Debug\netcoreapp2.2\NLog.config...
+2018-12-30 12:03:12.7630 Info Found 45 configuration items
+2018-12-30 12:03:12.7852 Info Configuration initialized.
+2018-12-30 12:03:12.7852 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.5.11.8645. Product version: 4.5.11.
+2018-12-30 12:03:13.5272 Info Shutting down logging...
+2018-12-30 12:03:13.5530 Info Logger has been shut down.
+2018-12-30 12:03:20.2507 Info Message Template Auto Format enabled
+2018-12-30 12:03:20.2644 Info Loading assembly: NLog.Web.AspNetCore
+2018-12-30 12:03:20.3242 Info Adding target File Target[allfile]
+2018-12-30 12:03:20.3242 Info Adding target File Target[ownFile-web]
+2018-12-30 12:03:20.3352 Info Configured from an XML element in C:\Users\htcse\OneDrive\Работен плот\AlpineClubBansko\src\Web\AlpineClubBansko.Web\bin\Debug\netcoreapp2.2\NLog.config...
+2018-12-30 12:03:20.3531 Info Found 45 configuration items
+2018-12-30 12:03:20.3754 Info Configuration initialized.
+2018-12-30 12:03:20.3820 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.5.11.8645. Product version: 4.5.11.
+2018-12-30 12:03:21.2961 Info Shutting down logging...
+2018-12-30 12:03:21.3248 Info Logger has been shut down.
+2018-12-30 12:03:27.6982 Info Message Template Auto Format enabled
+2018-12-30 12:03:27.7157 Info Loading assembly: NLog.Web.AspNetCore
+2018-12-30 12:03:27.7928 Info Adding target File Target[allfile]
+2018-12-30 12:03:27.7928 Info Adding target File Target[ownFile-web]
+2018-12-30 12:03:27.8138 Info Configured from an XML element in C:\Users\htcse\OneDrive\Работен плот\AlpineClubBansko\src\Web\AlpineClubBansko.Web\bin\Debug\netcoreapp2.2\NLog.config...
+2018-12-30 12:03:27.8441 Info Found 45 configuration items
+2018-12-30 12:03:27.8724 Info Configuration initialized.
+2018-12-30 12:03:27.8790 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.5.11.8645. Product version: 4.5.11.
+2018-12-30 12:03:39.4500 Info Shutting down logging...
+2018-12-30 12:03:39.4746 Info Logger has been shut down.
+2018-12-30 13:43:43.5396 Info Message Template Auto Format enabled
+2018-12-30 13:43:43.5591 Info Loading assembly: NLog.Web.AspNetCore
+2018-12-30 13:43:43.6517 Info Adding target File Target[allfile]
+2018-12-30 13:43:43.6517 Info Adding target File Target[ownFile-web]
+2018-12-30 13:43:43.6700 Info Configured from an XML element in C:\Users\htcse\OneDrive\Работен плот\AlpineClubBansko\src\Web\AlpineClubBansko.Web\bin\Debug\netcoreapp2.2\NLog.config...
+2018-12-30 13:43:43.6972 Info Found 45 configuration items
+2018-12-30 13:43:43.7283 Info Configuration initialized.
+2018-12-30 13:43:43.7376 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.5.11.8645. Product version: 4.5.11.
+2018-12-30 13:43:44.6362 Info Shutting down logging...
+2018-12-30 13:43:44.6643 Info Logger has been shut down.
+2018-12-30 13:43:53.4121 Info Message Template Auto Format enabled
+2018-12-30 13:43:53.4263 Info Loading assembly: NLog.Web.AspNetCore
+2018-12-30 13:43:53.4910 Info Adding target File Target[allfile]
+2018-12-30 13:43:53.4910 Info Adding target File Target[ownFile-web]
+2018-12-30 13:43:53.5032 Info Configured from an XML element in C:\Users\htcse\OneDrive\Работен плот\AlpineClubBansko\src\Web\AlpineClubBansko.Web\bin\Debug\netcoreapp2.2\NLog.config...
+2018-12-30 13:43:53.5341 Info Found 45 configuration items
+2018-12-30 13:43:53.5555 Info Configuration initialized.
+2018-12-30 13:43:53.5555 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.5.11.8645. Product version: 4.5.11.
+2018-12-30 13:43:54.5183 Info Shutting down logging...
+2018-12-30 13:43:54.5481 Info Logger has been shut down.
+2018-12-30 13:44:12.9262 Info Message Template Auto Format enabled
+2018-12-30 13:44:12.9429 Info Loading assembly: NLog.Web.AspNetCore
+2018-12-30 13:44:13.0021 Info Adding target File Target[allfile]
+2018-12-30 13:44:13.0053 Info Adding target File Target[ownFile-web]
+2018-12-30 13:44:13.0053 Info Configured from an XML element in C:\Users\htcse\OneDrive\Работен плот\AlpineClubBansko\src\Web\AlpineClubBansko.Web\bin\Debug\netcoreapp2.2\NLog.config...
+2018-12-30 13:44:13.0377 Info Found 45 configuration items
+2018-12-30 13:44:13.0714 Info Configuration initialized.
+2018-12-30 13:44:13.0714 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.5.11.8645. Product version: 4.5.11.
+2018-12-30 13:44:15.7633 Info Shutting down logging...
+2018-12-30 13:44:15.7890 Info Logger has been shut down.
+2018-12-30 15:46:55.6245 Info Message Template Auto Format enabled
+2018-12-30 15:46:55.6488 Info Loading assembly: NLog.Web.AspNetCore
+2018-12-30 15:46:55.7458 Info Adding target File Target[allfile]
+2018-12-30 15:46:55.7529 Info Adding target File Target[ownFile-web]
+2018-12-30 15:46:55.7529 Info Configured from an XML element in C:\Users\htcse\OneDrive\Работен плот\AlpineClubBansko\src\Web\AlpineClubBansko.Web\bin\Debug\netcoreapp2.2\NLog.config...
+2018-12-30 15:46:55.8154 Info Found 45 configuration items
+2018-12-30 15:46:55.8559 Info Configuration initialized.
+2018-12-30 15:46:55.8639 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.5.11.8645. Product version: 4.5.11.
+2018-12-30 15:46:57.2050 Info Shutting down logging...
+2018-12-30 15:46:57.2333 Info Logger has been shut down.
+2018-12-30 15:47:12.5924 Info Message Template Auto Format enabled
+2018-12-30 15:47:12.6072 Info Loading assembly: NLog.Web.AspNetCore
+2018-12-30 15:47:12.6937 Info Adding target File Target[allfile]
+2018-12-30 15:47:12.6937 Info Adding target File Target[ownFile-web]
+2018-12-30 15:47:12.7265 Info Configured from an XML element in C:\Users\htcse\OneDrive\Работен плот\AlpineClubBansko\src\Web\AlpineClubBansko.Web\bin\Debug\netcoreapp2.2\NLog.config...
+2018-12-30 15:47:12.7519 Info Found 45 configuration items
+2018-12-30 15:47:12.7852 Info Configuration initialized.
+2018-12-30 15:47:12.7852 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.5.11.8645. Product version: 4.5.11.
+2018-12-30 15:47:13.8941 Info Shutting down logging...
+2018-12-30 15:47:13.9263 Info Logger has been shut down.

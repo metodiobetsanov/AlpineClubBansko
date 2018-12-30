@@ -1,0 +1,69 @@
+﻿@model List<AlpineClubBansko.Services.Models.StoryViewModels.StoryViewModel>
+
+
+<div class="col-12">
+    <div class="card-deck">
+        @if (Model != null && Model.Count() > 0)
+        {
+            @foreach (var story in Model)
+            {
+                <div class="col-lg-6 py-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>@story.Title</h5>
+                            <span class="blockquote-footer">
+                                Автор: <a asp-controller="Users" asp-action="Profile" asp-route-id="@story.Author.Id">@story.Author</a>, качена на @story.CreatedOn
+                            </span>
+                        </div>
+                        <div class="card-body d-none d-md-block">
+                            <p class="card-text">@Html.Raw(story.Content)</p>
+                        </div>
+                        <div class="row card-footer py-2">
+                            <div class="small text-muted col d-flex justify-content-around">
+                                <span><i class="fas fa-book-reader"></i> @story.Views </span><span> <i class="fas fa-comments"></i> @story.StoryComments.Count </span><span> <i class="fas fa-heart"></i> @story.Favorite.Count</span>
+                            </div>
+                            <div class="small text-muted col text-right"><a asp-action="Details" asp-route-id="@story.Id"><i class="fab fa-readme"></i> Прочети</a></div>
+                        </div>
+                        </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center align-middle">Няма намерени истории</div>
+        }
+    </div>
+    <hr />
+    <div class="row justify-content-center">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item  @((int)ViewData["page"] == 1 ? "disabled" : "")">
+                    <a class="page-link" href="#" onclick="ChangePage('1')">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                </li>
+                <li class="page-item @((int)ViewData["page"] == 1 ? "disabled" : "")">
+                    <a class="page-link" href="#" onclick="ChangePage('@((int)ViewData["page"] - 1)')">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                </li>
+                @for (int i = 1; i <= (int)ViewData["totalPages"]; i++)
+                {
+                    <li class="page-item  @((int)ViewData["page"] == i ? "active" : ""))">
+                        <a class="page-link" href="#" onclick="ChangePage('@i')">@i</a>
+                    </li>
+                }
+                <li class="page-item @((int)ViewData["page"] == (int)ViewData["totalPages"] ? "disabled" : "")">
+                    <a class="page-link" href="#" onclick="ChangePage('@((int)ViewData["page"] + 1)')">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                </li>
+                <li class="page-item @((int)ViewData["page"] == (int)ViewData["totalPages"] ? "disabled" : "")">
+                    <a class="page-link" href="#" onclick="ChangePage('@((int)ViewData["totalPages"])')">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

@@ -4,14 +4,13 @@ using AlpineClubBansko.Data.Models;
 using AlpineClubBansko.Services.Contracts;
 using AlpineClubBansko.Services.Mapping;
 using AlpineClubBansko.Services.Models;
+using AlpineClubBansko.Services.Models.AlbumViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Shouldly;
 using System;
 using System.Linq;
-using Shouldly;
 using Xunit;
-using AlpineClubBansko.Services.Models.StoryViewModels;
-using AlpineClubBansko.Services.Models.AlbumViewModels;
 
 namespace AlpineClubBansko.Services.Tests
 {
@@ -37,8 +36,6 @@ namespace AlpineClubBansko.Services.Tests
             this.context = provider.GetService<ApplicationDbContext>();
             this.service = provider.GetService<IAlbumService>();
             this.repo = provider.GetService<IRepository<Album>>();
-
-
         }
 
         [Fact]

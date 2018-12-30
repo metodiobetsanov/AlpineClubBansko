@@ -19,10 +19,12 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.7.0" />
     <PackageReference Include="NLog" Version="4.5.11" />
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="7.6.0" />
   </ItemGroup>
 
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\MagicStrings\MagicStrings.csproj" />
     <ProjectReference Include="..\..\Data\AlpineClubBansko.Data\AlpineClubBansko.Data.csproj" />
     <ProjectReference Include="..\..\Services\AlpineClubBansko.Services.Mapping\AlpineClubBansko.Services.Mapping.csproj" />
     <ProjectReference Include="..\..\Services\AlpineClubBansko.Services.Models\AlpineClubBansko.Services.Models.csproj" />
@@ -32,11 +34,6 @@
 
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Models\" />
   </ItemGroup>
 
 

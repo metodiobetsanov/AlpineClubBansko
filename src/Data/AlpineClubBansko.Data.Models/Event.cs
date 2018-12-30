@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace AlpineClubBansko.Data.Models
 {
@@ -14,8 +13,9 @@ namespace AlpineClubBansko.Data.Models
 
         public DateTime EndDate { get; set; }
 
-        public string AlbumId { get; set; }
-        public virtual Album Album { get; set; }
+        public virtual ICollection<Album> Albums { get; set; }
+
+        public virtual ICollection<RoutesEvents> Routes { get; set; }
 
         public virtual ICollection<UsersEvents> Participants { get; set; }
 

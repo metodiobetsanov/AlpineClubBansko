@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AlpineClubBansko.Data.Models;
+﻿using AlpineClubBansko.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,5 +26,13 @@ namespace AlpineClubBansko.Data
         public DbSet<Route> Routes { get; set; }
 
         public DbSet<Story> Stories { get; set; }
+
+        public DbSet<RoutesAlbums> RoutesAlbums { get; set; }
+
+        public DbSet<RoutesEvents> RoutesEvents { get; set; }
+
+        public DbSet<RoutesStories> RoutesStories { get; set; }
+
+        public DbSet<LikedStories> UsersLikedStories { get; set; }
     }
 }

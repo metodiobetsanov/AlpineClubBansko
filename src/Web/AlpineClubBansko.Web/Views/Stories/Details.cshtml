@@ -1,0 +1,118 @@
+﻿@model AlpineClubBansko.Services.Models.StoryViewModels.StoryViewModel
+@using AlpineClubBansko.Data.Models
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<User> SignInManager
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid content">
+    <hr />
+    <vc:story-options model="@Model"></vc:story-options>
+    <hr />
+    <div class="row pt-3">
+        <div class="offset-md-2 col-12 col-md-8">
+            @Html.Raw(Model.Content)
+        </div>
+    </div>
+    <hr />
+    <div class="row pb-2">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <vc:create-comment></vc:create-comment>
+        }
+    </div>
+    <div class="row pt-2" id="comments">
+        <partial name="_Comments" model="@Model.StoryComments" />
+    </div>
+    <hr />
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+
+        $(document).ready(function () {
+            $.ajax({
+                url: '/Stories/AddViewed',
+                type: 'post',
+                data: {
+                    id: '@Model.Id',
+                }, success: function (data) {
+                    console.log(data);
+                    RefreshStats();
+                }, error: function (reponse) {
+                    console.log("error : " + reponse);
+                }
+            });
+        });
+
+        $('#createComment').submit(function (e) {
+            e.preventDefault();
+
+            var tmp = $('#comContent').val();
+            if ($("#comContent").valid()) {
+                $.ajax({
+                    url: '/Stories/CreateComment',
+                    type: 'post',
+                    data: {
+                        id: '@Model.Id',
+                        content: tmp,
+                    }, success: function (data) {
+                        $('#comments').html(data).fadeIn();
+                        $('#comContent').val('');
+                    }, error: function (reponse) {
+                        console.log("error : " + reponse);
+                    }
+                });
+            }
+        });
+
+        function DeleteComment(param) {
+             $.ajax({
+                    url: '/Stories/DeleteComment',
+                    type: 'post',
+                    data: {
+                        id: param,
+                        storyId: '@Model.Id'
+                    }, success: function (data) {
+                        $('#comments').html(data).fadeIn();
+                    }, error: function (reponse) {
+                        console.log("error : " + reponse);
+                    }
+                });
+        }
+
+        function Favorite() {
+            $.ajax({
+                url: '/Stories/Favorite',
+                type: 'post',
+                data: {
+                    id: '@Model.Id',
+                }, success: function (data) {
+                    console.log(data);
+                    RefreshStats();
+                }, error: function (reponse) {
+                    console.log("error : " + reponse);
+                }
+            })
+        }
+
+        function RefreshStats() {
+            $.ajax({
+                url: '/Stories/RefreshStats',
+                type: 'get',
+                data: {
+                    id: '@Model.Id',
+                }, success: function (data) {
+                    $('#optionsNav').replaceWith(data);
+                    SetOptionNavH();
+                }, error: function (reponse) {
+                    console.log("error : " + reponse);
+                }
+            })
+        }
+    </script>
+
+}

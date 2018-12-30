@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
 
 namespace AlpineClubBansko.Data.Models
 {
@@ -34,5 +34,7 @@ namespace AlpineClubBansko.Data.Models
         public virtual ICollection<Route> Routes { get; set; }
 
         public virtual ICollection<Album> Albums { get; set; }
+
+        public virtual ICollection<LikedStories> StoriesLiked { get; set; }
     }
 }
