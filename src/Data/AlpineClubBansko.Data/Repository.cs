@@ -45,10 +45,5 @@ namespace AlpineClubBansko.Data
         {
             return this._context.SaveChangesAsync();
         }
-
-        public void Dispose()
-        {
-            this._context.Dispose();
-        }
     }
 }

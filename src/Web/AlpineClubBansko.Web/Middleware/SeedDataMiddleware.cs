@@ -8,7 +8,6 @@ namespace AlpineClubBansko.Web.Middleware
     public class SeedDataMiddleware
     {
         private readonly RequestDelegate next;
-        private bool seedDone = false;
 
         public SeedDataMiddleware(RequestDelegate next)
         {
@@ -20,8 +19,6 @@ namespace AlpineClubBansko.Web.Middleware
             UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager)
         {
-            if (!seedDone)
-            {
                 if (!(await roleManager.RoleExistsAsync("Owner")))
                 {
                     await roleManager.CreateAsync(
@@ -45,7 +42,7 @@ namespace AlpineClubBansko.Web.Middleware
 
                 if (await userManager.FindByEmailAsync("owner@this.web") == null)
                 {
-                    User user = new User()
+                    User user = new User
                     {
                         UserName = "Owner",
                         Email = "owner@this.web"
@@ -56,10 +53,10 @@ namespace AlpineClubBansko.Web.Middleware
                     if (result.Succeeded)
                     {
                         await userManager.AddToRolesAsync(user, new[] { "Owner", "Administrator" });
-                        seedDone = true;
+
                     }
                 }
-            }
+
 
             await this.next(context);
         }

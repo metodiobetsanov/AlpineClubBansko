@@ -93,8 +93,7 @@ namespace AlpineClubBansko.Services
 
             await container.CreateAsync();
             await container.SetPermissionsAsync(
-                new BlobContainerPermissions()
-                {
+                new BlobContainerPermissions{
                     PublicAccess = BlobContainerPublicAccessType.Blob
                 });
         }

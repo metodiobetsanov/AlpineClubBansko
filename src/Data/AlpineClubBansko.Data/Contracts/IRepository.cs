@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace AlpineClubBansko.Data.Contracts
 {
-    public interface IRepository<TEntity> : IDisposable
+    public interface IRepository<TEntity>
         where TEntity : class
     {
         IQueryable<TEntity> All();

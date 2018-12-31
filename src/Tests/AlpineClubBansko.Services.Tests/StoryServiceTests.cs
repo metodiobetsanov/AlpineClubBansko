@@ -84,8 +84,6 @@ namespace AlpineClubBansko.Services.Tests
             storiesAsViewModel.ShouldNotBeEmpty();
 
             storiesAsViewModel.ShouldHaveSingleItem();
-
-            this.storyRepo.Dispose();
         }
 
         [Fact]

@@ -19,22 +19,22 @@ namespace AlpineClubBansko.Web.Controllers
 
         public void AddUserNotification(string message)
         {
-            this.TempData["notification"] = new string[2] { "primary", message };
+            this.TempData["notification"] = new string[] { "primary", message };
         }
 
         public void AddSuccessNotification(string message)
         {
-            this.TempData["notification"] = new string[2] { "success", message };
+            this.TempData["notification"] = new string[] { "success", message };
         }
 
         public void AddWarningNotification(string message)
         {
-            this.TempData["notification"] = new string[2] { "warning", message };
+            this.TempData["notification"] = new string[] { "warning", message };
         }
 
         public void AddDangerNotification(string message)
         {
-            this.TempData["notification"] = new string[2] { "danger", message };
+            this.TempData["notification"] = new string[] { "danger", message };
         }
     }
 }

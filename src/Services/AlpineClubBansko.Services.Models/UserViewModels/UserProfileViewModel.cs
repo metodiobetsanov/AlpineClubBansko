@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace AlpineClubBansko.Services.Models.UserViewModels
 {
-    public class UserProfileViewModel : IMapTo<User>, IMapFrom<User>, IHaveCustomMappings
+    public class UserProfileViewModel : IMapTo<User>, IMapFrom<User>
     {
         public string Id { get; set; }
 
@@ -37,10 +37,5 @@ namespace AlpineClubBansko.Services.Models.UserViewModels
         public List<StoryViewModel> Stories { get; set; }
 
         public List<AlbumViewModel> Albums { get; set; }
-
-        public void CreateMappings(IMapperConfigurationExpression configuration)
-        {
-            return;
-        }
     }
 }

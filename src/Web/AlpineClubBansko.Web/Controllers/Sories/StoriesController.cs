@@ -321,9 +321,9 @@ namespace AlpineClubBansko.Web.Controllers.Stories
         }
 
         [HttpGet]
-        public IActionResult FilterStories(string searchCriteria = null,
-            string sortOrder = null,
-            int page = 1)
+        public IActionResult FilterStories(string searchCriteria,
+            string sortOrder,
+            int page)
         {
             try
             {
