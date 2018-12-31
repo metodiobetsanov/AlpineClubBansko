@@ -21,11 +21,9 @@ namespace AlpineClubBansko.Web.Controllers.Stories
 
         public StoriesController(IStoryService storyService,
             UserManager<User> userManager,
-            ILogger<StoriesController> logger,
-            HtmlEncoder htmlEncoder)
+            ILogger<StoriesController> logger)
             : base(userManager)
         {
-            this.htmlEncoder = htmlEncoder;
             this.logger = logger;
             this.storyService = storyService;
         }
@@ -35,7 +33,7 @@ namespace AlpineClubBansko.Web.Controllers.Stories
         {
             try
             {
-                List<StoryViewModel> list = this.storyService.GetAllStories().ToList();
+                List<StoryViewModel> list = this.storyService.GetAllStoriesAsViewModels().ToList();
                 return View(list);
             }
             catch (System.Exception e)
@@ -59,6 +57,11 @@ namespace AlpineClubBansko.Web.Controllers.Stories
                 if (this.ModelState.IsValid)
                 {
                     string storyId = await storyService.CreateAsync(model.Title, CurrentUser);
+                    if (string.IsNullOrEmpty(storyId))
+                    {
+                        AddDangerNotification(string.Format(Notifications.CreatedFail, model.Title));
+                        return Redirect("/Stories");
+                    }
 
                     logger.LogInformation(
                         string.Format(SetLog.CreatedSuccess,
@@ -98,7 +101,13 @@ namespace AlpineClubBansko.Web.Controllers.Stories
         {
             try
             {
-                StoryViewModel model = this.storyService.GetStoryById(id);
+                StoryViewModel model = this.storyService.GetStoryByIdAsViewModel(id);
+
+                if (model == null)
+                {
+                    AddWarningNotification(Notifications.NotFound);
+                    return Redirect("/Stories");
+                }
 
                 return View(model);
             }
@@ -120,7 +129,13 @@ namespace AlpineClubBansko.Web.Controllers.Stories
         {
             try
             {
-                StoryViewModel model = this.storyService.GetStoryById(id);
+                StoryViewModel model = this.storyService.GetStoryByIdAsViewModel(id);
+
+                if (model == null)
+                {
+                    AddWarningNotification(Notifications.NotFound);
+                    return Redirect("/Stories");
+                }
 
                 return View(model);
             }
@@ -211,7 +226,13 @@ namespace AlpineClubBansko.Web.Controllers.Stories
 
             try
             {
-                await storyService.DeleteAsync(id);
+                var result = await storyService.DeleteAsync(id);
+
+                if (!result)
+                {
+                        AddDangerNotification(Notifications.Fail);
+                        return Redirect("/Stories");
+                }
 
                 logger.LogInformation(
                         string.Format(SetLog.Delete,
@@ -239,21 +260,21 @@ namespace AlpineClubBansko.Web.Controllers.Stories
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateComment(string id, string content)
+        public async Task<IActionResult> CreateComment(string storyId, string content)
         {
             try
             {
-                await this.storyService.CreateComment(id, content, CurrentUser);
+                await this.storyService.CreateCommentAsync(storyId, content, CurrentUser);
 
                 logger.LogInformation(
                         string.Format(SetLog.CreatedSuccess,
                             CurrentUser.UserName,
                             CurrentController,
-                            $"StoryCommentFor-{id}"
+                            $"StoryCommentFor-{storyId}"
                             ));
 
-                var model = storyService.GetStoryById(id);
-                return PartialView("_Comments", model.StoryComments.ToList());
+                var model = storyService.GetStoryById(storyId);
+                return PartialView("_Comments", model.StoryComments);
             }
             catch (System.Exception e)
             {
@@ -270,21 +291,21 @@ namespace AlpineClubBansko.Web.Controllers.Stories
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> DeleteComment(string id, string storyId)
+        public async Task<IActionResult> DeleteComment(string commentId, string storyId)
         {
             try
             {
-                await this.storyService.DeleteComment(id);
+                await this.storyService.DeleteCommentAsync(commentId);
 
                 logger.LogInformation(
                         string.Format(SetLog.Delete,
                             CurrentUser.UserName,
                             CurrentController,
-                            $"StoryCommentFor-{id}"
+                            $"StoryCommentFor-{storyId}"
                             ));
 
-                var model = storyService.GetStoryById(storyId);
-                return PartialView("_Comments", model.StoryComments.ToList());
+                StoryViewModel model = storyService.GetStoryByIdAsViewModel(storyId);
+                return PartialView("_Comments", model.StoryComments);
             }
             catch (System.Exception e)
             {
@@ -306,7 +327,7 @@ namespace AlpineClubBansko.Web.Controllers.Stories
         {
             try
             {
-                List<StoryViewModel> list = this.storyService.GetAllStories().ToList();
+                List<StoryViewModel> list = this.storyService.GetAllStoriesAsViewModels().ToList();
                 return ViewComponent("ViewStories",
                     new
                     {
@@ -330,11 +351,11 @@ namespace AlpineClubBansko.Web.Controllers.Stories
         }
 
         [HttpPost]
-        public async Task<bool> AddViewed(string id)
+        public async Task<bool> AddViewed(string storyId)
         {
             try
             {
-                bool result = await this.storyService.AddViewed(id);
+                bool result = await this.storyService.AddViewedAsync(storyId);
 
                 return result;
             }
@@ -353,11 +374,11 @@ namespace AlpineClubBansko.Web.Controllers.Stories
 
         [HttpPost]
         [Authorize]
-        public async Task<bool> Favorite(string id)
+        public async Task<bool> Favorite(string storyId)
         {
             try
             {
-                bool result = await this.storyService.Favorite(id, CurrentUser);
+                bool result = await this.storyService.FavoriteAsync(storyId, CurrentUser);
 
                 return result;
             }
@@ -375,11 +396,11 @@ namespace AlpineClubBansko.Web.Controllers.Stories
         }
 
         [HttpGet]
-        public IActionResult RefreshStats(string id)
+        public IActionResult RefreshStats(string storyId)
         {
             try
             {
-                var model = this.storyService.GetStoryById(id);
+                StoryViewModel model = this.storyService.GetStoryByIdAsViewModel(storyId);
 
                 return ViewComponent("StoryOptions", model);
             }

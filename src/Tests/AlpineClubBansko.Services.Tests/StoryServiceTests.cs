@@ -19,7 +19,7 @@ namespace AlpineClubBansko.Services.Tests
         private readonly ApplicationDbContext context;
         private readonly IStoryService service;
         private readonly IServiceProvider provider;
-        private readonly IRepository<Story> repo;
+        private readonly IRepository<Story> storyRepo;
 
         public StoryServiceTests()
         {
@@ -28,6 +28,8 @@ namespace AlpineClubBansko.Services.Tests
                 opt.UseInMemoryDatabase(Guid.NewGuid().ToString()));
             services.AddScoped<IStoryService, StoryService>();
             services.AddScoped<IRepository<Story>, Repository<Story>>();
+            services.AddScoped<IRepository<StoryComment>,Repository<StoryComment>>();
+            services.AddScoped<IRepository<LikedStories>, Repository<LikedStories>>(); 
             AutoMapperConfig.RegisterMappings(
                 typeof(ErrorViewModel).Assembly
             );
@@ -35,49 +37,68 @@ namespace AlpineClubBansko.Services.Tests
             this.provider = services.BuildServiceProvider();
             this.context = provider.GetService<ApplicationDbContext>();
             this.service = provider.GetService<IStoryService>();
-            this.repo = provider.GetService<IRepository<Story>>();
+            this.storyRepo = provider.GetService<IRepository<Story>>();
         }
 
         [Fact]
-        public void All_WithExistingsData_ShouldReturnNull()
+        public void All_WithExistingData_ShouldReturnNull()
         {
-            var result = service.GetAllStories().ToList();
+            var stories = service.GetAllStories().ToList();
 
-            result.ShouldBeEmpty();
+            stories.ShouldBeEmpty();
+
+            var storiesAsViewModel = service.GetAllStoriesAsViewModels().ToList();
+
+            storiesAsViewModel.ShouldBeEmpty();
         }
 
         [Fact]
-        public void All_WithExistingsData_ShouldReturnOneExistingData()
+        public void All_WithExistingData_ShouldReturnOneExistingData()
         {
-            var story = new Story();
-            repo.AddAsync(story);
-            repo.SaveChangesAsync();
+            User user = new User
+            {
+                UserName = "TestUser"
+            };
 
-            var result = service.GetAllStories().ToList();
+            Story story = new Story()
+            {
+                Title = "Title",
+                Author = user,
+            };
 
-            result.ShouldNotBeEmpty();
+            this.storyRepo.AddAsync(story);
+            this.storyRepo.SaveChangesAsync();
 
-            result.ShouldHaveSingleItem();
+            var count = this.storyRepo.All().Count();
+
+            Assert.Equal(1, count);
+
+            var stories = service.GetAllStories().ToList();
+
+            stories.ShouldNotBeEmpty();
+
+            stories.ShouldHaveSingleItem();
+
+            var storiesAsViewModel = service.GetAllStoriesAsViewModels().ToList();
+
+            storiesAsViewModel.ShouldNotBeEmpty();
+
+            storiesAsViewModel.ShouldHaveSingleItem();
+
+            this.storyRepo.Dispose();
         }
 
         [Fact]
         public void CreateAsync_ShouldReturnCreateStory_AndShouldReturnString()
         {
             string modelTitle = "TestCreate";
-            string modelContent = "TestCreateContent";
-
-            StoryViewModel model = new StoryViewModel
-            {
-                Title = modelTitle,
-                Content = modelContent,
-            };
 
             User user = new User
             {
                 UserName = "TestUser"
             };
 
-            var test = this.service.CreateAsync(model, user).GetAwaiter().GetResult();
+            var test = this.service.CreateAsync(modelTitle, user).GetAwaiter().GetResult();
 
             test.ShouldNotBeNullOrEmpty();
 
@@ -89,84 +110,130 @@ namespace AlpineClubBansko.Services.Tests
         }
 
         [Fact]
-        public void GetStoryById_ShouldReturnCorrectElement()
+        public void GetAll_ShouldReturnCorrectCount()
         {
             string modelTitle = "TestCreate";
-            string modelContent = "TestCreateContent";
 
-            StoryViewModel model = new StoryViewModel
-            {
-                Title = modelTitle,
-                Content = modelContent,
-            };
+            Random random = new Random();
+
+            int count = random.Next(10, 100);
 
             User user = new User
             {
                 UserName = "TestUser"
             };
 
-            var test = this.service.CreateAsync(model, user).GetAwaiter().GetResult();
+            for (int i = 0; i < count; i++)
+            {
+                this.service.CreateAsync($"{i}", user).GetAwaiter().GetResult();
+            }
 
-            var result = this.service.GetStoryById(test);
+            var repoCount = this.storyRepo.All().Count();
 
-            result.ShouldNotBeNull();
+            Assert.Equal(count, repoCount);
 
-            Assert.Equal(result.Id, test);
+            int allStoryCount = this.service.GetAllStories().Count();
+
+            Assert.Equal(count, allStoryCount);
+
+            int allStoryAsViewModelsCount = this.service.GetAllStoriesAsViewModels().Count();
+
+            Assert.Equal(count, allStoryAsViewModelsCount);
+        }
+
+        [Fact]
+        public void GetStoryById_ShouldReturnCorrectElement()
+        {
+            string modelTitle = "TestCreate";
+
+            User user = new User
+            {
+                UserName = "TestUser"
+            };
+
+            var test = this.service.CreateAsync(modelTitle, user).GetAwaiter().GetResult();
+
+            var story = this.service.GetStoryById(test);
+
+            story.ShouldNotBeNull();
+
+            Assert.Equal(story.Id, test);
+
+            var storyAsViewModel = this.service.GetStoryByIdAsViewModel(test);
+
+            storyAsViewModel.ShouldNotBeNull();
+
+            Assert.Equal(storyAsViewModel.Id, test);
         }
 
         [Fact]
         public void GetStoryById_ShouldReturnNull()
         {
             string modelTitle = "TestCreate";
-            string modelContent = "TestCreateContent";
-
-            StoryViewModel model = new StoryViewModel
-            {
-                Title = modelTitle,
-                Content = modelContent,
-            };
 
             User user = new User
             {
                 UserName = "TestUser"
             };
 
-            var test = this.service.CreateAsync(model, user).GetAwaiter().GetResult();
+            var test = this.service.CreateAsync(modelTitle, user).GetAwaiter().GetResult();
 
-            var result = this.service.GetStoryById(new Guid().ToString());
+            var story = this.service.GetStoryById(new Guid().ToString());
 
-            result.ShouldBeNull();
+            story.ShouldBeNull();
+
+            var storyAsViewModel = this.service.GetStoryByIdAsViewModel(new Guid().ToString());
+
+            storyAsViewModel.ShouldBeNull();
         }
 
         [Fact]
         public void Update_ShouldWork()
         {
             string modelTitle = "TestCreate";
-            string modelContent = "TestCreateContent";
-            string modelUpdateContent = "TestUpdateContent";
-
-            StoryViewModel model = new StoryViewModel
-            {
-                Title = modelTitle,
-                Content = modelContent,
-            };
+            string modelContent = "TestUpdateContentOne";
+            string modelUpdateContent = "TestUpdateContentTwo";
 
             User user = new User
             {
                 UserName = "TestUser"
             };
 
-            var test = this.service.CreateAsync(model, user).GetAwaiter().GetResult();
+            string test = this.service.CreateAsync(modelTitle, user).GetAwaiter().GetResult();
 
-            StoryViewModel updateModel = this.service.GetStoryById(test);
+            StoryViewModel modelUpdateOne = new StoryViewModel
+            {
+                Id = test,
+                Title = "One",
+                Content = modelContent,
+            };
 
-            updateModel.Content = modelUpdateContent;
+            StoryViewModel modelUpdateTwo = new StoryViewModel
+            {
+                Id = test,
+                Title = "Two",
+                Content = modelUpdateContent,
+            };
 
-            this.service.UpdateAsync(updateModel);
+            bool updateOne = this.service.UpdateAsync(modelUpdateOne).GetAwaiter().GetResult();
 
-            StoryViewModel result = this.service.GetStoryById(test);
+            updateOne.ShouldBeTrue();
 
-            Assert.Equal(modelUpdateContent, result.Content);
+            string updateOneTitle = this.service.GetStoryById(test).Title;
+            string updateOneContent = this.service.GetStoryById(test).Content;
+
+            Assert.Equal("One", updateOneTitle);
+            Assert.Equal(modelContent, updateOneContent);
+
+            bool updateTwo = this.service.UpdateAsync(modelUpdateTwo).GetAwaiter().GetResult();
+
+            updateTwo.ShouldBeTrue();
+
+            string updateTwoTitle = this.service.GetStoryById(test).Title;
+            string updateTwoContent = this.service.GetStoryById(test).Content;
+
+            Assert.Equal("Two", updateTwoTitle);
+            Assert.Equal(modelUpdateContent, updateTwoContent);
         }
 
         [Fact]
@@ -186,8 +253,8 @@ namespace AlpineClubBansko.Services.Tests
                 UserName = "TestUser"
             };
 
-            var testOne = this.service.CreateAsync(model, user).GetAwaiter().GetResult();
-            var testTwo = this.service.CreateAsync(model, user).GetAwaiter().GetResult();
+            var testOne = this.service.CreateAsync(modelTitle, user).GetAwaiter().GetResult();
+            var testTwo = this.service.CreateAsync(modelTitle, user).GetAwaiter().GetResult();
 
             var result = service.GetAllStories();
             Assert.Equal(2, result.Count());
@@ -203,6 +270,235 @@ namespace AlpineClubBansko.Services.Tests
             result = service.GetAllStories();
 
             result.ShouldBeEmpty();
+        }
+
+        [Fact]
+        public void CreateComment_ShouldWork()
+        {
+            string modelTitle = "TestCreate";
+
+            User user = new User
+            {
+                UserName = "TestUser"
+            };
+
+            string test = this.service.CreateAsync(modelTitle, user).GetAwaiter().GetResult();
+
+            string commentContent = "Comment";
+
+            bool result = this.service.CreateCommentAsync(test, commentContent, user).GetAwaiter().GetResult();
+
+            result.ShouldBeTrue();
+
+            int commentUserStoryCount = user.Stories.FirstOrDefault(s => s.Id == test).StoryComments.Count();
+
+            commentUserStoryCount.ShouldBe(1);
+        }
+
+        [Fact]
+        public void DeleteComment_ShouldWork()
+        {
+            string modelTitle = "TestCreate";
+
+            User user = new User
+            {
+                UserName = "TestUser"
+            };
+
+            string test = this.service.CreateAsync(modelTitle, user).GetAwaiter().GetResult();
+
+            string commentContent = "Comment";
+
+            bool result = this.service.CreateCommentAsync(test, commentContent, user).GetAwaiter().GetResult();
+
+            result.ShouldBeTrue();
+
+            int count = this.service.GetStoryById(test).StoryComments.Count();
+
+            count.ShouldBe(1);
+
+            string commentId = this.service.GetStoryById(test).StoryComments.First().Id;
+
+            bool deleted = this.service.DeleteCommentAsync(commentId).GetAwaiter().GetResult();
+
+            deleted.ShouldBeTrue();
+
+            count = this.service.GetStoryById(test).StoryComments.Count();
+
+            count.ShouldBe(0);
+        }
+
+        [Fact]
+        public void AddViews_ShouldWork()
+        {
+            string modelTitle = "TestCreate";
+
+            User user = new User
+            {
+                UserName = "TestUser"
+            };
+
+            string test = this.service.CreateAsync(modelTitle, user).GetAwaiter().GetResult();
+
+            Story story = this.service.GetStoryById(test);
+
+            int storyViews = story.Views;
+
+            storyViews.ShouldBe(0);
+
+            bool result = this.service.AddViewedAsync(test).GetAwaiter().GetResult();
+
+            result.ShouldBeTrue();
+
+            story = this.service.GetStoryById(test);
+
+            storyViews = story.Views;
+
+            storyViews.ShouldBe(1);
+
+            Random random = new Random();
+
+            int count = random.Next(10, 100);
+
+            for (int i = 0; i < count; i++)
+            {
+                this.service.AddViewedAsync(test).GetAwaiter().GetResult();
+            }
+
+            story = this.service.GetStoryById(test);
+
+            storyViews = story.Views;
+
+            storyViews.ShouldBe(count+1);
+        }
+
+        [Fact]
+        public void AddFavorite_ShouldWork()
+        {
+            string modelTitle = "TestCreate";
+
+            User user = new User
+            {
+                UserName = "TestUser"
+            };
+
+            string test = this.service.CreateAsync(modelTitle, user).GetAwaiter().GetResult();
+
+            bool result = this.service.FavoriteAsync(test, user).GetAwaiter().GetResult();
+
+            result.ShouldBeTrue();
+
+            int favCount = this.service.GetStoryById(test).Favorite.Count();
+            favCount.ShouldBe(1);
+
+            result = this.service.FavoriteAsync(test, user).GetAwaiter().GetResult();
+
+            result.ShouldBeTrue();
+
+            favCount = this.service.GetStoryById(test).Favorite.Count();
+            favCount.ShouldBe(0);
+        }
+
+        [Fact]
+        public void GetStoryById_ShouldThrowException()
+        {
+            Assert.Throws<ArgumentException>(() => this.service.GetStoryById(null));
+            Assert.Throws<ArgumentException>(() => this.service.GetStoryById(""));
+        }
+
+        [Fact]
+        public void GetStoryByIdAsViewModel_ShouldThrowException()
+        {
+            Assert.Throws<ArgumentException>(() => this.service.GetStoryByIdAsViewModel(null));
+            Assert.Throws<ArgumentException>(() => this.service.GetStoryByIdAsViewModel(""));
+        }
+
+        [Fact]
+        public void CreateAsync_ShouldThrowException()
+        {
+            User user = new User();
+            string test = "test";
+
+            Assert.Throws<ArgumentException>(() => 
+                this.service.CreateAsync(null, user).GetAwaiter().GetResult());
+            Assert.Throws<ArgumentException>(() => 
+                this.service.CreateAsync("", user).GetAwaiter().GetResult());
+
+            Assert.Throws<ArgumentNullException>(() => 
+                this.service.CreateAsync(test, null).GetAwaiter().GetResult());
+        }
+
+        [Fact]
+        public void UpdateAsync_ShouldThrowException()
+        {
+            Assert.Throws<ArgumentNullException>(() => 
+                this.service.UpdateAsync(null).GetAwaiter().GetResult());
+        }
+
+        [Fact]
+        public void DeleteAsync_ShouldThrowException()
+        {
+            Assert.Throws<ArgumentException>(() => 
+                this.service.DeleteAsync(null).GetAwaiter().GetResult());
+            Assert.Throws<ArgumentException>(() => 
+                this.service.DeleteAsync("").GetAwaiter().GetResult());
+        }
+
+        [Fact]
+        public void CreateCommentAsync_ShouldThrowException()
+        {
+            User user = new User();
+            string test = "test";
+
+            Assert.Throws<ArgumentException>(() => 
+                this.service.CreateCommentAsync(null, test, user).GetAwaiter().GetResult());
+            Assert.Throws<ArgumentException>(() => 
+                this.service.CreateCommentAsync("", test, user).GetAwaiter().GetResult());
+
+            Assert.Throws<ArgumentException>(() =>
+                this.service.CreateCommentAsync(test, null, user).GetAwaiter().GetResult());
+            Assert.Throws<ArgumentException>(() =>
+                this.service.CreateCommentAsync(test, "", user).GetAwaiter().GetResult());
+
+            Assert.Throws<ArgumentNullException>(() =>
+                this.service.CreateCommentAsync(test, test, null).GetAwaiter().GetResult());
+            Assert.Throws<ArgumentNullException>(() =>
+                this.service.CreateCommentAsync(test, test, null).GetAwaiter().GetResult());
+        }
+
+        [Fact]
+        public void DeleteCommentAsync_ShouldThrowException()
+        {
+            Assert.Throws<ArgumentException>(() =>
+                this.service.DeleteCommentAsync(null).GetAwaiter().GetResult());
+            Assert.Throws<ArgumentException>(() =>
+                this.service.DeleteCommentAsync("").GetAwaiter().GetResult());
+        }
+
+        [Fact]
+        public void AddViewedAsync_ShouldThrowException()
+        {
+            Assert.Throws<ArgumentException>(() =>
+                this.service.AddViewedAsync(null).GetAwaiter().GetResult());
+            Assert.Throws<ArgumentException>(() =>
+                this.service.AddViewedAsync("").GetAwaiter().GetResult());
+        }
+
+        [Fact]
+        public void FavoriteAsync_ShouldThrowException()
+        {
+            User user = new User();
+            string test = "test";
+
+            Assert.Throws<ArgumentException>(() =>
+                this.service.FavoriteAsync(null, user).GetAwaiter().GetResult());
+            Assert.Throws<ArgumentException>(() =>
+                this.service.FavoriteAsync("", user).GetAwaiter().GetResult());
+
+            Assert.Throws<ArgumentNullException>(() =>
+                this.service.FavoriteAsync(test, null).GetAwaiter().GetResult());
+            Assert.Throws<ArgumentNullException>(() =>
+                this.service.FavoriteAsync(test, null).GetAwaiter().GetResult());
         }
     }
 }

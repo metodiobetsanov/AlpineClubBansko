@@ -38,7 +38,7 @@
                 url: '/Stories/AddViewed',
                 type: 'post',
                 data: {
-                    id: '@Model.Id',
+                    storyId: '@Model.Id',
                 }, success: function (data) {
                     console.log(data);
                     RefreshStats();
@@ -57,7 +57,7 @@
                     url: '/Stories/CreateComment',
                     type: 'post',
                     data: {
-                        id: '@Model.Id',
+                        storyId: '@Model.Id',
                         content: tmp,
                     }, success: function (data) {
                         $('#comments').html(data).fadeIn();
@@ -74,7 +74,7 @@
                     url: '/Stories/DeleteComment',
                     type: 'post',
                     data: {
-                        id: param,
+                        commentId: param,
                         storyId: '@Model.Id'
                     }, success: function (data) {
                         $('#comments').html(data).fadeIn();
@@ -89,7 +89,7 @@
                 url: '/Stories/Favorite',
                 type: 'post',
                 data: {
-                    id: '@Model.Id',
+                    storyId: '@Model.Id',
                 }, success: function (data) {
                     console.log(data);
                     RefreshStats();
@@ -104,7 +104,7 @@
                 url: '/Stories/RefreshStats',
                 type: 'get',
                 data: {
-                    id: '@Model.Id',
+                    storyId: '@Model.Id',
                 }, success: function (data) {
                     $('#optionsNav').replaceWith(data);
                     SetOptionNavH();

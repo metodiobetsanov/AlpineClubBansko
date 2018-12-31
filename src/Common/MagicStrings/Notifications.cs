@@ -2,6 +2,8 @@
 {
     public static class Notifications
     {
+        public const string NotFound = "Страницата не е намерена!";
+
         public const string Success = "Заявката е изпълнена успешно!";
 
         public const string Fail = "Нещо се обърка, моля опитайте отново!";
@@ -20,6 +22,6 @@
 
         public const string CreatedFail = "Възникна проблем при създаването на {0}! Моля опитайте отново!";
 
-        public const string UpdateFail = "Възникна проблем при промяната на {0}! Моля опитайте отново!";
+        public static readonly string UpdateFail = "Възникна проблем при промяната на {0}! Моля опитайте отново!";
     }
 }

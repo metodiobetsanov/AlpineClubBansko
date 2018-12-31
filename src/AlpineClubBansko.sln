@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{153558
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicStrings", "Common\MagicStrings\MagicStrings.csproj", "{B731E328-68E8-41C7-8275-7276BAC3583E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlpineClubBansko.Services.Tests", "Tests\AlpineClubBansko.Services.Tests\AlpineClubBansko.Services.Tests.csproj", "{DD6FA3E9-2544-46ED-99B5-934EBFD42E9B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{B731E328-68E8-41C7-8275-7276BAC3583E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B731E328-68E8-41C7-8275-7276BAC3583E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B731E328-68E8-41C7-8275-7276BAC3583E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD6FA3E9-2544-46ED-99B5-934EBFD42E9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD6FA3E9-2544-46ED-99B5-934EBFD42E9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD6FA3E9-2544-46ED-99B5-934EBFD42E9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD6FA3E9-2544-46ED-99B5-934EBFD42E9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +79,7 @@ Global
 		{F4563DE0-F689-4C98-8D95-96390838B47D} = {5E078E9D-18FD-497C-A717-CCBFD5E5EBC3}
 		{1C013AE3-3120-4DAF-93A6-CB56D80B2D0E} = {15B96377-6E9B-47AC-9679-340DA983A42D}
 		{B731E328-68E8-41C7-8275-7276BAC3583E} = {1535585B-14DD-4E5A-B042-650BE5F9151D}
+		{DD6FA3E9-2544-46ED-99B5-934EBFD42E9B} = {1E566D08-F5FE-4C0B-A42E-DB7AB93DCE99}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0EFEF8EF-A734-45D3-AA2E-AE1AC882EB32}

@@ -23,10 +23,10 @@
                                 <a asp-controller="Users" asp-action="Profile" asp-route-id="@comment.Author.Id">@comment.Author</a>
                             </div>
                             <div class=" col text-right">
-                                @comment.CreatedOn.ToString("dd-MMM-yyyy")
+                                @comment.CreatedOn
                             @if (UserManager.GetUserId(User) == comment.Author.Id)
                             {
-                                <span class="hvr-icon-buzz"> | <button role="link" onclick="DeleteComment('@comment.Id')"><i class="hvr-icon far fa-trash-alt text-danger"></i></button></span>
+                                <span class="hvr-icon-buzz"> | <span role="link" onclick="DeleteComment('@comment.Id')"><i class="hvr-icon far fa-trash-alt text-danger"></i></span></span>
                             }
                         </div>
                     </div>

@@ -1,10 +1,9 @@
 ﻿using AlpineClubBansko.Data.Contracts;
 using AlpineClubBansko.Data.Models;
+using AlpineClubBansko.Services.Common;
 using AlpineClubBansko.Services.Contracts;
 using AlpineClubBansko.Services.Mapping;
 using AlpineClubBansko.Services.Models.StoryViewModels;
-using AutoMapper;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,34 +15,47 @@ namespace AlpineClubBansko.Services
     {
         private readonly IRepository<Story> storyRepository;
         private readonly IRepository<StoryComment> storyCommentRepository;
-        private readonly ILogger<StoryService> logger;
+        private readonly IRepository<LikedStories> likedStoriesRepository;
 
         public StoryService(IRepository<Story> storyRepository,
             IRepository<StoryComment> storyCommentRepository,
-            ILogger<StoryService> logger)
+            IRepository<LikedStories> likedStoriesRepository)
         {
-            this.logger = logger;
+            this.likedStoriesRepository = likedStoriesRepository;
             this.storyCommentRepository = storyCommentRepository;
             this.storyRepository = storyRepository;
         }
 
-        public IEnumerable<StoryViewModel> GetAllStories()
+        public IQueryable<Story> GetAllStories()
+        {
+            return this.storyRepository.All();
+        }
+
+        public IEnumerable<StoryViewModel> GetAllStoriesAsViewModels()
         {
             return this.storyRepository.All().To<StoryViewModel>();
         }
 
-        public Story GetStory(string id)
+        public Story GetStoryById(string storyId)
         {
-            return this.storyRepository.GetById(id);
+            ArgumentValidator.ThrowIfNullOrEmpty(storyId, nameof(storyId));
+
+            return this.storyRepository.GetById(storyId);
         }
 
-        public StoryViewModel GetStoryById(string id)
+        public StoryViewModel GetStoryByIdAsViewModel(string storyId)
         {
-            return this.GetAllStories().FirstOrDefault(s => s.Id == id);
+            ArgumentValidator.ThrowIfNullOrEmpty(storyId, nameof(storyId));
+
+            return this.GetAllStoriesAsViewModels().FirstOrDefault(s => s.Id == storyId);
         }
 
         public async Task<string> CreateAsync(string title, User user)
         {
+            ArgumentValidator.ThrowIfNullOrEmpty(title, nameof(title));
+
+            ArgumentValidator.ThrowIfNull(user, nameof(user));
+
             Story story = new Story
             {
                 Title = title,
@@ -59,6 +71,8 @@ namespace AlpineClubBansko.Services
 
         public async Task<bool> UpdateAsync(StoryViewModel model)
         {
+            ArgumentValidator.ThrowIfNull(model, nameof(model));
+
             Story story = this.storyRepository.GetById(model.Id);
             story.Title = model.Title;
             story.Content = model.Content;
@@ -70,9 +84,11 @@ namespace AlpineClubBansko.Services
             return result != 0;
         }
 
-        public async Task<bool> DeleteAsync(string id)
+        public async Task<bool> DeleteAsync(string storyId)
         {
-            Story story = this.storyRepository.All().FirstOrDefault(s => s.Id == id);
+            ArgumentValidator.ThrowIfNullOrEmpty(storyId, nameof(storyId));
+
+            Story story = this.storyRepository.All().FirstOrDefault(s => s.Id == storyId);
 
             this.storyRepository.Delete(story);
 
@@ -81,35 +97,43 @@ namespace AlpineClubBansko.Services
             return result != 0;
         }
 
-        public async Task<bool> CreateComment(string id, string content, User user)
+        public async Task<bool> CreateCommentAsync(string storyId, string content, User user)
         {
+            ArgumentValidator.ThrowIfNullOrEmpty(storyId, nameof(storyId));
+            ArgumentValidator.ThrowIfNullOrEmpty(content, nameof(content));
+            ArgumentValidator.ThrowIfNull(user, nameof(user));
 
-            StoryComment comment = new StoryComment
-                {
-                    Author = user,
-                    StoryId = id,
-                    Comment = content
-                };
+            var comment = new StoryComment
+            {
+                AuthorId = user.Id,
+                StoryId = storyId,
+                Comment = content,
+                CreatedOn = DateTime.UtcNow
+            };
 
             await this.storyCommentRepository.AddAsync(comment);
             var result = await this.storyCommentRepository.SaveChangesAsync();
             return result != 0;
         }
 
-        public async Task<bool> DeleteComment(string id)
+        public async Task<bool> DeleteCommentAsync(string commentId)
         {
-            StoryComment comment = this.storyCommentRepository.GetById(id);
+            ArgumentValidator.ThrowIfNullOrEmpty(commentId, nameof(commentId));
 
-            this.storyCommentRepository.Delete(comment);
+            var item = this.storyCommentRepository.GetById(commentId);
+
+            this.storyCommentRepository.Delete(item);
             var result = await this.storyCommentRepository.SaveChangesAsync();
             return result != 0;
         }
 
 
 
-        public async Task<bool> AddViewed(string id)
+        public async Task<bool> AddViewedAsync(string storyId)
         {
-            Story story = this.storyRepository.GetById(id);
+            ArgumentValidator.ThrowIfNullOrEmpty(storyId, nameof(storyId));
+
+            Story story = this.storyRepository.GetById(storyId);
 
             story.Views += 1;
 
@@ -119,27 +143,30 @@ namespace AlpineClubBansko.Services
             return changed != 0;
         }
 
-        public async Task<bool> Favorite(string id, User user)
+        public async Task<bool> FavoriteAsync(string storyId, User user)
         {
-            Story story = this.storyRepository.GetById(id);
-            if (story.Favorite.Any(f => f.UserId == user.Id))
+            ArgumentValidator.ThrowIfNullOrEmpty(storyId, nameof(storyId));
+            ArgumentValidator.ThrowIfNull(user, nameof(user));
+            
+            if (this.likedStoriesRepository.All()
+                .Any(f => f.UserId == user.Id && f.StoryId == storyId))
             {
-                var item = story.Favorite.FirstOrDefault(f => f.UserId == user.Id);
-                story.Favorite.Remove(item);
+                var item = this.likedStoriesRepository.All()
+                    .FirstOrDefault(f => f.UserId == user.Id && f.StoryId == storyId);
+
+                this.likedStoriesRepository.Delete(item);
 
             }
             else
             {
-                story.Favorite.Add(new LikedStories
+                await this.likedStoriesRepository.AddAsync(new LikedStories
                 {
-                    User = user,
-                    Story = story
+                    UserId = user.Id,
+                    StoryId = storyId,
                 });
 
             }
-
-            this.storyRepository.Update(story);
-            var changed = await this.storyRepository.SaveChangesAsync();
+            var changed = await this.likedStoriesRepository.SaveChangesAsync();
 
             return changed != 0;
         }

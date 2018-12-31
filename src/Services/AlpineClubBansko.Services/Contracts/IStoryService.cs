@@ -1,30 +1,33 @@
 ﻿using AlpineClubBansko.Data.Models;
 using AlpineClubBansko.Services.Models.StoryViewModels;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AlpineClubBansko.Services.Contracts
 {
     public interface IStoryService
     {
-        IEnumerable<StoryViewModel> GetAllStories();
+        IQueryable<Story> GetAllStories();
 
-        StoryViewModel GetStoryById(string id);
+        IEnumerable<StoryViewModel> GetAllStoriesAsViewModels();
 
-        Story GetStory(string id);
+        Story GetStoryById(string storyId);
+
+        StoryViewModel GetStoryByIdAsViewModel(string storyId);
 
         Task<string> CreateAsync(string title, User user);
 
         Task<bool> UpdateAsync(StoryViewModel model);
 
-        Task<bool> DeleteAsync(string id);
+        Task<bool> DeleteAsync(string storyId);
 
-        Task<bool> AddViewed(string id);
+        Task<bool> AddViewedAsync(string storyId);
 
-        Task<bool> Favorite(string id, User user);
+        Task<bool> FavoriteAsync(string storyId, User user);
 
-        Task<bool> CreateComment(string id, string content, User user);
+        Task<bool> CreateCommentAsync(string storyId, string content, User user);
 
-        Task<bool> DeleteComment(string id);
+        Task<bool> DeleteCommentAsync(string commentId);
     }
 }

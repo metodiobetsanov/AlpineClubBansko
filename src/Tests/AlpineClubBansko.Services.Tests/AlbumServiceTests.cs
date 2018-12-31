@@ -195,7 +195,7 @@ namespace AlpineClubBansko.Services.Tests
             this.service.DeleteAsync(testOne);
 
             result = service.GetAllAlbums();
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
 
             Assert.Equal(testTwo, result.First().Id);
 
