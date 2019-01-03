@@ -1,6 +1,6 @@
 ﻿@model AlpineClubBansko.Web.Models.CreateStoryInputModel
 
-<div id="createRoute" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+<div id="createStory" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -17,12 +17,12 @@
                         <input asp-for="Title" class="form-control" />
                         <span asp-validation-for="Title" class="text-danger"></span>
                     </div>
+                    <div class="modal-footer">
+                        <button type="reset" class="btn btn-secondary">Изчисти</button>
+                        <button type="submit" class="btn btn-success">Запази</button>
+                    </div>
+                </form>
             </div>
-            <div class="modal-footer">
-                <button type="reset" class="btn btn-secondary">Изчисти</button>
-                <button type="submit" class="btn btn-success">Запази</button>
-            </div>
-            </form>
         </div>
     </div>
 </div>

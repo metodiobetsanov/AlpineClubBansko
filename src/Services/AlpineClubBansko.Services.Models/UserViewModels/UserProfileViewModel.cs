@@ -32,8 +32,6 @@ namespace AlpineClubBansko.Services.Models.UserViewModels
 
         public string Country { get; set; }
 
-        public Level Level { get; set; }
-
         public List<StoryViewModel> Stories { get; set; }
 
         public List<AlbumViewModel> Albums { get; set; }

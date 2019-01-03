@@ -1,5 +1,6 @@
 ﻿using AlpineClubBansko.Data.Models;
 using AlpineClubBansko.Services.Mapping.Contracts;
+using AlpineClubBansko.Services.Models.AlbumViewModels;
 using MagicStrings;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,9 @@ namespace AlpineClubBansko.Services.Models.StoryViewModels
 
         public DateTime? ModifiedOn { get; set; }
 
-        public List<StoryCommentViewModel> StoryComments { get; set; }
+        public AlbumViewModel Album { get; set; }
+
+        public List<StoryCommentViewModel> Comments { get; set; }
 
         public List<LikedStories> Favorite { get; set; }
 

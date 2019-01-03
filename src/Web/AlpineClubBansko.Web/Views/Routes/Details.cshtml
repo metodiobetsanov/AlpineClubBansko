@@ -1,5 +1,8 @@
 ﻿@model AlpineClubBansko.Services.Models.RouteViewModels.RouteViewModel
+@using AlpineClubBansko.Data.Models
+@using Microsoft.AspNetCore.Identity
 
+@inject SignInManager<User> SignInManager
 @{
     ViewData["Title"] = Model.Title;
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -12,10 +15,11 @@
     <div class="row">
         <div class="col-md-7" id="map"></div>
         <div class="col-md-5">
-            @if (Model.Locations != null)
+
+            <p class="text-center">Маршрут</p>
+            <hr />
+            @if (Model.Locations != null && Model.Locations.Count > 0)
             {
-                <p class="text-center">Маршрут</p>
-                <hr />
                 <ol>
                     @foreach (var location in Model.Locations)
                     {
@@ -25,20 +29,20 @@
             }
             else
             {
-                <p>Няма въведен маршрут за този преход</p>
+                <div class="col-12 text-muted font-italic text-center align-middle">Няма въведен маршрут</div>
             }
         </div>
     </div>
     <hr />
     <div class="row">
         <div class="offset-2 col-8">
-            @if (Model.Content != null)
+            @if (string.IsNullOrEmpty(Model.Content))
             {
-                @Model.Content;
+                <div class="col-12 text-muted font-italic text-center align-middle">Няма въведено описание за този маршрут</div>
             }
             else
             {
-                <p>Автора не е въвел описание за този преход</p>
+                @Model.Content
             }
         </div>
     </div>
@@ -55,18 +59,112 @@
         }
         else
         {
-            <p>Автора не е създал албум за този преход</p>
+            <div class="col-12 text-muted font-italic text-center align-middle">Няма свързан албум към този преход</div>
         }
+    </div>
+    <hr />
+    <div class="row py-2">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <vc:create-route-comment></vc:create-route-comment>
+        }
+    </div>
+    <div class="row pt-2" id="comments">
+        <partial name="_RouteComments" model="@Model.Comments" />
     </div>
     <hr />
 </div>
 
 @section Scripts{
+<partial name="_ValidationScriptsPartial" />
     <script src="~/lib/lightslider/dist/js/lightslider.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $("#lightSlider").lightSlider();
         });
+
+        $(document).ready(function () {
+            $.ajax({
+                url: '/Routes/AddViewed',
+                type: 'post',
+                data: {
+                    routeId: '@Model.Id',
+                }, success: function (data) {
+                    console.log(data);
+                    RefreshStats();
+                }, error: function (reponse) {
+                    console.log("error : " + reponse);
+                }
+            });
+        });
+
+        $('#createComment').submit(function (e) {
+            e.preventDefault();
+
+            var tmp = $('#comContent').val();
+            if ($("#comContent").valid()) {
+                $.ajax({
+                    url: '/Routes/CreateComment',
+                    type: 'post',
+                    data: {
+                        routeId: '@Model.Id',
+                        content: tmp,
+                    }, success: function (data) {
+                        $('#comments').html(data).fadeIn();
+                        $('#comContent').val('');
+                        RefreshStats();
+                    }, error: function (reponse) {
+                        console.log("error : " + reponse);
+                    }
+                });
+            }
+        });
+
+        function DeleteComment(param) {
+             $.ajax({
+                    url: '/Routes/DeleteComment',
+                    type: 'post',
+                    data: {
+                        commentId: param,
+                        routeId: '@Model.Id'
+                    }, success: function (data) {
+                        $('#comments').html(data).fadeIn();
+                        RefreshStats();
+                    }, error: function (reponse) {
+                        console.log("error : " + reponse);
+                    }
+                });
+        }
+
+        function Favorite() {
+            $.ajax({
+                url: '/Routes/Favorite',
+                type: 'post',
+                data: {
+                    routeId: '@Model.Id',
+                }, success: function (data) {
+                    console.log(data);
+                    RefreshStats();
+                }, error: function (reponse) {
+                    console.log("error : " + reponse);
+                }
+            })
+        }
+
+        function RefreshStats() {
+            $.ajax({
+                url: '/Routes/RefreshStats',
+                type: 'get',
+                data: {
+                    routeId: '@Model.Id',
+                }, success: function (data) {
+                    $('#optionsNav').replaceWith(data);
+                    SetOptionNavH();
+                }, error: function (reponse) {
+                    console.log("error : " + reponse);
+                }
+            })
+        }
     </script>
 
     <script>

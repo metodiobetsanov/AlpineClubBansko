@@ -1,22 +1,33 @@
 ﻿using AlpineClubBansko.Data.Models;
 using AlpineClubBansko.Services.Models.AlbumViewModels;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AlpineClubBansko.Services.Contracts
 {
     public interface IAlbumService
     {
-        IEnumerable<AlbumViewModel> GetAllAlbums();
+        IQueryable<Album> GetAllAlbums();
 
-        AlbumViewModel GetAlbumById(string id);
+        IEnumerable<AlbumViewModel> GetAllAlbumsAsViewModels();
 
-        Album GetAlbum(string id);
+        Album GetAlbumById(string albumId);
 
-        Task<string> CreateAsync(AlbumViewModel model, User user);
+        AlbumViewModel GetAlbumByIdAsViewModel(string albumId);
 
-        Task<string> UpdateAsync(AlbumViewModel model);
+        Task<string> CreateAsync(string title, User user);
 
-        Task<int> DeleteAsync(string id);
+        Task<bool> UpdateAsync(AlbumViewModel model);
+
+        Task<bool> DeleteAsync(string albumId);
+
+        Task<bool> AddViewedAsync(string albumId);
+
+        Task<bool> FavoriteAsync(string albumId, User user);
+
+        Task<bool> CreateCommentAsync(string albumId, string content, User user);
+
+        Task<bool> DeleteCommentAsync(string commentId);
     }
 }

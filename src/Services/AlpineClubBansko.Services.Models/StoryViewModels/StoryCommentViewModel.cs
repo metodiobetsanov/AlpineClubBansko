@@ -17,7 +17,5 @@ namespace AlpineClubBansko.Services.Models.StoryViewModels
         public string Comment { get; set; }
 
         public Story Story { get; set; }
-
-        public string CommentType { get; set; }
     }
 }

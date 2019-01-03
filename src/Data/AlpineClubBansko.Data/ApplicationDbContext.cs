@@ -1,6 +1,7 @@
 ﻿using AlpineClubBansko.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace AlpineClubBansko.Data
 {
@@ -13,12 +14,6 @@ namespace AlpineClubBansko.Data
 
         public DbSet<Album> Albums { get; set; }
 
-        public DbSet<Event> Events { get; set; }
-
-        public DbSet<UsersEvents> UsersEvents { get; set; }
-
-        public DbSet<Level> Levels { get; set; }
-
         public DbSet<Location> Locations { get; set; }
 
         public DbSet<Photo> Photos { get; set; }
@@ -27,12 +22,21 @@ namespace AlpineClubBansko.Data
 
         public DbSet<Story> Stories { get; set; }
 
-        public DbSet<RoutesAlbums> RoutesAlbums { get; set; }
-
-        public DbSet<RoutesEvents> RoutesEvents { get; set; }
-
-        public DbSet<RoutesStories> RoutesStories { get; set; }
-
         public DbSet<LikedStories> UsersLikedStories { get; set; }
+
+        public DbSet<StoryComment> StoriesComments { get; set; }
+
+        public DbSet<LikedAlbums> UsersLikedAlbums { get; set; }
+
+        public DbSet<AlbumComment> AlbumsComments { get; set; }
+
+        public DbSet<LikedRoutes> UsersLikedRoutes { get; set; }
+
+        public DbSet<RouteComment> RoutesComments { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+        }
     }
 }

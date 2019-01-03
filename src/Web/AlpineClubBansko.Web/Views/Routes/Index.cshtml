@@ -7,23 +7,25 @@
 
 <div class="container-fluid content">
     <hr />
-    @await Component.InvokeAsync("RouteOptions")
+    <vc:route-options model="null"></vc:route-options>
     <hr />
     <div class="row">
         <div class="col-md-7" id="map"></div>
         <div class="col-md-5">
-            <p class="text-center">Най-посещавани места</p>
+            <p class="text-center">Най-любими места</p>
             <hr />
-            <ol>
-                @foreach (var route in Model.OrderBy(x => x.Rating))
+            <div class="list-group list-group-flush">
+                @foreach (var route in Model.OrderBy(x => x.Favorite.Count).Take(5))
                 {
-                    <li>
-                        @route.Title - @route.TimeNeeded -
-                        <a asp-action="Details" asp-route-id="@route.Id"><i class="fas fa-link"></i></a>
-                    </li>
+                <a asp-action="Details" asp-route-id="@route.Id" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center ">
+
+                        @route.Title - @route.TimeNeeded
+
+                    <span class="badge badge-primary badge-pill">@route.Favorite.Count</span>
+                </a>
                 }
-            </ol>
-        </div>
+            </div>
+</div>
     </div>
     <hr />
     <div class="row mb-3">
@@ -31,14 +33,14 @@
             <p class="align-self-center font-italic">Намерени прехода: <span class="text-info font-weight-bold">@Model.Count</span></p>
         </div>
         <div class="col-6 d-flex justify-content-end">
-            <form class="form-inline ">
+            <form class="form-inline" id="searchForm">
                 <input class="form-control" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Намери</button>
             </form>
         </div>
     </div>
-    <div class="row" id="routes">
-        @await Component.InvokeAsync("ViewRoutes", new { list = Model })
+    <div class="row" id="routeList">
+        @await Component.InvokeAsync("ViewRoutes", new { model = Model })
     </div>
     <hr />
 </div>
@@ -120,8 +122,42 @@
             }
 
         }
+
+        function ChangePage(param) {
+            $.ajax({
+                url: '/Routes/FilterRoutes',
+                type: 'get',
+                data: {
+                    page: param,
+                    searchCriteria: $('#searchCriteria').val(),
+                }, success: function (data) {
+                    $('#routeList').html(data).fadeIn();
+                }, error: function (reponse) {
+                    alert("error : " + reponse);
+                }
+            });
+        };
+
+        $('#searchForm').submit(function (e) {
+            e.preventDefault();
+
+            var tmp = $('#searchCriteria').val();
+
+            $.ajax({
+                url: '/Routes/FilterRoutes',
+                type: 'get',
+                data: {
+                    searchCriteria: tmp,
+                }, success: function (data) {
+                    $('#searchCriteria').val = tmp;
+                    $('#routeList').html(data);
+                }, error: function (reponse) {
+                    alert("error : " + reponse);
+                }
+            });
+        });
     </script>
-    <partial name="_OptionsNavScriptsPartial" />
+
     <partial name="_ValidationScriptsPartial" />
     <partial name="_GoogleMapsScriptsPartial" />
 }

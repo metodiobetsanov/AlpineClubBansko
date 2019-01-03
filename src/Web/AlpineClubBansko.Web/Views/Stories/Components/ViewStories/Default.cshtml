@@ -20,7 +20,7 @@
                         </div>
                         <div class="row card-footer py-2">
                             <div class="small text-muted col d-flex justify-content-around">
-                                <span><i class="fas fa-book-reader"></i> @story.Views </span><span> <i class="fas fa-comments"></i> @story.StoryComments.Count </span><span> <i class="fas fa-heart"></i> @story.Favorite.Count</span>
+                                <span><i class="fas fa-book-reader"></i> @story.Views </span><span> <i class="fas fa-comments"></i> @story.Comments.Count </span><span> <i class="fas fa-heart"></i> @story.Favorite.Count</span>
                             </div>
                             <div class="small text-muted col text-right"><a asp-action="Details" asp-route-id="@story.Id"><i class="fab fa-readme"></i> Прочети</a></div>
                         </div>
@@ -30,40 +30,9 @@
         }
         else
         {
-            <div class="col-12 text-center align-middle">Няма намерени истории</div>
+            <div class="col-12 text-muted font-italic text-center align-middle">Няма намерени истории</div>
         }
     </div>
     <hr />
-    <div class="row justify-content-center">
-        <nav>
-            <ul class="pagination">
-                <li class="page-item  @((int)ViewData["page"] == 1 ? "disabled" : "")">
-                    <a class="page-link" href="#" onclick="ChangePage('1')">
-                        <i class="fas fa-angle-double-left"></i>
-                    </a>
-                </li>
-                <li class="page-item @((int)ViewData["page"] == 1 ? "disabled" : "")">
-                    <a class="page-link" href="#" onclick="ChangePage('@((int)ViewData["page"] - 1)')">
-                        <i class="fas fa-angle-left"></i>
-                    </a>
-                </li>
-                @for (int i = 1; i <= (int)ViewData["totalPages"]; i++)
-                {
-                    <li class="page-item  @((int)ViewData["page"] == i ? "active" : ""))">
-                        <a class="page-link" href="#" onclick="ChangePage('@i')">@i</a>
-                    </li>
-                }
-                <li class="page-item @((int)ViewData["page"] == (int)ViewData["totalPages"] ? "disabled" : "")">
-                    <a class="page-link" href="#" onclick="ChangePage('@((int)ViewData["page"] + 1)')">
-                        <i class="fas fa-angle-right"></i>
-                    </a>
-                </li>
-                <li class="page-item @((int)ViewData["page"] == (int)ViewData["totalPages"] ? "disabled" : "")">
-                    <a class="page-link" href="#" onclick="ChangePage('@((int)ViewData["totalPages"])')">
-                        <i class="fas fa-angle-double-right"></i>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+    <partial name="_Pagination" />
 </div>

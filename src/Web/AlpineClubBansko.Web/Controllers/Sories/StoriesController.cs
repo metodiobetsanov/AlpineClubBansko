@@ -28,6 +28,7 @@ namespace AlpineClubBansko.Web.Controllers.Stories
             this.storyService = storyService;
         }
 
+        [HttpGet]
         [AllowAnonymous]
         public IActionResult Index()
         {
@@ -174,6 +175,8 @@ namespace AlpineClubBansko.Web.Controllers.Stories
             {
                 if (this.ModelState.IsValid)
                 {
+                    model.Content = model.Content.Replace("script", "");
+
                     await storyService.UpdateAsync(model);
 
                     logger.LogInformation(
@@ -273,8 +276,8 @@ namespace AlpineClubBansko.Web.Controllers.Stories
                             $"StoryCommentFor-{storyId}"
                             ));
 
-                var model = storyService.GetStoryById(storyId);
-                return PartialView("_Comments", model.StoryComments);
+                StoryViewModel model = storyService.GetStoryByIdAsViewModel(storyId);
+                return PartialView("_StoryComments", model.Comments);
             }
             catch (System.Exception e)
             {
@@ -305,7 +308,7 @@ namespace AlpineClubBansko.Web.Controllers.Stories
                             ));
 
                 StoryViewModel model = storyService.GetStoryByIdAsViewModel(storyId);
-                return PartialView("_Comments", model.StoryComments);
+                return PartialView("_StoryComments", model.Comments);
             }
             catch (System.Exception e)
             {

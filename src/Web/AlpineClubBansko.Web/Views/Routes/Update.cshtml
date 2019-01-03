@@ -1,7 +1,7 @@
 ﻿@model AlpineClubBansko.Services.Models.RouteViewModels.RouteViewModel
 
 @{
-    ViewData["Title"] = Model.Title;
+    TempData["AuthorId"] = Model.Author.Id;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -63,12 +63,16 @@
 
 @section Scripts{
     <script src="~/lib/lightslider/dist/js/lightslider.js"></script>
-    <script type="text/javascript">
+    <script>
         $(document).ready(function () {
             $("#lightSlider").lightSlider();
         });
-    </script>
 
+        function SubmitForm() {
+            tinyMCE.triggerSave();
+            $('#updateForm').submit();
+        };
+    </script>
     <script>
         var map;
         function initMap() {

@@ -18,7 +18,7 @@ namespace AlpineClubBansko.Web.Controllers.Albums.ViewComponents
             this.userManager = userManager;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(RouteViewModel model = null)
+        public IViewComponentResult Invoke(RouteViewModel model = null)
         {
             if (model != null)
             {

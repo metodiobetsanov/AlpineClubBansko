@@ -27,9 +27,7 @@ namespace AlpineClubBansko.Services.Tests
             services.AddDbContext<ApplicationDbContext>(opt =>
                 opt.UseInMemoryDatabase(Guid.NewGuid().ToString()));
             services.AddScoped<IStoryService, StoryService>();
-            services.AddScoped<IRepository<Story>, Repository<Story>>();
-            services.AddScoped<IRepository<StoryComment>,Repository<StoryComment>>();
-            services.AddScoped<IRepository<LikedStories>, Repository<LikedStories>>(); 
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             AutoMapperConfig.RegisterMappings(
                 typeof(ErrorViewModel).Assembly
             );
@@ -110,8 +108,6 @@ namespace AlpineClubBansko.Services.Tests
         [Fact]
         public void GetAll_ShouldReturnCorrectCount()
         {
-            string modelTitle = "TestCreate";
-
             Random random = new Random();
 
             int count = random.Next(10, 100);
@@ -288,7 +284,7 @@ namespace AlpineClubBansko.Services.Tests
 
             result.ShouldBeTrue();
 
-            int commentUserStoryCount = user.Stories.FirstOrDefault(s => s.Id == test).StoryComments.Count();
+            int commentUserStoryCount = user.Stories.FirstOrDefault(s => s.Id == test).Comments.Count();
 
             commentUserStoryCount.ShouldBe(1);
         }
@@ -311,17 +307,17 @@ namespace AlpineClubBansko.Services.Tests
 
             result.ShouldBeTrue();
 
-            int count = this.service.GetStoryById(test).StoryComments.Count();
+            int count = this.service.GetStoryById(test).Comments.Count();
 
             count.ShouldBe(1);
 
-            string commentId = this.service.GetStoryById(test).StoryComments.First().Id;
+            string commentId = this.service.GetStoryById(test).Comments.First().Id;
 
             bool deleted = this.service.DeleteCommentAsync(commentId).GetAwaiter().GetResult();
 
             deleted.ShouldBeTrue();
 
-            count = this.service.GetStoryById(test).StoryComments.Count();
+            count = this.service.GetStoryById(test).Comments.Count();
 
             count.ShouldBe(0);
         }

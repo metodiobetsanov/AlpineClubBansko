@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AlpineClubBansko.Web.Controllers.Albums.ViewComponents
+namespace AlpineClubBansko.Web.Controllers.Stories.ViewComponents
 {
     public class ViewStories : ViewComponent
     {
@@ -68,7 +68,7 @@ namespace AlpineClubBansko.Web.Controllers.Albums.ViewComponents
                         break;
                 }
 
-                int size = 10;
+                int size = 6;
                 int firstPage = 1;
                 int lastPage = (int)Math.Ceiling(model.Count / (double)size);
                 this.ViewData["totalPages"] = lastPage == 0 ? 1 : lastPage;

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace AlpineClubBansko.Web.Controllers.Albums.Components
+namespace AlpineClubBansko.Web.Controllers.Stories.Components
 {
     public class StoryOptions : ViewComponent
     {

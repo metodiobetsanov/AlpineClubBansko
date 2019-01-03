@@ -1,17 +1,16 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
-
-        #profileHeader {
+#profileHeader {
     background-image: url('../images/28.jpg');
     background-size: cover;
 }
 
 .row {
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
 }
 
-.min-height-300{
+.min-height-300 {
     min-height: 300px;
 }
 
@@ -22,10 +21,11 @@ for details on configuring this project to bundle and minify static web assets. 
 html {
     font-size: 14px;
 }
+
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
@@ -36,7 +36,7 @@ body {
     background-attachment: fixed;
 }
 
-footer{
+footer {
     background: white;
 }
 
@@ -48,10 +48,11 @@ footer{
 }
 
 .border-top {
-  border-top: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
 }
+
 .border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 hr {
@@ -59,10 +60,10 @@ hr {
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
-.options-nav{
+.options-nav {
     position: sticky;
     top: 0;
     z-index: 999;
@@ -140,6 +141,104 @@ p.text-story {
     width: 100%; /* The width is the width of the web page */
 }
 
+/* Album
+-------------------------------------------------- */
+.media {
+    background-position: center;
+    background-size: cover;
+    height: 100%;
+    position: absolute;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+figure {
+    min-height: 100px;
+    overflow: hidden;
+    position: relative;
+}
+
+    figure a {
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 3;
+    }
+
+    figure:hover .media {
+        -webkit-transform: scale(1.25);
+        transform: scale(1.25);
+    }
+
+figcaption {
+    color: #252830;
+    height: calc(100% - 30px);
+    margin: 15px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 250px;
+}
+
+.body {
+    background-color: white;
+    bottom: 0;
+    padding: 15px;
+    position: absolute;
+    width: 100%;
+}
+
+svg {
+    height: inherit;
+    width: 100%;
+}
+
+    svg text {
+        text-anchor: middle;
+    }
+
+    svg #alpha {
+        fill: white;
+    }
+
+    svg .title {
+        font-size: 28px;
+        font-family: "Montserrat";
+        letter-spacing: 5px;
+    }
+
+    svg #base {
+        fill: white;
+        -webkit-mask: url(#mask);
+        mask: url(#mask);
+    }
+@media (min-width: 425px) {
+    figure {
+        height: 175px;
+    }
+}
+
+@media (min-width: 768px) {
+    figure {
+        height: 300px;
+    }
+}
+
+@media (min-width: 992px) {
+    figure {
+        height: 375px;
+    }
+}
+
+@media (min-width: 1200px) {
+    figure {
+        height: 400px;
+    }
+}
+
+
 /* Links & Effects
 -------------------------------------------------- */
 
@@ -147,6 +246,7 @@ p.text-story {
 .add-link {
     color: #28a745;
 }
+
     .add-link:before {
         background: #1e7e34 !important;
     }
@@ -227,7 +327,6 @@ p.text-story {
         right: 0;
     }
 
-
 /* Icon Pulse Grow */
 @-webkit-keyframes hvr-icon-pulse-grow {
     to {
@@ -290,7 +389,6 @@ p.text-story {
         transform: scale(1.1);
     }
 
-
 /* Icon Buzz */
 @-webkit-keyframes hvr-icon-buzz {
     50% {
@@ -341,3 +439,100 @@ p.text-story {
         -webkit-animation-iteration-count: infinite;
         animation-iteration-count: infinite;
     }
+
+/* PageNotFound
+-------------------------------------------------- */
+#notfound {
+    position: relative;
+    height: 100vh;
+}
+
+    #notfound .notfound {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+.notfound {
+    max-width: 520px;
+    width: 100%;
+    line-height: 1.4;
+    text-align: center;
+}
+
+    .notfound .notfound-404 {
+        position: relative;
+        height: 240px;
+    }
+
+        .notfound .notfound-404 h1 {
+            font-family: 'Montserrat', sans-serif;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            font-size: 252px;
+            font-weight: 900;
+            margin: 0px;
+            color: #262626;
+            text-transform: uppercase;
+            letter-spacing: -40px;
+            margin-left: -20px;
+        }
+
+            .notfound .notfound-404 h1 > span {
+                text-shadow: -8px 0px 0px #fff;
+            }
+
+        .notfound .notfound-404 h3 {
+            font-family: 'Cabin', sans-serif;
+            position: relative;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #262626;
+            margin: 0px;
+            letter-spacing: 3px;
+            padding-left: 6px;
+        }
+
+    .notfound h2 {
+        font-family: 'Cabin', sans-serif;
+        font-size: 20px;
+        font-weight: 400;
+        text-transform: uppercase;
+        color: #000;
+        margin-top: 0px;
+        margin-bottom: 25px;
+    }
+
+@media only screen and (max-width: 767px) {
+    .notfound .notfound-404 {
+        height: 200px;
+    }
+
+        .notfound .notfound-404 h1 {
+            font-size: 200px;
+        }
+}
+
+@media only screen and (max-width: 480px) {
+    .notfound .notfound-404 {
+        height: 162px;
+    }
+
+        .notfound .notfound-404 h1 {
+            font-size: 162px;
+            height: 150px;
+            line-height: 162px;
+        }
+
+    .notfound h2 {
+        font-size: 16px;
+    }
+}

@@ -1,44 +1,92 @@
 ﻿@model AlpineClubBansko.Services.Models.AlbumViewModels.AlbumViewModel
 @{
-    ViewData["Title"] = "Update";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    TempData["AuthorId"] = Model.Author.Id;
 }
 
-<div class="container-fluid pt-3 pb-3 mt-2 mb-2 ">
-    <div class="row">
-        <form asp-action="Update" method="post">
+<div class="container content mb-5">
+    
+    <hr />
+    <vc:album-options model="@Model"></vc:album-options>
+    <hr />
+    <div class="offset-md-1 col-md-10">
+        <form asp-controller="Albums" asp-action="Update" method="post" id="updateForm">
             <div class="row">
-                <div class="col-lg-8 offset-lg-2">
-                    <div class="blog-post pt-md-3">
-                        <h2 class="blog-post-title text-center">Album</h2>
-                        <br />
-                        <div asp-validation-summary="All" class="text-danger"></div>
-                        <div class="form-group">
-                            <label asp-for="Title"></label>
-                            <input asp-for="Title" class="form-control" />
-                            <span asp-validation-for="Title" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Content"></label>
-                            <input asp-for="Content" class="form-control" />
-                            <span asp-validation-for="Content" class="text-danger"></span>
-                        </div>
-                        <br />
-                        <button type="submit" class="btn btn-info">Запиши</button>
-                    </div>
+                <div asp-validation-summary="All" class="text-center text-danger"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 col-12 form-group text-center">
+                    <label asp-for="Title"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 col-12 form-group text-center">
+                    <label asp-for="Place"></label>
+                    <input asp-for="Place" class="form-control" />
+                    <span asp-validation-for="Place" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 form-group text-center">
+                    <label asp-for="Content"></label>
+                    <textarea asp-for="Content" class="form-control"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
                 </div>
             </div>
         </form>
     </div>
+    <hr />
     <div class="justify-content-center mb-4">
         <div id="gallery" class="row align-items-center">
-            @await Component.InvokeAsync("UpdatePhoto", new { list = Model.Photos })
+            <vc:view-photos model="@Model.Photos" page="0"></vc:view-photos>
         </div>
     </div>
+    <hr />
 </div>
-
 @section Scripts {
+    <script>
+    function SubmitForm(){
+        $('#updateForm').submit();
+    };
 
+    function Uploaded() {
+        $(':input', '#FileUploadForm')
+            .not(':button, :submit, :reset, :hidden')
+            .val('')
+        $('#uploadPhoto').modal('hide');
+        }
+
+        function DeletePhoto(param) {
+        $.ajax({
+            url: '/Albums/DeletePhoto',
+            type: 'post',
+            data: {
+                photoId: param,
+                albumId: '@Model.Id',
+            }, success: function (data) {
+                $('#gallery').html(data).fadeIn();
+            }, error: function (reponse) {
+                alert("error : " + reponse);
+            }
+        });
+    };
+
+    function ChangePage(param) {
+        $.ajax({
+            url: '/Albums/FilterPhotos',
+            type: 'get',
+            data: {
+                page: param,
+                albumId: '@Model.Id',
+            }, success: function (data) {
+                $('#storyList').html(data).fadeIn();
+            }, error: function (reponse) {
+                alert("error : " + reponse);
+            }
+        });
+    };
+    </script>
+
+    <partial name="_ValidationScriptsPartial" />
     <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
-
 }

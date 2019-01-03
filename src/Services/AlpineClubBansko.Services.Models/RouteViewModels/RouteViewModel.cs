@@ -1,5 +1,6 @@
 ﻿using AlpineClubBansko.Data.Models;
 using AlpineClubBansko.Services.Mapping.Contracts;
+using AlpineClubBansko.Services.Models.AlbumViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,10 @@ namespace AlpineClubBansko.Services.Models.RouteViewModels
             }
         }
 
-        public int Rating { get; set; }
+        public List<RouteCommentViewModel> Comments { get; set; }
+
+        public List<LikedAlbums> Favorite { get; set; }
+
+        public int Views { get; set; }
     }
 }

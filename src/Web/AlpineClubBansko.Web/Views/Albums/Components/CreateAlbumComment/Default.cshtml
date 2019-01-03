@@ -1,0 +1,12 @@
+﻿@model AlpineClubBansko.Web.Models.CreateCommentInputModel
+<div class="offset-md-3 col-12 col-md-6 write-new">
+    <form asp-controller="Albums" asp-action="CreateComment" method="post" id="createComment">
+        <div class="row">
+            <textarea asp-for="Content" rows="3" class="col-12 form-control" id="comContent"></textarea>
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Запази</button>
+        </div>
+    </form>
+</div>

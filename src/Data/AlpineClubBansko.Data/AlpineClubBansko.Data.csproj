@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190103093556_CascadeDelete.cs" />
+    <Compile Remove="Migrations\20190103093556_CascadeDelete.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.0" />
@@ -15,17 +20,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Migrations\20181226154852_First.Designer.cs">
-      <DependentUpon>20181226154852_First.cs</DependentUpon>
+    <Compile Update="Migrations\20190102092548_Initial.Designer.cs">
+      <DependentUpon>20190102092548_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Update="Migrations\20181230100211_Added-Like-To-Story.Designer.cs">
-      <DependentUpon>20181230100211_Added-Like-To-Story.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Migrations\20181230114354_favorite.Designer.cs">
-      <DependentUpon>20181230114354_favorite.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Migrations\20181230134657_Story-Comments.Designer.cs">
-      <DependentUpon>20181230134657_Story-Comments.cs</DependentUpon>
+    <Compile Update="Migrations\20190102144933_AddedPlaceToAlbum.Designer.cs">
+      <DependentUpon>20190102144933_AddedPlaceToAlbum.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

@@ -17,14 +17,25 @@
         </div>
     </div>
     <hr />
-    <div class="row pb-2">
+    <div class="row py-2">
+        @if (Model.Album != null)
+        {
+            
+        }
+        else
+        {
+            <div class="col-12 text-muted text-center font-italic">Авторът не е добавил Албум към историята!</div>
+        }
+    </div>
+    <hr />
+    <div class="row py-2">
         @if (SignInManager.IsSignedIn(User))
         {
-            <vc:create-comment></vc:create-comment>
+            <vc:create-story-comment></vc:create-story-comment>
         }
     </div>
     <div class="row pt-2" id="comments">
-        <partial name="_Comments" model="@Model.StoryComments" />
+        <partial name="_StoryComments" model="@Model.Comments" />
     </div>
     <hr />
 </div>
@@ -62,6 +73,7 @@
                     }, success: function (data) {
                         $('#comments').html(data).fadeIn();
                         $('#comContent').val('');
+                        RefreshStats();
                     }, error: function (reponse) {
                         console.log("error : " + reponse);
                     }
@@ -78,6 +90,7 @@
                         storyId: '@Model.Id'
                     }, success: function (data) {
                         $('#comments').html(data).fadeIn();
+                        RefreshStats();
                     }, error: function (reponse) {
                         console.log("error : " + reponse);
                     }

@@ -1,5 +1,6 @@
 ﻿using AlpineClubBansko.Data.Contracts;
 using AlpineClubBansko.Data.Models;
+using AlpineClubBansko.Services.Common;
 using AlpineClubBansko.Services.Contracts;
 using AlpineClubBansko.Services.Mapping;
 using AlpineClubBansko.Services.Models.AlbumViewModels;
@@ -13,78 +14,177 @@ namespace AlpineClubBansko.Services
     public class AlbumService : IAlbumService
     {
         private readonly IRepository<Album> albumRepository;
+        private readonly IRepository<AlbumComment> albumCommentRepository;
+        private readonly IRepository<LikedAlbums> likedAlbumsRepository;
         private readonly ICloudService cloudService;
 
         public AlbumService(IRepository<Album> albumRepository,
+            IRepository<AlbumComment> albumCommentRepository,
+            IRepository<LikedAlbums> likedAlbumsRepository,
             ICloudService cloudService)
         {
-            this.cloudService = cloudService;
             this.albumRepository = albumRepository;
+            this.albumCommentRepository = albumCommentRepository;
+            this.likedAlbumsRepository = likedAlbumsRepository;
+            this.cloudService = cloudService;
         }
 
-        public IEnumerable<AlbumViewModel> GetAllAlbums()
+        public IQueryable<Album> GetAllAlbums()
+        {
+            return this.albumRepository.All();
+        }
+
+        public IEnumerable<AlbumViewModel> GetAllAlbumsAsViewModels()
         {
             return this.albumRepository.All().To<AlbumViewModel>();
         }
 
-        public Album GetAlbum(string id)
+        public Album GetAlbumById(string albumId)
         {
-            return this.albumRepository.GetById(id);
+            ArgumentValidator.ThrowIfNullOrEmpty(albumId, nameof(albumId));
+
+            return this.albumRepository.GetById(albumId);
         }
 
-        public AlbumViewModel GetAlbumById(string id)
+        public AlbumViewModel GetAlbumByIdAsViewModel(string albumId)
         {
-            return this.GetAllAlbums().FirstOrDefault(a => a.Id == id);
+            ArgumentValidator.ThrowIfNullOrEmpty(albumId, nameof(albumId));
+
+            return this.GetAllAlbumsAsViewModels().FirstOrDefault(s => s.Id == albumId);
         }
 
-        public async Task<string> CreateAsync(AlbumViewModel model, User user)
+        public async Task<string> CreateAsync(string title, User user)
         {
-            var album = new Album
+            ArgumentValidator.ThrowIfNullOrEmpty(title, nameof(title));
+
+            ArgumentValidator.ThrowIfNull(user, nameof(user));
+
+            Album album = new Album
             {
-                Title = model.Title,
-                Content = model.Content,
-                Author = user
+                Title = title,
+                Author = user,
+                CreatedOn = DateTime.UtcNow
             };
 
             await this.albumRepository.AddAsync(album);
-            await this.albumRepository.SaveChangesAsync();
+            var result = await this.albumRepository.SaveChangesAsync();
 
-            await this.cloudService.CreateContainer(album.Id);
+            if (result != 0)
+            {
+                await this.cloudService.CreateContainer(album.Id);
+            }
 
             return album.Id;
         }
 
-        public async Task<string> UpdateAsync(AlbumViewModel model)
+        public async Task<bool> UpdateAsync(AlbumViewModel model)
         {
+            ArgumentValidator.ThrowIfNull(model, nameof(model));
+
             Album album = this.albumRepository.GetById(model.Id);
 
             album.Title = model.Title;
             album.Content = model.Content;
+            album.Place = model.Place;
+            album.Photos = album.Photos;
             album.ModifiedOn = DateTime.UtcNow;
 
             this.albumRepository.Update(album);
-            await this.albumRepository.SaveChangesAsync();
+            var result =  await this.albumRepository.SaveChangesAsync();
 
-            return album.Id;
+            return result != 0;
         }
 
-        public async Task<int> DeleteAsync(string id)
+        public async Task<bool> DeleteAsync(string albumId)
         {
-            Album album = this.albumRepository.GetById(id);
+            ArgumentValidator.ThrowIfNullOrEmpty(albumId, nameof(albumId));
 
-            if (album.Photos != null || album.Photos.Count > 0)
+            Album album = this.albumRepository.GetById(albumId);
+
+            
+            this.albumRepository.Delete(album);
+            var result = await this.albumRepository.SaveChangesAsync();
+
+            if (result != 0)
             {
-                foreach (var photo in album.Photos.ToList())
-                {
-                    await this.cloudService.DeleteImage(photo.Id);
-                }
+                await this.cloudService.DeleteContainer(albumId);
             }
 
-            await this.cloudService.DeleteContainer(id);
+            return result != 0;
+        }
 
-            this.albumRepository.Delete(album);
+        public async Task<bool> CreateCommentAsync(string albumId, string content, User user)
+        {
+            ArgumentValidator.ThrowIfNullOrEmpty(albumId, nameof(albumId));
+            ArgumentValidator.ThrowIfNullOrEmpty(content, nameof(content));
+            ArgumentValidator.ThrowIfNull(user, nameof(user));
 
-            return await this.albumRepository.SaveChangesAsync();
+            var comment = new AlbumComment
+            {
+                AuthorId = user.Id,
+                AlbumId = albumId,
+                Comment = content,
+                CreatedOn = DateTime.UtcNow
+            };
+
+            await this.albumCommentRepository.AddAsync(comment);
+            var result = await this.albumCommentRepository.SaveChangesAsync();
+            return result != 0;
+        }
+
+        public async Task<bool> DeleteCommentAsync(string commentId)
+        {
+            ArgumentValidator.ThrowIfNullOrEmpty(commentId, nameof(commentId));
+
+            var item = this.albumCommentRepository.GetById(commentId);
+
+            this.albumCommentRepository.Delete(item);
+            var result = await this.albumCommentRepository.SaveChangesAsync();
+            return result != 0;
+        }
+
+
+
+        public async Task<bool> AddViewedAsync(string albumId)
+        {
+            ArgumentValidator.ThrowIfNullOrEmpty(albumId, nameof(albumId));
+
+            Album album = this.albumRepository.GetById(albumId);
+
+            album.Views += 1;
+
+            this.albumRepository.Update(album);
+            var changed = await this.albumRepository.SaveChangesAsync();
+
+            return changed != 0;
+        }
+
+        public async Task<bool> FavoriteAsync(string albumId, User user)
+        {
+            ArgumentValidator.ThrowIfNullOrEmpty(albumId, nameof(albumId));
+            ArgumentValidator.ThrowIfNull(user, nameof(user));
+
+            if (this.likedAlbumsRepository.All()
+                .Any(f => f.UserId == user.Id && f.AlbumId == albumId))
+            {
+                var item = this.likedAlbumsRepository.All()
+                    .FirstOrDefault(f => f.UserId == user.Id && f.AlbumId == albumId);
+
+                this.likedAlbumsRepository.Delete(item);
+
+            }
+            else
+            {
+                await this.likedAlbumsRepository.AddAsync(new LikedAlbums
+                {
+                    UserId = user.Id,
+                    AlbumId = albumId,
+                });
+
+            }
+            var changed = await this.likedAlbumsRepository.SaveChangesAsync();
+
+            return changed != 0;
         }
     }
 }

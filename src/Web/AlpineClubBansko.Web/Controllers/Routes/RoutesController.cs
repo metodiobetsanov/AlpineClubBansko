@@ -2,9 +2,11 @@
 using AlpineClubBansko.Services.Contracts;
 using AlpineClubBansko.Services.Models.RouteViewModels;
 using AlpineClubBansko.Web.Models;
+using MagicStrings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,19 +16,35 @@ namespace AlpineClubBansko.Web.Controllers.Routes
     public class RoutesController : BaseController
     {
         private readonly IRouteService routeService;
+        private readonly ILogger<RoutesController> logger;
 
         public RoutesController(IRouteService routeService,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            ILogger<RoutesController> logger)
             : base(userManager)
         {
+            this.logger = logger;
             this.routeService = routeService;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            var model = this.routeService.GetAllRoutes().ToList();
-            return View(model);
+            try
+            {
+                List<RouteViewModel> routeList = this.routeService.GetAllRoutesAsViewModels().ToList();
+                return View(routeList);
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(string.Format(SetLog.Error,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            e.Message));
+
+                AddDangerNotification(string.Format(Notifications.Fail));
+                return Redirect("/");
+            }
         }
 
         [HttpGet]
@@ -52,36 +70,353 @@ namespace AlpineClubBansko.Web.Controllers.Routes
         [Authorize]
         public async Task<IActionResult> Create(CreateRouteInputModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                string routeId = await this.routeService.CreateRouteAsync(model.Title, CurrentUser);
+                if (ModelState.IsValid)
+                {
+                    string routeId = await this.routeService.CreateAsync(model.Title, CurrentUser);
+                    if (string.IsNullOrEmpty(routeId))
+                    {
+                        AddDangerNotification(string.Format(Notifications.CreatedFail, model.Title));
+                        return Redirect("/Routes");
+                    }
 
-                return Redirect($"/Routes/Update/{routeId}");
+                    logger.LogInformation(
+                       string.Format(SetLog.CreatedSuccess,
+                           CurrentUser.UserName,
+                           CurrentController,
+                           routeId
+                           ));
+
+                    AddWarningNotification(string.Format(Notifications.CreatedSuccess, model.Title));
+
+                    return Redirect($"/Routes/Update/{routeId}");
+                }
+                else
+                {
+                    logger.LogInformation(string.Format(SetLog.CreatedFail,
+                        CurrentUser.UserName,
+                        CurrentController));
+
+                    AddDangerNotification(string.Format(Notifications.CreatedFail, model.Title));
+                    return View(model);
+                }
             }
+            catch (System.Exception e)
+            {
+                logger.LogError(string.Format(SetLog.Error,
+                        CurrentUser.UserName,
+                        CurrentController,
+                        e.Message));
 
-            return Redirect("/Routes");
+                AddDangerNotification(string.Format(Notifications.Fail));
+
+                return Redirect("/Routes");
+            }
         }
 
         [HttpGet]
         public IActionResult Details(string id)
         {
-            var model = this.routeService.GetRouteById(id);
+            try
+            {
+                RouteViewModel route = this.routeService.GetRouteByIdAsViewModel(id);
 
-            return View(model);
+                if (route == null)
+                {
+                    AddWarningNotification(Notifications.NotFound);
+                    return Redirect("/Home/NotFound");
+                }
+
+                return View(route);
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(string.Format(SetLog.Error,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            e.Message));
+                AddDangerNotification(string.Format(Notifications.Fail));
+
+                return Redirect("/Albums");
+            }
         }
 
         [HttpGet]
         public IActionResult Update(string id)
         {
-            var model = this.routeService.GetRouteById(id);
+            try
+            {
+                RouteViewModel route = this.routeService.GetRouteByIdAsViewModel(id);
 
-            return View(model);
+                return View(route);
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(string.Format(SetLog.Error,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            e.Message));
+                AddDangerNotification(string.Format(Notifications.Fail));
+
+                return Redirect("/Albums");
+            }
         }
 
         [HttpGet]
-        public ViewComponentResult SearchInRoutes(List<RouteViewModel> list, string searchCriteria = null)
+        public async Task<IActionResult> CreateLocation(LocationViewModel model)
         {
-            return ViewComponent("ViewRoutes", new { list, searchCriteria });
+            try
+            {
+                await this.routeService.CreateLocationAsync(model, CurrentUser);
+
+                RouteViewModel route = this.routeService.GetRouteByIdAsViewModel(model.RouteId);
+
+                return PartialView("_ViewLocations", route.Locations);
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(string.Format(SetLog.Error,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            e.Message));
+                AddDangerNotification(string.Format(Notifications.Fail));
+
+                return Redirect("/Routes");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteLocation(string locationId, string routeId)
+        {
+            try
+            {
+                await this.routeService.DeleteLocationAsync(locationId);
+
+                RouteViewModel route = this.routeService.GetRouteByIdAsViewModel(routeId);
+
+                return PartialView("_ViewLocations", route.Locations);
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(string.Format(SetLog.Error,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            e.Message));
+                AddDangerNotification(string.Format(Notifications.Fail));
+
+                return Redirect($"/Routes/Details{routeId}");
+            }
+        }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (!CurrentUser.Routes.Any(s => s.Id == id))
+            {
+                logger.LogInformation(
+                        string.Format(SetLog.NotTheAuthor,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            id
+                            ));
+
+                AddDangerNotification(string.Format(Notifications.DeleteFail));
+
+                Redirect($"/Routes/Details/{id}");
+            }
+
+            try
+            {
+                var result = await routeService.DeleteAsync(id);
+
+                if (!result)
+                {
+                    AddDangerNotification(Notifications.Fail);
+                    return Redirect("/Routes");
+                }
+
+                logger.LogInformation(
+                        string.Format(SetLog.Delete,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            id
+                            ));
+
+                AddSuccessNotification(Notifications.Delete);
+
+                return Redirect($"/Routes");
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(string.Format(SetLog.Error,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            e.Message));
+
+                AddDangerNotification(Notifications.Fail);
+
+                return Redirect($"/Routes");
+            }
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> CreateComment(string routeId, string content)
+        {
+            try
+            {
+                await this.routeService.CreateCommentAsync(routeId, content, CurrentUser);
+
+                logger.LogInformation(
+                        string.Format(SetLog.CreatedSuccess,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            $"StoryCommentFor-{routeId}"
+                            ));
+
+                RouteViewModel route = routeService.GetRouteByIdAsViewModel(routeId);
+                return PartialView("_RouteComments", route.Comments);
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(string.Format(SetLog.Error,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            e.Message));
+
+                AddDangerNotification(Notifications.Fail);
+
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> DeleteComment(string commentId, string routeId)
+        {
+            try
+            {
+                await this.routeService.DeleteCommentAsync(commentId);
+
+                logger.LogInformation(
+                        string.Format(SetLog.Delete,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            $"StoryCommentFor-{routeId}"
+                            ));
+
+                RouteViewModel route = routeService.GetRouteByIdAsViewModel(routeId);
+                return PartialView("_RouteComments", route.Comments);
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(string.Format(SetLog.Error,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            e.Message));
+
+                AddDangerNotification(Notifications.Fail);
+
+                return null;
+            }
+        }
+
+        [HttpGet]
+        public IActionResult FilterRoutes(string searchCriteria,
+            string sortOrder,
+            int page)
+        {
+            try
+            {
+                List<RouteViewModel> list = this.routeService.GetAllRoutesAsViewModels().ToList();
+                return ViewComponent("ViewRoutes",
+                    new
+                    {
+                        model = list,
+                        searchCriteria,
+                        sortOrder,
+                        page
+                    });
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(string.Format(SetLog.Error,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            e.Message));
+
+                AddDangerNotification(Notifications.Fail);
+
+                return null;
+            }
+        }
+
+        [HttpPost]
+        public async Task<bool> AddViewed(string routeId)
+        {
+            try
+            {
+                bool result = await this.routeService.AddViewedAsync(routeId);
+
+                return result;
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(string.Format(SetLog.Error,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            e.Message));
+
+                AddDangerNotification(Notifications.Fail);
+
+                return false;
+            }
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<bool> Favorite(string routeId)
+        {
+            try
+            {
+                bool result = await this.routeService.FavoriteAsync(routeId, CurrentUser);
+
+                return result;
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(string.Format(SetLog.Error,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            e.Message));
+
+                AddDangerNotification(Notifications.Fail);
+
+                return false;
+            }
+        }
+
+        [HttpGet]
+        public IActionResult RefreshStats(string routeId)
+        {
+            try
+            {
+                RouteViewModel route = this.routeService.GetRouteByIdAsViewModel(routeId);
+
+                return ViewComponent("RouteOptions", route);
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(string.Format(SetLog.Error,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            e.Message));
+
+                AddDangerNotification(Notifications.Fail);
+
+                return null;
+            }
         }
     }
 }

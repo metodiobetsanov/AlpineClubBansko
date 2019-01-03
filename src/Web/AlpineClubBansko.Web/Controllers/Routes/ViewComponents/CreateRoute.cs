@@ -10,7 +10,7 @@ namespace AlpineClubBansko.Web.Controllers.Albums.ViewComponents
         {
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        public IViewComponentResult Invoke()
         {
             var model = new CreateRouteInputModel();
             return View(model);

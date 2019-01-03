@@ -1,5 +1,6 @@
 ﻿using AlpineClubBansko.Data.Models;
 using AlpineClubBansko.Services.Mapping.Contracts;
+using MagicStrings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,11 +11,15 @@ namespace AlpineClubBansko.Services.Models.AlbumViewModels
     public class AlbumViewModel : IMapTo<Album>, IMapFrom<Album>
     {
         public string Id { get; set; }
-
-        [Required]
+        [Display(Name = "Заглавие", Prompt = Validations.Placeholder)]
+        [Required(ErrorMessage = Validations.Required)]
+        [StringLength(60, ErrorMessage = Validations.StringLength, MinimumLength = 10)]
         public string Title { get; set; }
 
-        [Required]
+        [Display(Name = "Кратко описание")]
+        [Required(ErrorMessage = Validations.Required)]
+        [MinLength(10, ErrorMessage = Validations.MinLength)]
+        [DataType(DataType.MultilineText)]
         public string Content { get; set; }
 
         public string Cover
@@ -26,9 +31,14 @@ namespace AlpineClubBansko.Services.Models.AlbumViewModels
                     return string.Empty;
                 }
 
-                return Photos.First().ThumbnailUrl;
+                return Photos.First().LocationUrl;
             }
         }
+
+        [Display(Name = "Заснето място")]
+        [Required(ErrorMessage = Validations.Required)]
+        [MinLength(3, ErrorMessage = Validations.MinLength)]
+        public string Place { get; set; }
 
         public List<PhotoViewModel> Photos { get; set; }
 
@@ -38,6 +48,10 @@ namespace AlpineClubBansko.Services.Models.AlbumViewModels
 
         public DateTime? ModifiedOn { get; set; }
 
-        public int Rating { get; set; }
+        public List<AlbumCommentViewModel> Comments { get; set; }
+
+        public List<LikedAlbums> Favorite { get; set; }
+
+        public int Views { get; set; }
     }
 }

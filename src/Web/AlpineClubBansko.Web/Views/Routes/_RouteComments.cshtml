@@ -1,0 +1,39 @@
+﻿@model List<AlpineClubBansko.Services.Models.RouteViewModels.RouteCommentViewModel>
+@using AlpineClubBansko.Data.Models
+@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<User> UserManager
+
+@{
+    int counter = 0;
+}
+
+<div class="offset-md-2 col-12 col-md-8">
+    @if (Model != null && Model.Count > 0)
+    {
+        @foreach (var comment in Model.OrderByDescending(c => c.CreatedOn))
+        {<div class="row">
+                <div class="col-3 @(counter++ % 2 == 0 ? "order-1" : "order-0") d-flex ">
+                    <img src="~/images/avatar.svg" class="img-fluid rounded-circle align-self-center" width="100" walt="Alternate Text" />
+                </div>
+                <div class="col-9 py-2">
+                    <div class="card">
+                        <div class="card-header row py-2">
+                            <div class=" col text-left">
+                                <a asp-controller="Users" asp-action="Profile" asp-route-id="@comment.Author.Id">@comment.Author</a>
+                            </div>
+                            <div class=" col text-right">
+                                @comment.CreatedOn
+                            @if (UserManager.GetUserId(User) == comment.Author.Id)
+                            {
+                                <span class="hvr-icon-buzz"> | <span role="link" onclick="DeleteComment('@comment.Id')"><i class="hvr-icon far fa-trash-alt text-danger"></i></span></span>
+                            }
+                        </div>
+                    </div>
+                    <p class="p-3 text-justify">@comment.Comment</p>
+                </div>
+            </div>
+        </div>
+    }
+    }
+</div>

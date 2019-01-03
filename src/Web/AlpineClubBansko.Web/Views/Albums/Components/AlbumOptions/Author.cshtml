@@ -1,0 +1,72 @@
+﻿@model AlpineClubBansko.Services.Models.AlbumViewModels.AlbumViewModel
+@using AlpineClubBansko.Data.Models
+@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<User> UserManager
+
+@{
+    string userId = UserManager.GetUserId(User);
+    string fav = Model.Favorite.Any(s => s.UserId == userId) ? "fas fa-heart text-warning" : "far fa-heart text-primary";
+}
+
+<div class="row options-nav bg-light shadow-sm py-2" id="optionsNav">
+    <div class="col-12 flex-column">
+        <h4 class="text-center">@Model.Title</h4>
+        <p class="blockquote-footer text-center">Добавен от <a href="/Users/Profile/@Model.Author.Id">@Model.Author</a> на @Model.CreatedOn</p>
+    </div>
+    <div class="col-xl-4 col-12 py-2">
+        <div class="text-muted d-flex justify-content-around">
+            <span><i class="far fa-eye text-primary"></i> @Model.Views</span>
+            <span><i class="far fa-image text-primary"></i> @Model.Photos.Count()</span>
+            <span><i class="fas fa-comments text-primary"></i> @Model.Comments.Count </span>
+            <span class="hvr-icon-pulse-grow"> <i class="@fav  hvr-icon" onclick="Favorite()"></i> @Model.Favorite.Count </span>
+        </div>
+    </div>
+    <div class="col-xl-8 col-12 d-flex align-items-center justify-content-around justify-content-xl-end">
+        <ul class="nav">
+            <li class="nav-item">
+                <a href="#" class="nav-link add-link hvr-underline-from-center" data-toggle="modal" data-target="#createAlbum"><i class="far fa-plus-square"></i> Създай нов</a>
+            </li>
+            <li class="nav-item d-none d-lg-block align-self-center"> || </li>
+            <li class="nav-item">
+                <div class="dropdown">
+                    <a class="nav-link option-link dropdown-toggle hvr-underline-from-center" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-code-branch"></i> Свържи с
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="#">История</a>
+                        <a class="dropdown-item" href="#">Преход</a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item d-none d-lg-block align-self-center"> || </li>
+            @if (this.ViewContext.RouteData.Values["action"].ToString() == "Update")
+            {
+                <li class="nav-item">
+                    <a class="nav-link save-link hvr-underline-from-center" data-toggle="modal" data-target="#uploadPhoto" href="">
+                        <i class="fas fa-cloud-upload-alt"></i> Качи снимка
+                    </a>
+                </li>
+                <li class="nav-item d-none d-lg-block align-self-center"> || </li>
+
+                <li class="nav-item">
+                    <a class="nav-link save-link hvr-underline-from-center" href="#" onclick="SubmitForm()"><i class="fas fa-save"></i> Запази</a>
+                </li>
+
+            }
+            else
+            {
+                <li class="nav-item">
+                    <a class="nav-link option-link hvr-underline-from-center" asp-action="Update" asp-route-id="@Model.Id"><i class="far fa-edit"></i> Редактирай</a>
+                </li>
+            }
+            <li class="nav-item d-none d-lg-block align-self-center"> || </li>
+            <li class="nav-item">
+                <a class="nav-link del-link hvr-underline-from-center" asp-action="Delete" asp-route-id="@Model.Id"><i class="far fa-trash-alt"></i> Премахни</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<vc:create-album></vc:create-album>
+<vc:upload-photo album-id="@Model.Id"></vc:upload-photo>

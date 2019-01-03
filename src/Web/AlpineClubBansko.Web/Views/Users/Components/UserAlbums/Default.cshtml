@@ -21,7 +21,7 @@
             <th scope="row">@(index++)</th>
             <td>@album.Title</td>
             <td class="text-center">@album.Photos.Count()</td>
-            <td class="text-center">@album.Rating</td>
+            <td class="text-center">@album.Views</td>
             <td class="text-center">
                 <a asp-area="" asp-controller="Albums" asp-action="Details" asp-route-id="@album.Id">Разгледай</a>
             </td>

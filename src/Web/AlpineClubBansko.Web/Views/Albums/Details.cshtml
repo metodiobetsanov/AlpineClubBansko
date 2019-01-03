@@ -1,52 +1,138 @@
 ﻿@model AlpineClubBansko.Services.Models.AlbumViewModels.AlbumViewModel
+@using AlpineClubBansko.Data.Models
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<User> SignInManager
 
 @{
-    ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container-fluid pt-3 pb-3 mt-2 mb-2 ">
-    <div class="row justify-content-center">
-        <h2 class="text-center mb-2">@Model.Title</h2>
-    </div>
-    <div class="row mt-3 mb-3">
-        <div class="col-12 col-sm-6 d-flex align-items-center">
-            @await Component.InvokeAsync("UploadPhoto", new { albumId = Model.Id })
+<div class="container content mb-5">
+    <hr />
+    <vc:album-options model="@Model"></vc:album-options>
+    <hr />
+    <div class="justify-content-center mb-4">
+        <div class="row col-12">
+            <div class="row col-12 justify-content-center">
+                <p>Снимките са заснети в местност: <spna class="font-italic">@Model.Place</spna></p>
+            </div>
+            <div class="offset-md-1 col-10">
+                <p class="font-italic text-justify">@Model.Content</p>
+            </div>
         </div>
-        <div class="col-12 col-sm-6 d-flex flex-column">
-            <span class="blockquote-footer ml-auto">
-                Създаден от
-                <a href="/Users/Profile/@Model.Author.Id">
-                    @Model.Author
+        <hr />
+        <div id="gallery" class="row align-items-center">
+            @foreach (var photo in Model.Photos.OrderByDescending(p => p.CreatedOn))
+            {
+                <a href="@photo.LocationUrl" class="col-lg-3 col-md-4 col-sm-6 mb-3" data-sub-html="#@photo.Id">
+                    <img src="@photo.ThumbnailUrl" class="img-fluid img-thumbnail" />
                 </a>
-                на @Model.CreatedOn.ToString("d.MM.yyyy г.")
-            </span>
-            <span class="text-muted ml-auto">
-                @Model.Rating харесвания | <a href="#"><i class="far fa-heart"></i></a>
-            </span>
+            }
         </div>
     </div>
+    <hr />
+    <div class="row py-2">
+        <vc:create-album-comment></vc:create-album-comment>
+    </div>
+    <div class="row pt-2" id="comments">
+        <partial name="_AlbumComments" model="@Model.Comments" />
+    </div>
+    <hr />
 </div>
 
-<div class="justify-content-center mb-4">
-    <div id="gallery" class="row align-items-center">
-        @await Component.InvokeAsync("ViewPhotos", new { list = Model.Photos })
-        </div>
-    </div>
-    @section Scripts {
+@section Scripts {
 
-        <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $("#gallery").lightGallery();
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#gallery").lightGallery();
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '/Albums/AddViewed',
+                type: 'post',
+                data: {
+                    albumId: '@Model.Id',
+                }, success: function (data) {
+                    console.log(data);
+                    RefreshStats();
+                }, error: function (reponse) {
+                    console.log("error : " + reponse);
+                }
             });
-        </script>
-        <script>
-            Success = function () {
-                $('#uploadPhoto').modal('hide');
-                $("#gallery").data("lightGallery").destroy(true);
-                $("#gallery").lightGallery();
-            };
-        </script>
+        });
 
-    }
+        $('#createComment').submit(function (e) {
+            e.preventDefault();
+
+            var tmp = $('#comContent').val();
+            if ($("#comContent").valid()) {
+                $.ajax({
+                    url: '/Albums/CreateComment',
+                    type: 'post',
+                    data: {
+                        albumId: '@Model.Id',
+                        content: tmp,
+                    }, success: function (data) {
+                        $('#comments').html(data).fadeIn();
+                        $('#comContent').val('');
+                        RefreshStats();
+                    }, error: function (reponse) {
+                        console.log("error : " + reponse);
+                    }
+                });
+            }
+        });
+
+        function DeleteComment(param) {
+             $.ajax({
+                    url: '/Albums/DeleteComment',
+                    type: 'post',
+                    data: {
+                        commentId: param,
+                        albumId: '@Model.Id'
+                    }, success: function (data) {
+                        $('#comments').html(data).fadeIn();
+                        RefreshStats();
+                    }, error: function (reponse) {
+                        console.log("error : " + reponse);
+                    }
+                });
+        }
+
+        function Favorite() {
+            $.ajax({
+                url: '/Albums/Favorite',
+                type: 'post',
+                data: {
+                    albumId: '@Model.Id',
+                }, success: function (data) {
+                    console.log(data);
+                    RefreshStats();
+                }, error: function (reponse) {
+                    console.log("error : " + reponse);
+                }
+            })
+        }
+
+        function RefreshStats() {
+            $.ajax({
+                url: '/Albums/RefreshStats',
+                type: 'get',
+                data: {
+                    albumId: '@Model.Id',
+                }, success: function (data) {
+                    $('#optionsNav').replaceWith(data);
+                    SetOptionNavH();
+                }, error: function (reponse) {
+                    console.log("error : " + reponse);
+                }
+            })
+        }
+    </script>
+
+    <partial name="_ValidationScriptsPartial" />
+}

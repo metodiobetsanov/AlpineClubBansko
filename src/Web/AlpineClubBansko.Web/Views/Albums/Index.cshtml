@@ -1,52 +1,56 @@
 ﻿@model List<AlpineClubBansko.Services.Models.AlbumViewModels.AlbumViewModel>
 
 @{
-    ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
-    <div class="row mt-5">
-        <div class="col-8 offset-1 justify-content-start">
-            <p class="blog-header">Сподели спомен от твое приклчение</p>
-        </div>
-        <div class="d-flex justify-content-end align-self-center">
-            <a asp-area="" asp-controller="Albums" asp-action="Create" class="btn btn-info">Създай албум</a>
-        </div>
-    </div>
-
+<div class="container content mb-5">
     <hr />
-    <br />
-
-    @if (Model == null)
-    {
-        <h2>None</h2>
-    }
-    else
-    {
-        <div class="card-deck">
-            @foreach (var album in Model)
-            {
-                <div class="col-sm-6 col-md-6 col-lg-4 mb-md-5 mb-lg-5">
-                    <div class="card">
-                        <a asp-controller="Albums" asp-action="Details" asp-route-id="@album.Id">
-                            <img class="card-img-top img-fluid" src="@album.Cover" alt="Card image cap">
-                        </a>
-                        <div class="card-body pb-0">
-                            <h5 class="card-title">@album.Title</h5>
-                            <p class="blockquote-footer text-right">Създаден от <a href="/Users/Profile/@album.Author">@album.Author</a></p>
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted float-left">
-                                <a asp-controller="Albums" asp-action="Details" asp-route-id="@album.Id">Разгледай</a>
-                            </small>
-                            <small class="text-muted float-right">
-                                @album.Photos.Count() снимки | @album.Rating харесвания
-                            </small>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-    }
+    <vc:album-options model="null"></vc:album-options>
+    <hr />
+    <div class="row" id="albumList">
+        @await Component.InvokeAsync("ViewAlbums", new { model = Model })
+    </div>
+    <hr />
 </div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        function ChangePage(param) {
+            $.ajax({
+                url: '/Albums/FilterAlbums',
+                type: 'get',
+                data: {
+                    page: param,
+                    searchCriteria: $('#searchCriteria').val(),
+                }, success: function (data) {
+                    $('#albumList').html(data).fadeIn();
+                }, error: function (reponse) {
+                    alert("error : " + reponse);
+                }
+            });
+        };
+
+            $('#searchForm').submit(function (e) {
+                e.preventDefault();
+
+                var tmp = $('#searchCriteria').val();
+
+                $.ajax({
+                    url: '/Albums/FilterAlbums',
+                    type: 'get',
+                    data: {
+                        searchCriteria: tmp,
+                    }, success: function (data) {
+                        $('#searchCriteria').val = tmp;
+                        $('#albumList').html(data);
+                    }, error: function (reponse) {
+                        alert("error : " + reponse);
+                    }
+                });
+            });
+    </script>
+}

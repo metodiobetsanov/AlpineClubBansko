@@ -1,17 +1,5 @@
 ﻿@model AlpineClubBansko.Services.Models.AlbumViewModels.PhotoViewModel
 
-<a class="btn bg-white" data-toggle="modal" data-target="#uploadPhoto" alt="Добави снимка">
-    <i class="fas fa-2x fa-cloud-upload-alt text-success"></i>
-</a>
-
-<a class="btn bg-white" asp-controller="Albums" asp-action="Update" asp-route-id="@Model.Album.Id">
-    <i class="fas fa-2x fa-edit text-info"></i>
-</a>
-
-<a class="btn bg-white" asp-controller="Albums" asp-action="Delete" asp-route-id="@Model.Album.Id">
-    <i class="fas fa-2x fa-trash-alt text-danger"></i>
-</a>
-
 <div class="modal fade" id="uploadPhoto" tabindex="-1" role="dialog" aria-labelledby="uploadPhoto" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -22,12 +10,11 @@
                 </button>
             </div>
             <div class="container">
-                <form id="FileUploadForm" action="/Albums/UploadPhoto"
+                <form id="FileUploadForm" asp-controller="Albums" asp-action="UploadPhoto"
                       data-ajax="true"
                       data-ajax-method="post"
                       data-ajax-update="#gallery"
-                      data-ajax-success="Success"
-                      data-ajax-failure="Failure"
+                      data-ajax-success="Uploaded()"
                       enctype="multipart/form-data">
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-group">
@@ -47,14 +34,14 @@
                     </div>
                     <div class="input-group">
                         <div class="custom-file">
-                            <input type="file" name="file" class="custom-file-input" id="inputGroupFile04">
+                            <input type="file" name="file" class="custom-file-input" id="file">
                             <label class="custom-file-label" for="inputGroupFile04">Снимка</label>
                         </div>
                         <div class="input-group-append">
                             <button class="btn btn-outline-info" type="submit" >Качи</button>
                         </div>
                     </div>
-                    <input name="albumid" value="@Model.Album.Id" hidden />
+                    <input asp-for="AlbumId" value="@Model.AlbumId" hidden />
                 </form>
                 <br />
             </div>

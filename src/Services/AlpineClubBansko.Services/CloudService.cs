@@ -37,7 +37,7 @@ namespace AlpineClubBansko.Services
             if (this.IsImage(file) && file.Length > 0)
             {
                 var name = $"{albumId}-{++counter}.{file.FileName.Split(".").Last()}";
-
+            
                 using (var stream = file.OpenReadStream())
                 {
                     isUploaded = await this.UploadImageToStorage(
@@ -56,6 +56,7 @@ namespace AlpineClubBansko.Services
                         Photographer = model.Photographer,
                         Album = model.Album,
                         Author = model.Author,
+                        CreatedOn = DateTime.UtcNow,
                         LocationUrl = $"https://acbimagestorage.blob.core.windows.net/{albumId}/{name}",
                         ThumbnailUrl = $"https://acbimagestorage.blob.core.windows.net/{albumId}/thumbnail_{name}",
                     };
@@ -85,17 +86,27 @@ namespace AlpineClubBansko.Services
             return isDeleted;
         }
 
-        public async Task CreateContainer(string name)
+        public async Task<bool> CreateContainer(string name)
         {
-            var blobClient = this.GetClient();
+            try
+            {
+                var blobClient = this.GetClient();
 
-            var container = blobClient.GetContainerReference(name);
+                var container = blobClient.GetContainerReference(name);
 
-            await container.CreateAsync();
-            await container.SetPermissionsAsync(
-                new BlobContainerPermissions{
-                    PublicAccess = BlobContainerPublicAccessType.Blob
-                });
+                await container.CreateAsync();
+                await container.SetPermissionsAsync(
+                    new BlobContainerPermissions
+                    {
+                        PublicAccess = BlobContainerPublicAccessType.Blob
+                    });
+
+                return true;
+            }
+            catch(Exception)
+            {
+                return false;
+            }
         }
 
         public async Task<bool> DeleteContainer(string name)
@@ -129,9 +140,8 @@ namespace AlpineClubBansko.Services
 
             using (var image = new MagickImage(fileStream))
             {
-                MagickGeometry size = new MagickGeometry(200);
+                MagickGeometry size = new MagickGeometry(500);
                 size.IgnoreAspectRatio = false;
-
                 image.Resize(size);
                 image.Quality = 100;
                 thumbnail = image.ToByteArray();

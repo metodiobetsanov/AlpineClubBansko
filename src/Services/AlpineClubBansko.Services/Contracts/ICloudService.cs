@@ -10,7 +10,7 @@ namespace AlpineClubBansko.Services.Contracts
 
         Task<bool> DeleteImage(string photoId);
 
-        Task CreateContainer(string name);
+        Task<bool> CreateContainer(string name);
 
         Task<bool> DeleteContainer(string name);
     }

@@ -24,27 +24,33 @@ namespace AlpineClubBansko.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AuthorId");
+                    b.Property<string>("AuthorId")
+                        .IsRequired();
 
                     b.Property<string>("Content");
 
                     b.Property<DateTime>("CreatedOn");
 
-                    b.Property<string>("EventId");
-
                     b.Property<DateTime?>("ModifiedOn");
 
-                    b.Property<int>("Rating");
+                    b.Property<string>("Place");
+
+                    b.Property<string>("RouteId");
 
                     b.Property<string>("StoryId");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
+
+                    b.Property<int>("Views");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
 
-                    b.HasIndex("EventId");
+                    b.HasIndex("RouteId")
+                        .IsUnique()
+                        .HasFilter("[RouteId] IS NOT NULL");
 
                     b.HasIndex("StoryId")
                         .IsUnique()
@@ -53,54 +59,65 @@ namespace AlpineClubBansko.Data.Migrations
                     b.ToTable("Albums");
                 });
 
-            modelBuilder.Entity("AlpineClubBansko.Data.Models.Event", b =>
+            modelBuilder.Entity("AlpineClubBansko.Data.Models.AlbumComment", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AuthorId");
+                    b.Property<string>("AlbumId");
 
-                    b.Property<string>("Content");
+                    b.Property<string>("AuthorId")
+                        .IsRequired();
+
+                    b.Property<string>("Comment");
 
                     b.Property<DateTime>("CreatedOn");
 
-                    b.Property<DateTime>("EndDate");
-
                     b.Property<DateTime?>("ModifiedOn");
 
-                    b.Property<int>("Rating");
-
-                    b.Property<DateTime>("StartDate");
-
-                    b.Property<string>("Title");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("AlbumId");
 
                     b.HasIndex("AuthorId");
 
-                    b.ToTable("Events");
+                    b.ToTable("AlbumsComments");
                 });
 
-            modelBuilder.Entity("AlpineClubBansko.Data.Models.Level", b =>
+            modelBuilder.Entity("AlpineClubBansko.Data.Models.LikedAlbums", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AuthorId");
+                    b.Property<string>("AlbumId");
 
-                    b.Property<DateTime>("CreatedOn");
-
-                    b.Property<DateTime?>("ModifiedOn");
-
-                    b.Property<string>("Name");
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId")
-                        .IsUnique()
-                        .HasFilter("[AuthorId] IS NOT NULL");
+                    b.HasIndex("AlbumId");
 
-                    b.ToTable("Levels");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UsersLikedAlbums");
+                });
+
+            modelBuilder.Entity("AlpineClubBansko.Data.Models.LikedRoutes", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("RouteId");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RouteId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UsersLikedRoutes");
                 });
 
             modelBuilder.Entity("AlpineClubBansko.Data.Models.LikedStories", b =>
@@ -126,7 +143,8 @@ namespace AlpineClubBansko.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AuthorId");
+                    b.Property<string>("AuthorId")
+                        .IsRequired();
 
                     b.Property<DateTime>("CreatedOn");
 
@@ -156,7 +174,8 @@ namespace AlpineClubBansko.Data.Migrations
 
                     b.Property<string>("AlbumId");
 
-                    b.Property<string>("AuthorId");
+                    b.Property<string>("AuthorId")
+                        .IsRequired();
 
                     b.Property<string>("Content");
 
@@ -188,7 +207,8 @@ namespace AlpineClubBansko.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AuthorId");
+                    b.Property<string>("AuthorId")
+                        .IsRequired();
 
                     b.Property<string>("Content");
 
@@ -196,11 +216,11 @@ namespace AlpineClubBansko.Data.Migrations
 
                     b.Property<DateTime?>("ModifiedOn");
 
-                    b.Property<int>("Rating");
-
                     b.Property<string>("TimeNeeded");
 
                     b.Property<string>("Title");
+
+                    b.Property<int>("Views");
 
                     b.HasKey("Id");
 
@@ -209,58 +229,29 @@ namespace AlpineClubBansko.Data.Migrations
                     b.ToTable("Routes");
                 });
 
-            modelBuilder.Entity("AlpineClubBansko.Data.Models.RoutesAlbums", b =>
+            modelBuilder.Entity("AlpineClubBansko.Data.Models.RouteComment", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AlbumId");
+                    b.Property<string>("AuthorId")
+                        .IsRequired();
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<string>("RouteId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AlbumId");
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("RouteId");
 
-                    b.ToTable("RoutesAlbums");
-                });
-
-            modelBuilder.Entity("AlpineClubBansko.Data.Models.RoutesEvents", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("EventId");
-
-                    b.Property<string>("RouteId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventId");
-
-                    b.HasIndex("RouteId");
-
-                    b.ToTable("RoutesEvents");
-                });
-
-            modelBuilder.Entity("AlpineClubBansko.Data.Models.RoutesStories", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("RouteId");
-
-                    b.Property<string>("StoryId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RouteId");
-
-                    b.HasIndex("StoryId");
-
-                    b.ToTable("RoutesStories");
+                    b.ToTable("RoutesComments");
                 });
 
             modelBuilder.Entity("AlpineClubBansko.Data.Models.Story", b =>
@@ -268,7 +259,8 @@ namespace AlpineClubBansko.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AuthorId");
+                    b.Property<string>("AuthorId")
+                        .IsRequired();
 
                     b.Property<string>("Content");
 
@@ -292,7 +284,8 @@ namespace AlpineClubBansko.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AuthorId");
+                    b.Property<string>("AuthorId")
+                        .IsRequired();
 
                     b.Property<string>("Comment");
 
@@ -308,7 +301,7 @@ namespace AlpineClubBansko.Data.Migrations
 
                     b.HasIndex("StoryId");
 
-                    b.ToTable("StoryComment");
+                    b.ToTable("StoriesComments");
                 });
 
             modelBuilder.Entity("AlpineClubBansko.Data.Models.User", b =>
@@ -374,24 +367,6 @@ namespace AlpineClubBansko.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("AlpineClubBansko.Data.Models.UsersEvents", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("EventId");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UsersEvents");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -508,29 +483,50 @@ namespace AlpineClubBansko.Data.Migrations
                 {
                     b.HasOne("AlpineClubBansko.Data.Models.User", "Author")
                         .WithMany("Albums")
-                        .HasForeignKey("AuthorId");
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("AlpineClubBansko.Data.Models.Event", "Event")
-                        .WithMany("Albums")
-                        .HasForeignKey("EventId");
+                    b.HasOne("AlpineClubBansko.Data.Models.Route", "Route")
+                        .WithOne("Album")
+                        .HasForeignKey("AlpineClubBansko.Data.Models.Album", "RouteId");
 
                     b.HasOne("AlpineClubBansko.Data.Models.Story", "Story")
                         .WithOne("Album")
                         .HasForeignKey("AlpineClubBansko.Data.Models.Album", "StoryId");
                 });
 
-            modelBuilder.Entity("AlpineClubBansko.Data.Models.Event", b =>
+            modelBuilder.Entity("AlpineClubBansko.Data.Models.AlbumComment", b =>
                 {
+                    b.HasOne("AlpineClubBansko.Data.Models.Album", "Album")
+                        .WithMany("Comments")
+                        .HasForeignKey("AlbumId");
+
                     b.HasOne("AlpineClubBansko.Data.Models.User", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId");
+                        .WithMany("AlbumsComments")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("AlpineClubBansko.Data.Models.Level", b =>
+            modelBuilder.Entity("AlpineClubBansko.Data.Models.LikedAlbums", b =>
                 {
-                    b.HasOne("AlpineClubBansko.Data.Models.User", "Author")
-                        .WithOne("Level")
-                        .HasForeignKey("AlpineClubBansko.Data.Models.Level", "AuthorId");
+                    b.HasOne("AlpineClubBansko.Data.Models.Album", "Album")
+                        .WithMany("Favorite")
+                        .HasForeignKey("AlbumId");
+
+                    b.HasOne("AlpineClubBansko.Data.Models.User", "User")
+                        .WithMany("AlbumsLiked")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("AlpineClubBansko.Data.Models.LikedRoutes", b =>
+                {
+                    b.HasOne("AlpineClubBansko.Data.Models.Route", "Route")
+                        .WithMany("Favorite")
+                        .HasForeignKey("RouteId");
+
+                    b.HasOne("AlpineClubBansko.Data.Models.User", "User")
+                        .WithMany("RoutesLiked")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("AlpineClubBansko.Data.Models.LikedStories", b =>
@@ -548,7 +544,8 @@ namespace AlpineClubBansko.Data.Migrations
                 {
                     b.HasOne("AlpineClubBansko.Data.Models.User", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorId");
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("AlpineClubBansko.Data.Models.Route", "Route")
                         .WithMany("Locations")
@@ -563,76 +560,48 @@ namespace AlpineClubBansko.Data.Migrations
 
                     b.HasOne("AlpineClubBansko.Data.Models.User", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorId");
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AlpineClubBansko.Data.Models.Route", b =>
                 {
                     b.HasOne("AlpineClubBansko.Data.Models.User", "Author")
                         .WithMany("Routes")
-                        .HasForeignKey("AuthorId");
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("AlpineClubBansko.Data.Models.RoutesAlbums", b =>
+            modelBuilder.Entity("AlpineClubBansko.Data.Models.RouteComment", b =>
                 {
-                    b.HasOne("AlpineClubBansko.Data.Models.Album", "Album")
-                        .WithMany("Routes")
-                        .HasForeignKey("AlbumId");
+                    b.HasOne("AlpineClubBansko.Data.Models.User", "Author")
+                        .WithMany("RoutesComments")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("AlpineClubBansko.Data.Models.Route", "Route")
-                        .WithMany("Albums")
+                        .WithMany("Comments")
                         .HasForeignKey("RouteId");
-                });
-
-            modelBuilder.Entity("AlpineClubBansko.Data.Models.RoutesEvents", b =>
-                {
-                    b.HasOne("AlpineClubBansko.Data.Models.Event", "Event")
-                        .WithMany("Routes")
-                        .HasForeignKey("EventId");
-
-                    b.HasOne("AlpineClubBansko.Data.Models.Route", "Route")
-                        .WithMany("Events")
-                        .HasForeignKey("RouteId");
-                });
-
-            modelBuilder.Entity("AlpineClubBansko.Data.Models.RoutesStories", b =>
-                {
-                    b.HasOne("AlpineClubBansko.Data.Models.Route", "Route")
-                        .WithMany("Stories")
-                        .HasForeignKey("RouteId");
-
-                    b.HasOne("AlpineClubBansko.Data.Models.Story", "Story")
-                        .WithMany("Routes")
-                        .HasForeignKey("StoryId");
                 });
 
             modelBuilder.Entity("AlpineClubBansko.Data.Models.Story", b =>
                 {
                     b.HasOne("AlpineClubBansko.Data.Models.User", "Author")
                         .WithMany("Stories")
-                        .HasForeignKey("AuthorId");
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AlpineClubBansko.Data.Models.StoryComment", b =>
                 {
                     b.HasOne("AlpineClubBansko.Data.Models.User", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId");
+                        .WithMany("StoriesComments")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("AlpineClubBansko.Data.Models.Story", "Story")
-                        .WithMany("StoryComments")
+                        .WithMany("Comments")
                         .HasForeignKey("StoryId");
-                });
-
-            modelBuilder.Entity("AlpineClubBansko.Data.Models.UsersEvents", b =>
-                {
-                    b.HasOne("AlpineClubBansko.Data.Models.Event", "Event")
-                        .WithMany("Participants")
-                        .HasForeignKey("EventId");
-
-                    b.HasOne("AlpineClubBansko.Data.Models.User", "User")
-                        .WithMany("EventsParticipations")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
