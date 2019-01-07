@@ -86,11 +86,10 @@ namespace AlpineClubBansko.Services
             album.Title = model.Title;
             album.Content = model.Content;
             album.Place = model.Place;
-            album.Photos = album.Photos;
             album.ModifiedOn = DateTime.UtcNow;
 
             this.albumRepository.Update(album);
-            var result =  await this.albumRepository.SaveChangesAsync();
+            var result = await this.albumRepository.SaveChangesAsync();
 
             return result != 0;
         }
@@ -101,7 +100,6 @@ namespace AlpineClubBansko.Services
 
             Album album = this.albumRepository.GetById(albumId);
 
-            
             this.albumRepository.Delete(album);
             var result = await this.albumRepository.SaveChangesAsync();
 
@@ -143,8 +141,6 @@ namespace AlpineClubBansko.Services
             return result != 0;
         }
 
-
-
         public async Task<bool> AddViewedAsync(string albumId)
         {
             ArgumentValidator.ThrowIfNullOrEmpty(albumId, nameof(albumId));
@@ -171,7 +167,6 @@ namespace AlpineClubBansko.Services
                     .FirstOrDefault(f => f.UserId == user.Id && f.AlbumId == albumId);
 
                 this.likedAlbumsRepository.Delete(item);
-
             }
             else
             {
@@ -180,7 +175,6 @@ namespace AlpineClubBansko.Services
                     UserId = user.Id,
                     AlbumId = albumId,
                 });
-
             }
             var changed = await this.likedAlbumsRepository.SaveChangesAsync();
 

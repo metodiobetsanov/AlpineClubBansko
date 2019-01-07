@@ -6,7 +6,7 @@ namespace AlpineClubBansko.Services.Contracts
 {
     public interface IUsersService
     {
-        IEnumerable<UserProfileViewModel> GetAllUsers();
+        IEnumerable<UserProfileViewModel> GetAllUsersAsViewModels();
 
         User GetUser(string id);
 

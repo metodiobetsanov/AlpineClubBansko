@@ -39,8 +39,7 @@ namespace AlpineClubBansko.Data.Migrations
 
                     b.Property<string>("StoryId");
 
-                    b.Property<string>("Title")
-                        .IsRequired();
+                    b.Property<string>("Title");
 
                     b.Property<int>("Views");
 
@@ -148,9 +147,11 @@ namespace AlpineClubBansko.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
-                    b.Property<decimal>("Latitude");
+                    b.Property<decimal>("Latitude")
+                        .HasColumnType("decimal(11,8)");
 
-                    b.Property<decimal>("Longitude");
+                    b.Property<decimal>("Longitude")
+                        .HasColumnType("decimal(11, 8)");
 
                     b.Property<DateTime?>("ModifiedOn");
 
@@ -268,6 +269,8 @@ namespace AlpineClubBansko.Data.Migrations
 
                     b.Property<DateTime?>("ModifiedOn");
 
+                    b.Property<string>("RouteId");
+
                     b.Property<string>("Title");
 
                     b.Property<int>("Views");
@@ -275,6 +278,10 @@ namespace AlpineClubBansko.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("RouteId")
+                        .IsUnique()
+                        .HasFilter("[RouteId] IS NOT NULL");
 
                     b.ToTable("Stories");
                 });
@@ -590,6 +597,10 @@ namespace AlpineClubBansko.Data.Migrations
                         .WithMany("Stories")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AlpineClubBansko.Data.Models.Route", "Route")
+                        .WithOne("Story")
+                        .HasForeignKey("AlpineClubBansko.Data.Models.Story", "RouteId");
                 });
 
             modelBuilder.Entity("AlpineClubBansko.Data.Models.StoryComment", b =>

@@ -78,6 +78,7 @@ namespace AlpineClubBansko.Services
             Route route = this.routeRepository.GetById(model.Id);
             route.Title = model.Title;
             route.Content = model.Content;
+            route.TimeNeeded = model.TimeNeeded;
             route.ModifiedOn = DateTime.UtcNow;
 
             this.routeRepository.Update(route);
@@ -107,6 +108,7 @@ namespace AlpineClubBansko.Services
             Location location = new Location
             {
                 Name = model.Name,
+                CreatedOn = DateTime.UtcNow,
                 Latitude = model.Latitude,
                 Longitude = model.Longitude,
                 AuthorId = user.Id,
@@ -160,8 +162,6 @@ namespace AlpineClubBansko.Services
             return result != 0;
         }
 
-
-
         public async Task<bool> AddViewedAsync(string storyId)
         {
             ArgumentValidator.ThrowIfNullOrEmpty(storyId, nameof(storyId));
@@ -188,7 +188,6 @@ namespace AlpineClubBansko.Services
                     .FirstOrDefault(f => f.UserId == user.Id && f.RouteId == routeId);
 
                 this.likedRoutesRepository.Delete(item);
-
             }
             else
             {
@@ -197,7 +196,6 @@ namespace AlpineClubBansko.Services
                     UserId = user.Id,
                     RouteId = routeId,
                 });
-
             }
             var changed = await this.likedRoutesRepository.SaveChangesAsync();
 

@@ -1,6 +1,7 @@
 ﻿using AlpineClubBansko.Data.Contracts;
 using AlpineClubBansko.Data.Models;
 using AlpineClubBansko.Services.Contracts;
+using AlpineClubBansko.Services.Mapping;
 using AlpineClubBansko.Services.Models;
 using AlpineClubBansko.Services.Models.AlbumViewModels;
 using ImageMagick;
@@ -10,6 +11,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,6 +30,11 @@ namespace AlpineClubBansko.Services
             this.storageConfig = config.Value;
         }
 
+        public IEnumerable<PhotoViewModel> GetAllPhotosAsViewModels()
+        {
+            return this.photoRepository.All().To<PhotoViewModel>();
+        }
+
         public async Task<bool> UploadImage(IFormFile file, PhotoViewModel model)
         {
             bool isUploaded = false;
@@ -37,7 +44,7 @@ namespace AlpineClubBansko.Services
             if (this.IsImage(file) && file.Length > 0)
             {
                 var name = $"{albumId}-{++counter}.{file.FileName.Split(".").Last()}";
-            
+
                 using (var stream = file.OpenReadStream())
                 {
                     isUploaded = await this.UploadImageToStorage(
@@ -67,6 +74,48 @@ namespace AlpineClubBansko.Services
             }
 
             return isUploaded;
+        }
+
+        public async Task<string> UploadAvatar(IFormFile file, string id)
+        {
+            var blobClient = this.GetClient();
+
+            var container = blobClient.GetContainerReference("avatars");
+
+            await container.CreateIfNotExistsAsync();
+            await container.SetPermissionsAsync(
+                new BlobContainerPermissions
+                {
+                    PublicAccess = BlobContainerPublicAccessType.Blob
+                });
+
+            if (this.IsImage(file) && file.Length > 0)
+            {
+                using (var fileStream = file.OpenReadStream())
+                {
+                    byte[] thumbnail;
+
+                    using (var image = new MagickImage(fileStream))
+                    {
+                        MagickGeometry size = new MagickGeometry(500);
+                        size.IgnoreAspectRatio = false;
+                        image.Resize(size);
+                        image.Quality = 100;
+                        thumbnail = image.ToByteArray();
+                    }
+
+                    var imageBlob = container.GetBlockBlobReference(id);
+                    await imageBlob.UploadFromByteArrayAsync(thumbnail, 0, thumbnail.Count());
+
+                    imageBlob = container.GetBlockBlobReference(id);
+                    if (await imageBlob.ExistsAsync())
+                    {
+                        return $"https://acbimagestorage.blob.core.windows.net/avatars/{id}";
+                    }
+                }
+            }
+
+            return null;
         }
 
         public async Task<bool> DeleteImage(string photoId)
@@ -103,7 +152,7 @@ namespace AlpineClubBansko.Services
 
                 return true;
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return false;
             }
@@ -150,6 +199,7 @@ namespace AlpineClubBansko.Services
             fileStream.Position = 0;
 
             await imageBlob.UploadFromStreamAsync(fileStream);
+
             await thumbnailBlob.UploadFromByteArrayAsync(thumbnail, 0, thumbnail.Count());
 
             return await Task.FromResult(true);

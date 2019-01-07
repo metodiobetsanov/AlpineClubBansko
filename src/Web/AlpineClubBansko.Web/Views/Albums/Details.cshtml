@@ -21,6 +21,19 @@
                 <p class="font-italic text-justify">@Model.Content</p>
             </div>
         </div>
+        @if (Model.Story != null || Model.Route != null)
+        {<hr />
+            <div class="row col-12 justify-content-around">
+                @if (Model.Story != null)
+                {
+                    <span class="font-italic"><a asp-controller="Stories" asp-action="Details" asp-route-id="@Model.Story.Id">Тук</a> можете да прочетете за това място</span>
+                }
+                @if (Model.Route != null)
+                {
+                    <span class="font-italic"><a asp-controller="Routes" asp-action="Details" asp-route-id="@Model.Route.Id">Тук</a> можете да разберете как да стигнете до това място</span>
+                }
+            </div>
+        }
         <hr />
         <div id="gallery" class="row align-items-center">
             @foreach (var photo in Model.Photos.OrderByDescending(p => p.CreatedOn))

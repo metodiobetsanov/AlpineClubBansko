@@ -1,34 +1,35 @@
 ﻿@page
 @model DeletePersonalDataModel
 @{
-    ViewData["Title"] = "Delete Personal Data";
+    ViewData["Title"] = "Премахване на лични данни";
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
 }
 
-<h4>@ViewData["Title"]</h4>
-
-<div class="alert alert-warning" role="alert">
-    <p>
-        <span class="glyphicon glyphicon-warning-sign"></span>
-        <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
-    </p>
+<h3 class="font-italic text-center">@ViewData["Title"]</h3>
+<div class="offset-md-1 col-md-10">
+    <hr />
+    <div class="alert alert-warning" role="alert">
+        <p>
+            <span><i class="fas fa-exclamation-triangle"></i></span>
+            <strong>Изтриването на тези данни, ще изтрие Вашият профил и той няма да може да бъде възстановен!</strong>
+        </p>
+    </div>
+    <hr />
+    <div>
+        <form id="delete-user" method="post" class="form-group">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            @if (Model.RequirePassword)
+            {
+                <div class="form-group">
+                    <label asp-for="Input.Password"></label>
+                    <input asp-for="Input.Password" class="form-control" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+            }
+            <button class="btn btn-danger" type="submit">Изтрии данните и профила</button>
+        </form>
+    </div>
 </div>
-
-<div>
-    <form id="delete-user" method="post" class="form-group">
-        <div asp-validation-summary="All" class="text-danger"></div>
-        @if (Model.RequirePassword)
-        {
-            <div class="form-group">
-                <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="form-control" />
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-        }
-        <button class="btn btn-danger" type="submit">Delete data and close my account</button>
-    </form>
-</div>
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AlpineClubBansko.Web.Controllers
 {
-    public class BaseController : Controller
+    public abstract class BaseController : Controller
     {
         private readonly UserManager<User> userManager;
 
-        public BaseController(UserManager<User> userManager)
+        protected BaseController(UserManager<User> userManager)
         {
             this.userManager = userManager;
         }

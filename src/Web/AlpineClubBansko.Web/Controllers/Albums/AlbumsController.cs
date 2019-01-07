@@ -131,6 +131,20 @@ namespace AlpineClubBansko.Web.Controllers.Albums
         [Authorize]
         public IActionResult Update(string id)
         {
+            if (!CurrentUser.Albums.Any(a => a.Id == id))
+            {
+                logger.LogInformation(
+                        string.Format(SetLog.NotTheAuthor,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            id
+                            ));
+
+                AddDangerNotification(string.Format(Notifications.OnlyAuthor));
+
+                Redirect($"/Albums/Details/{id}");
+            }
+
             try
             {
                 AlbumViewModel model = this.albumService.GetAlbumByIdAsViewModel(id);
@@ -224,7 +238,7 @@ namespace AlpineClubBansko.Web.Controllers.Albums
             }
 
             try
-            { 
+            {
                 await this.albumService.DeleteAsync(id);
 
                 return Redirect($"/Albums");
@@ -289,9 +303,11 @@ namespace AlpineClubBansko.Web.Controllers.Albums
 
                 AlbumViewModel album = this.albumService.GetAlbumByIdAsViewModel(albumId);
 
-                return ViewComponent("ViewPhotos", new {
+                return ViewComponent("ViewPhotos", new
+                {
                     model = album.Photos,
-                    page = 1});
+                    page = 1
+                });
             }
             catch (System.Exception e)
             {

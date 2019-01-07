@@ -127,8 +127,6 @@ namespace AlpineClubBansko.Services
             return result != 0;
         }
 
-
-
         public async Task<bool> AddViewedAsync(string storyId)
         {
             ArgumentValidator.ThrowIfNullOrEmpty(storyId, nameof(storyId));
@@ -147,7 +145,7 @@ namespace AlpineClubBansko.Services
         {
             ArgumentValidator.ThrowIfNullOrEmpty(storyId, nameof(storyId));
             ArgumentValidator.ThrowIfNull(user, nameof(user));
-            
+
             if (this.likedStoriesRepository.All()
                 .Any(f => f.UserId == user.Id && f.StoryId == storyId))
             {
@@ -155,7 +153,6 @@ namespace AlpineClubBansko.Services
                     .FirstOrDefault(f => f.UserId == user.Id && f.StoryId == storyId);
 
                 this.likedStoriesRepository.Delete(item);
-
             }
             else
             {
@@ -164,7 +161,6 @@ namespace AlpineClubBansko.Services
                     UserId = user.Id,
                     StoryId = storyId,
                 });
-
             }
             var changed = await this.likedStoriesRepository.SaveChangesAsync();
 

@@ -1,8 +1,8 @@
 ﻿using AlpineClubBansko.Data.Models;
 using AlpineClubBansko.Services.Mapping.Contracts;
 using AlpineClubBansko.Services.Models.AlbumViewModels;
+using AlpineClubBansko.Services.Models.RouteViewModels;
 using AlpineClubBansko.Services.Models.StoryViewModels;
-using AutoMapper;
 using System;
 using System.Collections.Generic;
 
@@ -24,6 +24,8 @@ namespace AlpineClubBansko.Services.Models.UserViewModels
 
         public string LastName { get; set; }
 
+        public string PhoneNumber { get; set; }
+
         public string FullName => $"{FirstName} {LastName}";
 
         public int PostCode { get; set; }
@@ -35,5 +37,9 @@ namespace AlpineClubBansko.Services.Models.UserViewModels
         public List<StoryViewModel> Stories { get; set; }
 
         public List<AlbumViewModel> Albums { get; set; }
+
+        public List<RouteViewModel> Routes { get; set; }
+
+        public int Points => (Stories.Count * 5) + (Albums.Count * 20) + (Routes.Count * 10);
     }
 }

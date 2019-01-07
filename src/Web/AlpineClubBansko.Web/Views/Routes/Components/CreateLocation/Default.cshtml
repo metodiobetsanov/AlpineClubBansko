@@ -1,0 +1,44 @@
+﻿@model AlpineClubBansko.Services.Models.RouteViewModels.LocationViewModel
+
+<div id="createLocation" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Създай нова точка от маршрут</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="createLocationForm" asp-controller="Routes" asp-action="CreateLocation"
+                  data-ajax="true"
+                  data-ajax-method="post"
+                  data-ajax-update="#locations"
+                  data-ajax-seccess="Uploaded()"
+                  enctype="multipart/form-data">
+                <div class="row">
+                    <div class="form-group col-12">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <label asp-for="Name" class="col-12 text-center"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col">
+                        <label asp-for="Latitude" class="col-12 text-center"></label>
+                        <input asp-for="Latitude" class="form-control" />
+                        <span asp-validation-for="Latitude" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col">
+                        <label asp-for="Longitude" class="col-12 text-center"></label>
+                        <input asp-for="Longitude" class="form-control" />
+                        <span asp-validation-for="Longitude" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Запази</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

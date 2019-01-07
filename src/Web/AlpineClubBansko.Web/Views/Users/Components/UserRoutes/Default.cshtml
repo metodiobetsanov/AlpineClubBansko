@@ -1,0 +1,34 @@
+﻿@model List<AlpineClubBansko.Services.Models.RouteViewModels.RouteViewModel>
+
+@{
+    var index = 1;
+}
+
+<table class="table table-hover">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Преходи, създадени от @User.Identity.Name</th>
+            <th scope="col" class="text-center"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var route in Model)
+        {
+            <tr>
+                <th scope="row">@(index++)</th>
+                <td class="d-flex justify-content-between">
+                    @route.Title
+                    <span class="badge badge-pill">
+                        <i class="fas fa-heart text-danger"></i> @route.Favorite.Count |
+                        <i class="far fa-eye text-primary"></i> @route.Views |
+                        <i class="fas fa-comments text-primary"></i> @route.Comments.Count
+                    </span>
+                </td>
+                <td class="text-center">
+                    <a asp-area="" asp-controller="Routes" asp-action="Details" asp-route-id="@route.Id">Разгледай</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

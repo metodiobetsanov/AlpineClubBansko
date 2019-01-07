@@ -1,7 +1,6 @@
 ﻿using AlpineClubBansko.Services.Extensions;
 using AlpineClubBansko.Services.Models.StoryViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +10,8 @@ namespace AlpineClubBansko.Web.Controllers.Stories.ViewComponents
 {
     public class ViewStories : ViewComponent
     {
-
         public ViewStories()
         {
-
         }
 
         public async Task<IViewComponentResult> InvokeAsync(List<StoryViewModel> model,

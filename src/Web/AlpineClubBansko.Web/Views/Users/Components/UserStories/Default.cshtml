@@ -4,27 +4,31 @@
     var index = 1;
 }
 
-<table class="table">
-    <thead class="thead-dark">
-    <tr>
-        <th scope="col">#</th>
-        <th scope="col">Заглавие</th>
-        <th scope="col" class="text-center">Коментари</th>
-        <th scope="col" class="text-center">Рейтинг</th>
-        <th scope="col" class="text-center"></th>
-    </tr>
+<table class="table table-hover">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Истории, разказани от @User.Identity.Name</th>
+            <th scope="col" class="text-center"></th>
+        </tr>
     </thead>
     <tbody>
-    @foreach (var story in Model)
-    {
-        <tr>
-            <th scope="row">@(index++)</th>
-            <td>@story.Title</td>
-            <td class="text-center">@story.Favorite.Count</td>
-            <td class="text-center">
-                <a asp-area="" asp-controller="Posts" asp-action="Details" asp-route-id="@story.Id">Разгледай</a>
-            </td>
-        </tr>
-    }
+        @foreach (var story in Model)
+        {
+            <tr>
+                <th scope="row">@(index++)</th>
+                <td class="d-flex justify-content-between">
+                    @story.Title
+                    <span class="badge badge-pill">
+                        <i class="fas fa-heart text-danger"></i> @story.Favorite.Count |
+                        <i class="far fa-eye text-primary"></i> @story.Views |
+                        <i class="fas fa-comments text-primary"></i> @story.Comments.Count
+                    </span>
+                </td>
+                <td class="text-center">
+                    <a asp-area="" asp-controller="Stories" asp-action="Details" asp-route-id="@story.Id">Разгледай</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

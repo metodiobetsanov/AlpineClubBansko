@@ -5,12 +5,28 @@
         <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
     </ol>
     <div class="carousel-inner">
-        <div class="carousel-item bg-secondary rounded active min-height-400" id="firstSlide">
+        <div class="carousel-item bg-light rounded active min-height-400" id="firstSlide">
             <div class="offset-lg-1 col-lg-7">
-               <p class="display-4 font-italic">Прочети някоя от историите ни за покорени върхове</p>
+                <p class="display-4 font-italic p-5">Прочети някоя от историите ни за покорени върхове</p>
             </div>
             <div class="carousel-caption p-1 m-1">
-                <a asp-controller="Stories" asp-action="Index">Заведи ме</a>
+                <a class="btn btn-light hvr-grow-shadow " asp-controller="Stories" asp-action="Index">Заведи ме</a>
+            </div>
+        </div>
+        <div class="carousel-item rounded min-height-400" id="secondSlide">
+            <div class="offset-lg-1 col-lg-10">
+                <p class="display-4 font-italic p-5 text-right">Разбери повече за нас</p>
+            </div>
+            <div class="carousel-caption p-1 m-1 d-flex justify-content-end">
+                <a class="btn btn-light hvr-grow-shadow " asp-controller="Club" asp-action="Index">Заведи ме</a>
+            </div>
+        </div>
+        <div class="carousel-item bg-light rounded min-height-400" id="thirdSlide">
+            <div class="offset-lg-4 col-lg-7">
+                <p class="display-4 font-italic p-5">Виж планината както никога до сега</p>
+            </div>
+            <div class="carousel-caption p-1 m-1">
+                <a class="btn btn-light hvr-grow-shadow " asp-controller="Routes" asp-action="Index">Заведи ме</a>
             </div>
         </div>
     </div>

@@ -1,68 +1,63 @@
-﻿<div class="container content">
+﻿@model AlpineClubBansko.Services.Models.HomeViewModels.HomeViewModel
+
+<div class="container content shadow">
     <hr />
     <div class="row d-none d-md-block">
         <partial name="_WelcomePartial" />
     </div>
     <hr />
-    <div class="alert alert-primary">
+    <div class="alert alert-danger">
         <div class="text-center">
-            Телефон за Спешни случай: <span class="font-weight-bold">112</span> 
-            Централен денонощен пост ПСС: <span class="font-weight-bold">1470; 02 963 2000</span> 
+            Телефон за Спешни случаи: <span class="font-weight-bold">112</span>
+            Централен денонощен пост ПСС: <span class="font-weight-bold">1470; 02 963 2000</span>
             НП "Пирин" ПЦ Банско: <span class="font-weight-bold">0884 323 245</span>
-</div>
+        </div>
     </div>
     <hr />
     <div class="row">
-        <aside class="col-md-4 order-md-2">
-            <partial name="_IndexAsidePartial" />
+        <aside class="d-none d-md-block col-md-4 order-md-2">
+            <partial name="_IndexAsidePartial" model="@Model" />
         </aside>
         <div class="col-md-8 order-md-1">
-            <div id="index_story" class="pb-3">
+            <div id="index_story" class="py-3 my-2">
                 <div class="row">
                     <div class="col-12">
-                        <h3 class="pb-3 mb-4 font-italic border-bottom">
-                            Последно добавени истории
+                        <h3 class="pb-3 mb-4 font-italic">
+                            Любими истории
                         </h3>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12">
-                        Being Developed
-
+                    <div class="col-12 py-2 my-2">
+                        <partial name="_TopStories" model="@Model.TopStories" />
                     </div>
                 </div>
             </div>
-
-            <br />
-
-            <div id="index_photo">
+            <div id="index_routes" class="py-3 my-2">
                 <div class="row">
                     <div class="col-12">
-                        <h3 class="pb-3 mb-4 font-italic border-bottom">
-                            Последно добавени снимки
+                        <h3 class="pb-3 mb-4 font-italic">
+                            Любими преходи
                         </h3>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        Being Developed
+                        <partial name="_TopRoutes" model="@Model.TopRoutes" />
                     </div>
                 </div>
             </div>
-
-            <br />
-
-            <div id="index_route">
+            <div id="index_photo" class="py-3 my-2">
                 <div class="row">
                     <div class="col-12">
-                        <h3 class="pb-3 mb-4 font-italic border-bottom">
-                            Последно добавени преходи
+                        <h3 class="pb-3 mb-4 font-italic">
+                            Нови снимки
                         </h3>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        Being Developed
+                        <partial name="_NewPhotos" model="@Model.NewPhotos" />
                     </div>
                 </div>
             </div>
@@ -70,3 +65,15 @@
     </div>
     <hr />
 </div>
+
+@section Scripts{
+    <script src="~/lib/lightslider/dist/js/lightslider.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#lightSlider').lightSlider({
+                autoWidth: true,
+                loop: true
+            });
+        });
+    </script>
+}

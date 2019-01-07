@@ -16,6 +16,7 @@ namespace AlpineClubBansko.Data.Models
 
         [Required]
         public string AuthorId { get; set; }
+
         public virtual User Author { get; set; }
     }
 }

@@ -2,7 +2,6 @@
 using AlpineClubBansko.Services.Models.StoryViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace AlpineClubBansko.Web.Controllers.Stories.Components
 {
@@ -24,15 +23,16 @@ namespace AlpineClubBansko.Web.Controllers.Stories.Components
             {
                 if (signInManager.IsSignedIn(UserClaimsPrincipal))
                 {
-                    if (model.Author.Id == userManager.GetUserId(UserClaimsPrincipal))
+                    if (model.Author.Id == userManager.GetUserId(UserClaimsPrincipal)
+                        || User.IsInRole("Administrator"))
                     {
                         return View("Author", model);
                     }
 
-                    return View("UserStoriesDetails");
+                    return View("UserStoriesDetails", model);
                 }
 
-                return View("GuestStoriesDetails");
+                return View("GuestStoriesDetails", model);
             }
 
             if (signInManager.IsSignedIn(UserClaimsPrincipal))

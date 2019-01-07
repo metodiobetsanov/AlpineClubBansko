@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
 namespace AlpineClubBansko.Web.Controllers.Stories
@@ -128,6 +127,20 @@ namespace AlpineClubBansko.Web.Controllers.Stories
         [Authorize]
         public IActionResult Update(string id)
         {
+            if (!CurrentUser.Stories.Any(s => s.Id == id))
+            {
+                logger.LogInformation(
+                        string.Format(SetLog.NotTheAuthor,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            id
+                            ));
+
+                AddDangerNotification(string.Format(Notifications.OnlyAuthor));
+
+                Redirect($"/Stories/Details/{id}");
+            }
+
             try
             {
                 StoryViewModel model = this.storyService.GetStoryByIdAsViewModel(id);
@@ -233,8 +246,8 @@ namespace AlpineClubBansko.Web.Controllers.Stories
 
                 if (!result)
                 {
-                        AddDangerNotification(Notifications.Fail);
-                        return Redirect("/Stories");
+                    AddDangerNotification(Notifications.Fail);
+                    return Redirect("/Stories");
                 }
 
                 logger.LogInformation(

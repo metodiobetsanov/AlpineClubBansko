@@ -17,7 +17,7 @@
     <div class="col-lg-4 py-2">
         <div class="text-muted d-flex justify-content-around">
             <span><i class="far fa-eye text-primary"></i> @Model.Views</span> <span><i class="fas fa-comments text-primary"></i> @Model.Comments.Count </span> <span class="hvr-icon-pulse-grow"> <i class="@fav  hvr-icon" onclick="Favorite()"></i> @Model.Favorite.Count </span>
-</div>
+        </div>
     </div>
     <div class="col-lg-8 d-flex align-items-center justify-content-center justify-content-md-around justify-content-lg-end">
         <ul class="nav">
@@ -31,7 +31,22 @@
                         <i class="fas fa-code-branch"></i> Свържи с
                     </a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="#">Албум</a>
+                        @if (Model.Album == null)
+                        {
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#storyToAlbum">Албум</a>
+                        }
+                        else
+                        {
+                            <a class="dropdown-item" asp-controller="Connect" asp-action="DisconnectStoryAndAlbum" asp-route-id="@Model.Album.Id" asp-route-storyId="@Model.Id">Премахни Албум</a>
+                        }
+                        @if (Model.Route == null)
+                        {
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#storyToRoute">Преход</a>
+                        }
+                        else
+                        {
+                            <a class="dropdown-item" asp-controller="Connect" asp-action="DisconnectStoryAndRoute" asp-route-id="@Model.Id">Премахни Преход</a>
+                        }
                     </div>
                 </div>
             </li>
@@ -57,3 +72,5 @@
 </div>
 
 <vc:create-story></vc:create-story>
+@await Component.InvokeAsync("StoryToRoute", new { storyId = Model.Id })
+@await Component.InvokeAsync("StoryToAlbum", new { storyId = Model.Id })

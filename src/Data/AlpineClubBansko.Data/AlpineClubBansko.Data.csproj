@@ -7,6 +7,10 @@
   <ItemGroup>
     <Compile Remove="Migrations\20190103093556_CascadeDelete.cs" />
     <Compile Remove="Migrations\20190103093556_CascadeDelete.Designer.cs" />
+    <Compile Remove="Migrations\20190105110428_DecimalPrecision2.cs" />
+    <Compile Remove="Migrations\20190105110428_DecimalPrecision2.Designer.cs" />
+    <Compile Remove="Migrations\20190105113013_DecimalPrecision3.cs" />
+    <Compile Remove="Migrations\20190105113013_DecimalPrecision3.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +29,9 @@
     </Compile>
     <Compile Update="Migrations\20190102144933_AddedPlaceToAlbum.Designer.cs">
       <DependentUpon>20190102144933_AddedPlaceToAlbum.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20190105113345_DecimalPrecision2.Designer.cs">
+      <DependentUpon>20190105113345_DecimalPrecision2.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

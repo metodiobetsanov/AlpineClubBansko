@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace AlpineClubBansko.Data.Models
 {
@@ -26,25 +25,16 @@ namespace AlpineClubBansko.Data.Models
 
         [ProtectedPersonalData] public string Country { get; set; }
 
-        [Required]
         public virtual ICollection<Story> Stories { get; set; }
-        [Required]
         public virtual ICollection<Route> Routes { get; set; }
-        [Required]
         public virtual ICollection<Album> Albums { get; set; }
 
-        [Required]
         public virtual ICollection<LikedStories> StoriesLiked { get; set; }
-        [Required]
         public virtual ICollection<LikedRoutes> RoutesLiked { get; set; }
-        [Required]
         public virtual ICollection<LikedAlbums> AlbumsLiked { get; set; }
 
-        [Required]
         public virtual ICollection<StoryComment> StoriesComments { get; set; }
-        [Required]
         public virtual ICollection<RouteComment> RoutesComments { get; set; }
-        [Required]
         public virtual ICollection<AlbumComment> AlbumsComments { get; set; }
     }
 }

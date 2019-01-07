@@ -50,20 +50,49 @@ namespace AlpineClubBansko.Web.Controllers.Routes
         [HttpGet]
         public JsonResult GetListCoords()
         {
-            var result = new List<Location> {
-                new Location()
-                {
-                    Latitude = 42.0100311m,
-                    Longitude = 42.0100311m
-                },
-                new Location()
-                {
-                    Latitude = 41.0100311m,
-                    Longitude = 41.0100311m
-                },
-            };
+            try
+            {
+                var result = this.routeService
+                    .GetAllRoutesAsViewModels()
+                    .Where(l => l.Locations != null && l.Locations.Count > 0)
+                    .Select(r => r.Locations.OrderBy(l => l.CreatedOn).Last())
+                    .ToList();
 
-            return Json(result);
+                return Json(result);
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(string.Format(SetLog.Error,
+                           CurrentUser.UserName,
+                           CurrentController,
+                           e.Message));
+
+                return null;
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetListRouteCoords(string routeId)
+        {
+            try
+            {
+                var result = this.routeService
+                    .GetRouteByIdAsViewModel(routeId)
+                    .Locations
+                    .OrderBy(l => l.CreatedOn)
+                    .ToList();
+
+                return Json(result);
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(string.Format(SetLog.Error,
+                           CurrentUser.UserName,
+                           CurrentController,
+                           e.Message));
+
+                return null;
+            }
         }
 
         [HttpPost]
@@ -143,11 +172,33 @@ namespace AlpineClubBansko.Web.Controllers.Routes
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult Update(string id)
         {
+            if (!CurrentUser.Routes.Any(r => r.Id == id)
+                && !User.IsInRole("Administrator"))
+            {
+                logger.LogInformation(
+                        string.Format(SetLog.NotTheAuthor,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            id
+                            ));
+
+                AddDangerNotification(string.Format(Notifications.OnlyAuthor));
+
+                Redirect($"/Routes/Details/{id}");
+            }
+
             try
             {
                 RouteViewModel route = this.routeService.GetRouteByIdAsViewModel(id);
+
+                if (route == null)
+                {
+                    AddWarningNotification(Notifications.NotFound);
+                    return Redirect("/Routes");
+                }
 
                 return View(route);
             }
@@ -163,16 +214,48 @@ namespace AlpineClubBansko.Web.Controllers.Routes
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> CreateLocation(LocationViewModel model)
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Update(RouteViewModel model)
         {
+            if (!CurrentUser.Routes.Any(r => r.Id == model.Id)
+                || !User.IsInRole("Administrator"))
+            {
+                logger.LogInformation(
+                        string.Format(SetLog.NotTheAuthor,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            model.Id
+                            ));
+
+                AddDangerNotification(string.Format(Notifications.NotTheAuthor, model.Title));
+
+                Redirect($"/Routes/Details/{model.Id}");
+            }
             try
             {
-                await this.routeService.CreateLocationAsync(model, CurrentUser);
+                if (this.ModelState.IsValid)
+                {
+                    model.Content = model.Content.Replace("script", "");
 
-                RouteViewModel route = this.routeService.GetRouteByIdAsViewModel(model.RouteId);
+                    await routeService.UpdateAsync(model);
 
-                return PartialView("_ViewLocations", route.Locations);
+                    logger.LogInformation(
+                        string.Format(SetLog.UpdateSuccess,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            model.Id
+                            ));
+
+                    AddSuccessNotification(string.Format(Notifications.UpdateSuccess, model.Title));
+
+                    return Redirect($"/Routes/Details/{model.Id}");
+                }
+                else
+                {
+                    AddDangerNotification(string.Format(Notifications.Fail));
+                    return Redirect($"/Routes");
+                }
             }
             catch (System.Exception e)
             {
@@ -186,7 +269,33 @@ namespace AlpineClubBansko.Web.Controllers.Routes
             }
         }
 
-        [HttpGet]
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> CreateLocation(LocationViewModel model)
+        {
+            try
+            {
+                model.RouteId = this.TempData.Peek("RouteId").ToString();
+                await this.routeService.CreateLocationAsync(model, CurrentUser);
+
+                RouteViewModel route = this.routeService.GetRouteByIdAsViewModel(model.RouteId);
+
+                return PartialView("_Locations", route.Locations);
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(string.Format(SetLog.Error,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            e.Message));
+                AddDangerNotification(string.Format(Notifications.Fail));
+
+                return Redirect("/Routes");
+            }
+        }
+
+        [HttpPost]
+        [Authorize]
         public async Task<IActionResult> DeleteLocation(string locationId, string routeId)
         {
             try
@@ -195,7 +304,7 @@ namespace AlpineClubBansko.Web.Controllers.Routes
 
                 RouteViewModel route = this.routeService.GetRouteByIdAsViewModel(routeId);
 
-                return PartialView("_ViewLocations", route.Locations);
+                return PartialView("_Locations", route.Locations);
             }
             catch (System.Exception e)
             {
@@ -208,6 +317,7 @@ namespace AlpineClubBansko.Web.Controllers.Routes
                 return Redirect($"/Routes/Details{routeId}");
             }
         }
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Delete(string id)
@@ -375,7 +485,6 @@ namespace AlpineClubBansko.Web.Controllers.Routes
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<bool> Favorite(string routeId)
         {
             try

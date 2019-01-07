@@ -10,6 +10,8 @@
 
         public const string Warning = "Внимание! {0}";
 
+        public const string OnlyAuthor = "Внимание! Само Автора има достъп до тази функция!";
+
         public const string NotTheAuthor = "Внимание! Само Автора може да променя {0}!";
 
         public const string DeleteFail = "Внимание! Само Автора може да изтрие елемент от сайта!";

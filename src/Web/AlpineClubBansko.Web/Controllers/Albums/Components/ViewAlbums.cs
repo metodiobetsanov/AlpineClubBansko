@@ -1,5 +1,4 @@
-﻿using AlpineClubBansko.Services.Extensions;
-using AlpineClubBansko.Services.Models.AlbumViewModels;
+﻿using AlpineClubBansko.Services.Models.AlbumViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

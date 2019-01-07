@@ -1,4 +1,5 @@
 ﻿using AlpineClubBansko.Data.Models;
+using MagicStrings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -38,20 +39,24 @@ namespace AlpineClubBansko.Web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage = Validations.Required)]
             [EmailAddress]
-            [Display(Name = "Email")]
+            [Display(Name = "Електронна поща")]
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Display(Name = "Потребителско име")]
+            public string UserName { get; set; }
+
+            [Required(ErrorMessage = Validations.Required)]
+            [StringLength(100, ErrorMessage = Validations.StringLength, MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Парола")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Повторете паролата")]
+            [Compare("Password", ErrorMessage = Validations.PasswordsDoNotMatch)]
             public string ConfirmPassword { get; set; }
         }
 
@@ -65,13 +70,11 @@ namespace AlpineClubBansko.Web.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = Input.Email, Email = Input.Email };
+                var user = new User { UserName = Input.UserName, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation($"User created a new account with password: {user.UserName}");
-                    await _userManager.AddToRoleAsync(user, "User");
-                    _logger.LogInformation($"The role 'User' is given to User {user.UserName}");
+                    _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Page(
@@ -84,7 +87,8 @@ namespace AlpineClubBansko.Web.Areas.Identity.Pages.Account
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     await _userManager.AddToRoleAsync(user, "User");
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    //await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)

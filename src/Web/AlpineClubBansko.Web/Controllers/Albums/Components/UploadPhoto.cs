@@ -1,8 +1,6 @@
-﻿using AlpineClubBansko.Data.Models;
-using AlpineClubBansko.Services.Contracts;
+﻿using AlpineClubBansko.Services.Contracts;
 using AlpineClubBansko.Services.Models.AlbumViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace AlpineClubBansko.Web.Controllers.Albums.Components
 {
@@ -10,7 +8,6 @@ namespace AlpineClubBansko.Web.Controllers.Albums.Components
     {
         public UploadPhoto(IAlbumService albumService)
         {
-
         }
 
         public IViewComponentResult Invoke(string albumId)

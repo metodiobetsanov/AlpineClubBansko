@@ -1,16 +1,13 @@
-﻿<div class="p-3 mb-3 bg-light rounded">
-    <h4 class="font-italic">Предстоящи Събития</h4>
-    <p class="mb-0">Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-</div>
+﻿@model AlpineClubBansko.Services.Models.HomeViewModels.HomeViewModel
 
 <div class="p-3 mb-3 bg-light rounded">
-    <h4 class="font-italic">Най-избирани маршрути</h4>
-    <p class="mb-0">Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-</div>
-
-<div class="p-3 mb-3 bg-light rounded">
-    <h4 class="font-italic">Нови членове</h4>
-    <p class="mb-0">Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+    <h4 class="font-italic">Нови потребители</h4>
+    <ul class="list-group">
+        @foreach (var user in Model.NewUsers)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">@user.UserName<span class="badge badge-primary badge-pill">@user.CreatedOn.ToString("dd-MMM-yyyy")</span></li>
+        }
+    </ul>
 </div>
 
 <div class="p-3 mb-3 bg-light rounded">

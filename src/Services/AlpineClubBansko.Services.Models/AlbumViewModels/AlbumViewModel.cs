@@ -11,6 +11,7 @@ namespace AlpineClubBansko.Services.Models.AlbumViewModels
     public class AlbumViewModel : IMapTo<Album>, IMapFrom<Album>
     {
         public string Id { get; set; }
+
         [Display(Name = "Заглавие", Prompt = Validations.Placeholder)]
         [Required(ErrorMessage = Validations.Required)]
         [StringLength(60, ErrorMessage = Validations.StringLength, MinimumLength = 10)]
@@ -47,6 +48,10 @@ namespace AlpineClubBansko.Services.Models.AlbumViewModels
         public DateTime CreatedOn { get; set; }
 
         public DateTime? ModifiedOn { get; set; }
+
+        public Story Story { get; set; }
+
+        public Route Route { get; set; }
 
         public List<AlbumCommentViewModel> Comments { get; set; }
 

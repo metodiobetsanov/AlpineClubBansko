@@ -1,0 +1,38 @@
+﻿@model List<AlpineClubBansko.Services.Models.RouteViewModels.LocationViewModel>
+@using AlpineClubBansko.Data.Models
+@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<User> UserManager
+<div class="col-12 col-md-5" id="locations">
+    <p class="text-center">Маршрут</p>
+    <hr />
+    @if (Model != null && Model.Count > 0)
+    {
+
+        <ol>
+            @foreach (var location in Model.OrderBy(l => l.CreatedOn))
+            {
+                <li>
+                    <div class="row">
+                        <div class="col-10">@location.Name -> {@location.Latitude : @location.Longitude}</div>
+                        @if (UserManager.GetUserId(User) == location.Author.Id)
+                        {
+                            <div class="col-1 hvr-icon-buzz"><span role="link" onclick="DeleteLocation('@location.Id')"><i class="hvr-icon far fa-trash-alt text-danger"></i></span></div>
+                        }
+                    </div>
+                </li>
+            }
+        </ol>
+
+    }
+    else
+    {
+        <p>Няма въведен маршрут за този преход</p>
+    }
+
+    <hr />
+    <div class="text-center">
+        <a href="#" class="nav-link add-link hvr-underline-from-center" data-toggle="modal" data-target="#createLocation"><i class="far fa-plus-square"></i> Добави</a>
+    </div>
+    <vc:create-location></vc:create-location>
+</div>

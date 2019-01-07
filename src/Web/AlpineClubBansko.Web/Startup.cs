@@ -5,13 +5,16 @@ using AlpineClubBansko.Services;
 using AlpineClubBansko.Services.Contracts;
 using AlpineClubBansko.Services.Mapping;
 using AlpineClubBansko.Services.Models;
+using AlpineClubBansko.Web.EmailSenderService;
 using AlpineClubBansko.Web.Middleware.MiddlewareExtensions;
+using AlpineClubBansko.Web.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -45,8 +48,7 @@ namespace AlpineClubBansko.Web
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseLazyLoadingProxies()
-                    .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+                    .UseSqlServer(Configuration.GetConnectionString("AzureConnection")));
 
             services.AddIdentity<User, IdentityRole>(options =>
                 {
@@ -55,18 +57,22 @@ namespace AlpineClubBansko.Web
                     options.Password.RequireLowercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequiredUniqueChars = 0;
-                    options.Password.RequiredLength = 3;
+                    options.Password.RequiredLength = 6;
+                    options.SignIn.RequireConfirmedEmail = true;
                 })
                 .AddDefaultTokenProviders()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.Configure<AzureStorageConfig>(Configuration.GetSection("AzureStorageConfig"));
+            services.Configure<AuthMessageSenderOptions>(Configuration.GetSection("EmailSender"));
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddAutoMapper();
+
+            services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUsersService, UsersService>();
@@ -74,6 +80,8 @@ namespace AlpineClubBansko.Web
             services.AddScoped<IAlbumService, AlbumService>();
             services.AddScoped<ICloudService, CloudService>();
             services.AddScoped<IRouteService, RouteService>();
+            services.AddScoped<IHomeService, HomeService>();
+            services.AddScoped<IConnectService, ConnectService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,6 +89,8 @@ namespace AlpineClubBansko.Web
             IHostingEnvironment env)
         {
             var cultureInfo = new CultureInfo("bg-BG");
+            cultureInfo.NumberFormat.NumberDecimalSeparator = ".";
+
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
@@ -107,7 +117,7 @@ namespace AlpineClubBansko.Web
             {
                 routes.MapRoute(
                     name: "areas",
-                    template: "{area:exists}/{controller=Admin}/{action=Index}/{id?}");
+                    template: "{area:exists}/{controller}/{action}/{id?}");
 
                 routes.MapRoute(
                     name: "default",

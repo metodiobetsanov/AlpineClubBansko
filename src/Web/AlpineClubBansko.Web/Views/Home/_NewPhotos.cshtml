@@ -1,0 +1,10 @@
+﻿@model List<AlpineClubBansko.Services.Models.AlbumViewModels.PhotoViewModel>
+
+<ul id="lightSlider">
+    @foreach (var photo in Model)
+    {
+        <li data-thumb="@photo.ThumbnailUrl">
+            <a asp-controller="Albums" asp-action="Details" asp-route-id="@photo.AlbumId"><img src="@photo.ThumbnailUrl" /></a>
+        </li>
+    }
+</ul>

@@ -34,8 +34,22 @@
                         <i class="fas fa-code-branch"></i> Свържи с
                     </a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="#">История</a>
-                        <a class="dropdown-item" href="#">Преход</a>
+                        @if (Model.Story == null)
+                        {
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#albumToStory">История</a>
+                        }
+                        else
+                        {
+                            <a class="dropdown-item" asp-controller="Connect" asp-action="DisconnectAlbumAndStory" asp-route-id="@Model.Id">Премахни История</a>
+                        }
+                        @if (Model.Route == null)
+                        {
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#albumToRoute">Преход</a>
+                        }
+                        else
+                        {
+                            <a class="dropdown-item" asp-controller="Connect" asp-action="DisconnectAlbumAndRoute" asp-route-id="@Model.Id">Премахни Преход</a>
+                        }
                     </div>
                 </div>
             </li>
@@ -70,3 +84,5 @@
 
 <vc:create-album></vc:create-album>
 <vc:upload-photo album-id="@Model.Id"></vc:upload-photo>
+@await Component.InvokeAsync("AlbumToRoute", new { albumId = Model.Id })
+@await Component.InvokeAsync("AlbumToStory", new { albumId = Model.Id })

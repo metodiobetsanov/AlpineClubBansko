@@ -17,7 +17,7 @@ namespace AlpineClubBansko.Services
             this.usersRepository = usersRepository;
         }
 
-        public IEnumerable<UserProfileViewModel> GetAllUsers()
+        public IEnumerable<UserProfileViewModel> GetAllUsersAsViewModels()
         {
             return this.usersRepository.All().To<UserProfileViewModel>();
         }
@@ -29,7 +29,7 @@ namespace AlpineClubBansko.Services
 
         public UserProfileViewModel GetUserById(string id)
         {
-            return this.GetAllUsers().FirstOrDefault(a => a.Id == id);
+            return this.GetAllUsersAsViewModels().FirstOrDefault(a => a.Id == id);
         }
     }
 }

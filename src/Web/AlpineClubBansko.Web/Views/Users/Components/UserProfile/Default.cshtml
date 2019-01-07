@@ -1,77 +1,66 @@
 ﻿@model AlpineClubBansko.Services.Models.UserViewModels.UserProfileViewModel
 
-<div class="d-flex justify-content-center">
-    <form>
-        <div class="form-row">
-            <div class="col-6">
-                <label class="sr-only"></label>
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Потребител</div>
-                    </div>
-                    <input asp-for="UserName" type="text" readonly class="form-control">
+<div class="container d-flex justify-content-center">
+    <div class="col-12">
+        <div class="row py-3">
+            <div class="row col">
+                <div class="col-3 d-flex align-items-center">
+                    <i class="fas fa-3x fa-user-circle"></i>
+                </div>
+                <div class="col-9 d-flex flex-column">
+                    <label asp-for="UserName" class="font-weight-bold m-0"></label>
+                    <text>@Model.UserName</text>
                 </div>
             </div>
-            <div class="col-6">
-                <label class="sr-only"></label>
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Регистриран на</div>
-                    </div>
-                    <input asp-for="CreatedOn" type="text" readonly class="form-control">
+            <div class="row col">
+                <div class="col-3 d-flex align-items-center">
+                    <i class="fas fa-3x fa-envelope"></i>
+                </div>
+                <div class="col-9 d-flex flex-column">
+                    <label asp-for="Email" class="font-weight-bold m-0"></label>
+                    <text>@Model.Email</text>
                 </div>
             </div>
-        </div>
-        <div class="form-row mt-2">
-            <div class="col-8">
-                <label class="sr-only"></label>
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Електронна поща</div>
-                    </div>
-                    <input asp-for="Email" type="text" readonly class="form-control">
+            <div class="row col">
+                <div class="col-3 d-flex align-items-center">
+                    <i class="fas fa-3x fa-phone-square"></i>
                 </div>
-            </div>
-        </div>
-        <div class="form-row mt-2">
-            <div class="col-6">
-                <label class="sr-only"></label>
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Име</div>
-                    </div>
-                    <input asp-for="FirstName" type="text" readonly class="form-control edit">
-                </div>
-            </div>
-            <div class="col-6">
-                <label class="sr-only"></label>
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Фамилия</div>
-                    </div>
-                    <input asp-for="LastName" type="text" readonly class="form-control edit">
+                <div class="col-9 d-flex flex-column">
+                    <label asp-for="PhoneNumber" class="font-weight-bold m-0"></label>
+                    <text>@Model.PhoneNumber</text>
                 </div>
             </div>
         </div>
-        <div class="form-row mt-2">
-            <div class="col-6">
-                <label class="sr-only"></label>
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Град</div>
-                    </div>
-                    <input asp-for="City" type="text" readonly class="form-control edit">
-                </div>
+        <hr />
+        <div class="row py-3">
+            <div class="col">
+                <label asp-for="Points" class="font-weight-bold"></label>
+                <text>@Model.Points</text>
             </div>
-            <div class="col-6">
-                <label class="sr-only"></label>
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Държава</div>
-                    </div>
-                    <input asp-for="Country" type="text"  readonly class="form-control edit">
-                </div>
+
+            <div class="col">
+                <label asp-for="FirstName" class="font-weight-bold"></label>
+                <text>@Model.FirstName</text>
+            </div>
+            <div class="col">
+                <label asp-for="LastName" class="font-weight-bold"></label>
+                <text>@Model.LastName</text>
             </div>
         </div>
-    </form>
+        <div class="row py-3">
+            <div class="form-group col">
+                <label asp-for="PostCode" class="font-weight-bold"></label>
+                <text>@Model.PostCode</text>
+            </div>
+            <div class="form-group col">
+                <label asp-for="City" class="font-weight-bold"></label>
+                <text>@Model.City</text>
+            </div>
+            <div class="form-group col">
+                <label asp-for="Country" class="font-weight-bold"></label>
+                <text>@Model.Country</text>
+            </div>
+        </div>
+        <hr />
+    </div>
 </div>

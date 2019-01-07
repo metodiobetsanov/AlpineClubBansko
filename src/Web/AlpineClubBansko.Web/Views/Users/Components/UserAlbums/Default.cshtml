@@ -4,28 +4,32 @@
     var index = 1;
 }
 
-<table class="table">
-    <thead class="thead-dark">
-    <tr>
-        <th scope="col">#</th>
-        <th scope="col">Заглавие</th>
-        <th scope="col" class="text-center">Снимки</th>
-        <th scope="col" class="text-center">Рейтинг</th>
-        <th scope="col" class="text-center"></th>
-    </tr>
+<table class="table table-hover">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Албуми, качени от @User.Identity.Name</th>
+            <th scope="col" class="text-center"></th>
+        </tr>
     </thead>
     <tbody>
-    @foreach (var album in Model)
-    {
-        <tr>
-            <th scope="row">@(index++)</th>
-            <td>@album.Title</td>
-            <td class="text-center">@album.Photos.Count()</td>
-            <td class="text-center">@album.Views</td>
-            <td class="text-center">
-                <a asp-area="" asp-controller="Albums" asp-action="Details" asp-route-id="@album.Id">Разгледай</a>
-            </td>
-        </tr>
-    }
+        @foreach (var album in Model)
+        {
+            <tr>
+                <th scope="row">@(index++)</th>
+                <td class="d-flex justify-content-between">
+                    @album.Title
+                    <span class="badge badge-pill">
+                        <i class="fas fa-heart text-danger"></i> @album.Favorite.Count |
+                        <i class="far fa-image text-primary"></i> @album.Photos.Count() |
+                        <i class="far fa-eye text-primary"></i> @album.Views |
+                        <i class="fas fa-comments text-primary"></i> @album.Comments.Count
+                    </span>
+                </td>
+                <td class="text-center">
+                    <a asp-area="" asp-controller="Albums" asp-action="Details" asp-route-id="@album.Id">Разгледай</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -1,4 +1,5 @@
 ﻿using AlpineClubBansko.Data.Models;
+using MagicStrings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -27,8 +28,9 @@ namespace AlpineClubBansko.Web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage = Validations.Required)]
             [EmailAddress]
+            [Display(Name = "Електронна поща")]
             public string Email { get; set; }
         }
 

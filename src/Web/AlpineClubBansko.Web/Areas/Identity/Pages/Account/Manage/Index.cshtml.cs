@@ -1,4 +1,7 @@
-﻿using AlpineClubBansko.Data.Models;
+﻿using AlpineClubBansko.Data.Contracts;
+using AlpineClubBansko.Data.Models;
+using AlpineClubBansko.Services.Contracts;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -15,18 +18,30 @@ namespace AlpineClubBansko.Web.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly IRepository<User> repository;
+        private readonly ICloudService cloudService;
 
-        public IndexModel(
+        public IndexModel(ICloudService cloudService,
+            IRepository<User> repository,
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IEmailSender emailSender)
         {
+            this.cloudService = cloudService;
+            this.repository = repository;
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
         }
 
+        [Display(Name = "Потребителско име")]
         public string Username { get; set; }
+
+        [Display(Name = "Електронна поща")]
+        public string Email { get; set; }
+
+        [Display(Name = "Регистриран на")]
+        public DateTime CreatedOn { get; set; }
 
         public bool IsEmailConfirmed { get; set; }
 
@@ -38,13 +53,27 @@ namespace AlpineClubBansko.Web.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
-            public string Email { get; set; }
-
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = "Телефон")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Име")]
+            public string FirstName { get; set; }
+
+            [Display(Name = "Фамилия")]
+            public string LastName { get; set; }
+
+            [Display(Name = "Пощенски код")]
+            public int PostCode { get; set; }
+
+            [Display(Name = "Град")]
+            public string City { get; set; }
+
+            [Display(Name = "Държава")]
+            public string Country { get; set; }
+
+            [Display(Name = "Аватар")]
+            public IFormFile File { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -55,16 +84,18 @@ namespace AlpineClubBansko.Web.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var userName = await _userManager.GetUserNameAsync(user);
-            var email = await _userManager.GetEmailAsync(user);
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-
-            Username = userName;
+            Username = user.UserName;
+            Email = user.Email;
+            CreatedOn = user.CreatedOn;
 
             Input = new InputModel
             {
-                Email = email,
-                PhoneNumber = phoneNumber
+                PhoneNumber = user.PhoneNumber,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PostCode = user.PostCode,
+                City = user.City,
+                Country = user.Country
             };
 
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
@@ -85,30 +116,22 @@ namespace AlpineClubBansko.Web.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var email = await _userManager.GetEmailAsync(user);
-            if (Input.Email != email)
+            user.FirstName = Input.FirstName;
+            user.LastName = Input.LastName;
+            user.PhoneNumber = Input.PhoneNumber;
+            user.PostCode = Input.PostCode;
+            user.City = Input.City;
+            user.Country = Input.Country;
+            if (Input.File != null)
             {
-                var setEmailResult = await _userManager.SetEmailAsync(user, Input.Email);
-                if (!setEmailResult.Succeeded)
-                {
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    throw new InvalidOperationException($"Unexpected error occurred setting email for user with ID '{userId}'.");
-                }
+                user.Avatar = await this.cloudService.UploadAvatar(Input.File, user.Id);
             }
 
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
-            {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
-                {
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
-                }
-            }
+            this.repository.Update(user);
+            await this.repository.SaveChangesAsync();
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "Профила беше променен!";
             return RedirectToPage();
         }
 

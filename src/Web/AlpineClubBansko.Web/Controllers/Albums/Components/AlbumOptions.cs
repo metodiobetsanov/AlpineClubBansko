@@ -23,15 +23,16 @@ namespace AlpineClubBansko.Web.Controllers.Albums.Components
             {
                 if (signInManager.IsSignedIn(UserClaimsPrincipal))
                 {
-                    if (model.Author.Id == userManager.GetUserId(UserClaimsPrincipal))
+                    if (model.Author.Id == userManager.GetUserId(UserClaimsPrincipal)
+                        || User.IsInRole("Administrator"))
                     {
                         return View("Author", model);
                     }
 
-                    return View("UserAlbumsDetails");
+                    return View("UserAlbumsDetails", model);
                 }
 
-                return View("GuestAlbumsDetails");
+                return View("GuestAlbumsDetails", model);
             }
 
             if (signInManager.IsSignedIn(UserClaimsPrincipal))

@@ -12,10 +12,13 @@ namespace AlpineClubBansko.Web.Areas.Identity.Pages.Account
     public class ConfirmEmailModel : PageModel
     {
         private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
-        public ConfirmEmailModel(UserManager<User> userManager)
+        public ConfirmEmailModel(UserManager<User> userManager,
+            SignInManager<User> signInManager)
         {
-            _userManager = userManager;
+            this._signInManager = signInManager;
+            this._userManager = userManager;
         }
 
         public async Task<IActionResult> OnGetAsync(string userId, string code)
@@ -37,7 +40,9 @@ namespace AlpineClubBansko.Web.Areas.Identity.Pages.Account
                 throw new InvalidOperationException($"Error confirming email for user with ID '{userId}':");
             }
 
-            return Page();
+            await _signInManager.SignInAsync(user, true);
+
+            return Redirect("/");
         }
     }
 }

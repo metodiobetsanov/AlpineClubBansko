@@ -14,9 +14,9 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <header class="blog-header py-3">
+    <header class="py-3">
         <div class="text-center">
-            <span class="blog-header-logo text-dark">Алпийски клуб Банско</span>
+            <h2 class="font-weight-bold text-muted">Алпийски Клуб Банско</h2>
         </div>
     </header>
 
@@ -31,10 +31,10 @@
         @RenderBody()
     </div>
 
-    <footer class="footer text-muted mt-5">
+    <footer class="footer text-muted bg-white py-1">
         <div class="container">
-            <div class="col-9">
-                &copy; 2018 - Alpine Club Bansko - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row justify-content-center small font-italic">
+                &copy; 2018 - Алпийски Клуб Банско - <a asp-area="" asp-controller="Home" asp-action="Privacy">Поверителност</a>
             </div>
         </div>
     </footer>
@@ -43,9 +43,8 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
     <script src="~/js/site.js"></script>
     <script src="~/lib/lightgallery/dist/js/lightgallery-all.js"></script>
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
     <partial name="_OptionsNavScriptsPartial" />
     @RenderSection("Scripts", required: false)
-
-
 </body>
 </html>

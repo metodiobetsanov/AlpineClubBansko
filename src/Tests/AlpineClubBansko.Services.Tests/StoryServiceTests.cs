@@ -363,7 +363,7 @@ namespace AlpineClubBansko.Services.Tests
 
             storyViews = story.Views;
 
-            storyViews.ShouldBe(count+1);
+            storyViews.ShouldBe(count + 1);
         }
 
         [Fact]
@@ -413,28 +413,28 @@ namespace AlpineClubBansko.Services.Tests
             User user = new User();
             string test = "test";
 
-            Assert.Throws<ArgumentException>(() => 
+            Assert.Throws<ArgumentException>(() =>
                 this.service.CreateAsync(null, user).GetAwaiter().GetResult());
-            Assert.Throws<ArgumentException>(() => 
+            Assert.Throws<ArgumentException>(() =>
                 this.service.CreateAsync("", user).GetAwaiter().GetResult());
 
-            Assert.Throws<ArgumentNullException>(() => 
+            Assert.Throws<ArgumentNullException>(() =>
                 this.service.CreateAsync(test, null).GetAwaiter().GetResult());
         }
 
         [Fact]
         public void UpdateAsync_ShouldThrowException()
         {
-            Assert.Throws<ArgumentNullException>(() => 
+            Assert.Throws<ArgumentNullException>(() =>
                 this.service.UpdateAsync(null).GetAwaiter().GetResult());
         }
 
         [Fact]
         public void DeleteAsync_ShouldThrowException()
         {
-            Assert.Throws<ArgumentException>(() => 
+            Assert.Throws<ArgumentException>(() =>
                 this.service.DeleteAsync(null).GetAwaiter().GetResult());
-            Assert.Throws<ArgumentException>(() => 
+            Assert.Throws<ArgumentException>(() =>
                 this.service.DeleteAsync("").GetAwaiter().GetResult());
         }
 
@@ -444,9 +444,9 @@ namespace AlpineClubBansko.Services.Tests
             User user = new User();
             string test = "test";
 
-            Assert.Throws<ArgumentException>(() => 
+            Assert.Throws<ArgumentException>(() =>
                 this.service.CreateCommentAsync(null, test, user).GetAwaiter().GetResult());
-            Assert.Throws<ArgumentException>(() => 
+            Assert.Throws<ArgumentException>(() =>
                 this.service.CreateCommentAsync("", test, user).GetAwaiter().GetResult());
 
             Assert.Throws<ArgumentException>(() =>

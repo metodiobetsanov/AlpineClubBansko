@@ -2,6 +2,7 @@
 
 @{
     TempData["AuthorId"] = Model.Author.Id;
+    TempData["RouteId"] = Model.Id;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,53 +11,33 @@
     @await Component.InvokeAsync("RouteOptions", Model)
     <hr />
     <div class="row">
-        <div class="col-md-7" id="map"></div>
-        <div class="col-md-5">
-            @if (Model.Locations != null)
-            {
-                <p class="text-center">Маршрут</p>
-                <hr />
-                <ol>
-                    @foreach (var location in Model.Locations)
-                    {
-                        <li>@location.Name</li>
-                    }
-                </ol>
-            }
-            else
-            {
-                <p>Няма въведен маршрут за този преход</p>
-            }
-        </div>
+        <div class="col-12 col-md-7" id="map"></div>
+
+        <partial name="_Locations" model="@Model.Locations" />
     </div>
     <hr />
     <div class="row">
         <div class="offset-2 col-8">
-            @if (Model.Content != null)
-            {
-                @Model.Content;
-            }
-            else
-            {
-                <p>Автора не е въвел описание за този преход</p>
-            }
+            <form asp-controller="Routes" asp-action="Update" method="post" id="updateForm">
+                <div class="row">
+                    <div class="col-12 col-md-8 form-group">
+                        <label asp-for="Title" class="col-12 text-center"></label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="col-12 col-md-4 form-group">
+                        <label asp-for="TimeNeeded" class="col-12 text-center"></label>
+                        <input asp-for="TimeNeeded" class="form-control" />
+                        <span asp-validation-for="TimeNeeded" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label asp-for="Content" class="col-12 text-center"></label>
+                    <textarea asp-for="Content" class="form-control"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+            </form>
         </div>
-    </div>
-    <hr />
-    <div class="row">
-        @if (Model.Album != null)
-        {
-            <ul id="lightSlider">
-                @foreach (var photo in Model.Album.Photos)
-                {
-                    <li><img src="@photo.ThumbnailUrl" /></li>
-                }
-            </ul>
-        }
-        else
-        {
-            <p>Автора не е създал албум за този преход</p>
-        }
     </div>
     <hr />
 </div>
@@ -67,20 +48,126 @@
         $(document).ready(function () {
             $("#lightSlider").lightSlider();
         });
-
         function SubmitForm() {
-            tinyMCE.triggerSave();
             $('#updateForm').submit();
+        };
+
+        function Uploaded() {
+            $('#createLocation').modal('hide');
+            $(':input', '#createLocationForm')
+                .not(':button, :submit, :reset, :hidden')
+                .val('')
+        };
+
+        function DeleteLocation(param) {
+            $.ajax({
+                url: '/Routes/DeleteLocation',
+                type: 'post',
+                data: {
+                    locationId: param,
+                    routeId: '@Model.Id'
+                }, success: function (data) {
+                    $('#locations').replaceWith(data);
+                    initMap();
+                }, error: function (reponse) {
+                    console.log("error : " + reponse);
+                }
+            })
+        };
+
+        function RefreshStats() {
+            $.ajax({
+                url: '/Routes/RefreshStats',
+                type: 'get',
+                data: {
+                    albumId: '@Model.Id',
+                }, success: function (data) {
+                    $('#optionsNav').replaceWith(data);
+                    SetOptionNavH();
+                }, error: function (reponse) {
+                    console.log("error : " + reponse);
+                }
+            })
         };
     </script>
     <script>
         var map;
+
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: -34.397, lng: 150.644 },
-                zoom: 8
+                center: { lat: 41.837480, lng: 23.488766 },
+                zoom: 13
             });
-        }
+
+            getData();
+        };
+
+        function getData() {
+            $.ajax({
+                url: "/Routes/GetListRouteCoords",
+                type: 'GET',
+                contentType: "application/json",
+                data: {
+                    routeId: '@Model.Id'
+                },
+                success: function (data) {
+                    if (data != null) {
+                        getMarkers(data);
+                    } else {
+                        console.log("No data")
+                    }
+
+                },
+            });
+
+            function getMarkers(data) {
+                var startLocData = data[0];
+                var startName = startLocData["name"];
+                var startLatLng = new google.maps.LatLng(startLocData["latitude"], startLocData["longitude"]);
+
+                var startMarker = new google.maps.Marker({
+                    title: startName,
+                    position: startLatLng,
+                    map: map,
+                });
+
+                var waypts = [];
+
+                for (var i = 0; i < data.length; i++) {
+                    var curData = data[i];
+                    var marker = new google.maps.Marker({
+                        title: curData['name'],
+                        position: new google.maps.LatLng(curData["latitude"], curData["longitude"]),
+                        map: map,
+                    });
+                    waypts.push(
+                        new google.maps.LatLng(curData["latitude"], curData["longitude"])
+                    );
+                }
+
+                var lineSymbol = {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    strokeOpacity: 1,
+                    fillOpacity: 0,
+                    strokeColor:'#a7288a',
+                    scale: 5
+                };
+
+                var line = new google.maps.Polyline({
+                    path: waypts,
+                    strokeOpacity: 0,
+                    icons: [{
+                        icon: lineSymbol,
+                        offset: '0',
+                        repeat: '20px'
+                    }],
+                    map: map,
+                });
+
+                map.panTo(startMarker.position);
+                map.setZoom(12);
+            };
+        };
     </script>
     <partial name="_OptionsNavScriptsPartial" />
     <partial name="_GoogleMapsScriptsPartial" />

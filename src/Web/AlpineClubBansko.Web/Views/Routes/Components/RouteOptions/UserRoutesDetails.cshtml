@@ -1,9 +1,23 @@
 ﻿@model AlpineClubBansko.Services.Models.RouteViewModels.RouteViewModel
 
-<div class="row options-nav bg-light shadow-sm" id="optionsNav">
+@using AlpineClubBansko.Data.Models
+@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<User> UserManager
+
+@{
+    string userId = UserManager.GetUserId(User);
+    string fav = Model.Favorite.Any(s => s.UserId == userId) ? "fas fa-heart text-warning" : "far fa-heart";
+}
+<div class="row options-nav bg-light shadow-sm py-2" id="optionsNav">
+    <div class="col-12 flex-column">
+        <h4 class="text-center">@Model.Title</h4>
+        <p class="blockquote-footer text-center">Добавен от <a href="/Users/Profile/@Model.Author.Id">@Model.Author</a> на @Model.CreatedOn</p>
+    </div>
     <div class="col-lg-4 py-2">
-        <h5>@Model.Title</h5>
-        <p class="blockquote-footer">Добавен от <a href="/Users/Profile/@Model.Author.Id">@Model.Author</a> на @Model.CreatedOn</p>
+        <div class="text-muted d-flex justify-content-around">
+            <span><i class="far fa-eye text-primary"></i> @Model.Views</span> <span><i class="fas fa-comments text-primary"></i> @Model.Comments.Count </span> <span class="hvr-icon-pulse-grow"> <i class="@fav  hvr-icon" onclick="Favorite()"></i> @Model.Favorite.Count </span>
+        </div>
     </div>
     <div class="col-lg-8 d-flex align-items-center justify-content-around justify-content-lg-end">
         <ul class="nav">

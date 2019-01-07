@@ -19,44 +19,43 @@ namespace AlpineClubBansko.Web.Middleware
             UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager)
         {
-                if (!(await roleManager.RoleExistsAsync("Owner")))
+            if (!(await roleManager.RoleExistsAsync("Owner")))
+            {
+                await roleManager.CreateAsync(
+                    new IdentityRole("Owner")
+                    );
+            }
+
+            if (!(await roleManager.RoleExistsAsync("Administrator")))
+            {
+                await roleManager.CreateAsync(
+                    new IdentityRole("Administrator")
+                    );
+            }
+
+            if (!(await roleManager.RoleExistsAsync("User")))
+            {
+                await roleManager.CreateAsync(
+                    new IdentityRole("User")
+                    );
+            }
+
+            if (await userManager.FindByEmailAsync("owner@this.web") == null)
+            {
+                User user = new User
                 {
-                    await roleManager.CreateAsync(
-                        new IdentityRole("Owner")
-                        );
-                }
+                    UserName = "Owner",
+                    Email = "owner@this.web",
+                    EmailConfirmed = true,
+                };
 
-                if (!(await roleManager.RoleExistsAsync("Administrator")))
+                var result = await userManager.CreateAsync(user, "0wnerPassw0rd");
+
+                if (result.Succeeded)
                 {
-                    await roleManager.CreateAsync(
-                        new IdentityRole("Administrator")
-                        );
+                    await userManager.AddToRolesAsync(user, new[] { "Owner", "Administrator" });
                 }
-
-                if (!(await roleManager.RoleExistsAsync("User")))
-                {
-                    await roleManager.CreateAsync(
-                        new IdentityRole("User")
-                        );
-                }
-
-                if (await userManager.FindByEmailAsync("owner@this.web") == null)
-                {
-                    User user = new User
-                    {
-                        UserName = "Owner",
-                        Email = "owner@this.web"
-                    };
-
-                    var result = await userManager.CreateAsync(user, "0wnerPassw0rd");
-
-                    if (result.Succeeded)
-                    {
-                        await userManager.AddToRolesAsync(user, new[] { "Owner", "Administrator" });
-
-                    }
-                }
-
+            }
 
             await this.next(context);
         }

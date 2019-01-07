@@ -5,7 +5,7 @@
 }
 
 <div class="container content mb-5">
-    
+
     <hr />
     <vc:album-options model="@Model"></vc:album-options>
     <hr />
@@ -45,48 +45,63 @@
 </div>
 @section Scripts {
     <script>
-    function SubmitForm(){
-        $('#updateForm').submit();
-    };
+        function SubmitForm(){
+            $('#updateForm').submit();
+        };
 
-    function Uploaded() {
-        $(':input', '#FileUploadForm')
+        function Uploaded() {
+            $(':input', '#FileUploadForm')
             .not(':button, :submit, :reset, :hidden')
             .val('')
-        $('#uploadPhoto').modal('hide');
-        }
+            $('#uploadPhoto').modal('hide');
+        };
 
         function DeletePhoto(param) {
-        $.ajax({
-            url: '/Albums/DeletePhoto',
-            type: 'post',
-            data: {
-                photoId: param,
-                albumId: '@Model.Id',
-            }, success: function (data) {
-                $('#gallery').html(data).fadeIn();
-            }, error: function (reponse) {
-                alert("error : " + reponse);
-            }
-        });
-    };
+            $.ajax({
+                url: '/Albums/DeletePhoto',
+                type: 'post',
+                data: {
+                    photoId: param,
+                    albumId: '@Model.Id',
+                }, success: function (data) {
+                    $('#gallery').html(data).fadeIn();
+                    RefreshStats();
+                }, error: function (reponse) {
+                    alert("error : " + reponse);
+                }
+            });
+        };
 
-    function ChangePage(param) {
-        $.ajax({
-            url: '/Albums/FilterPhotos',
-            type: 'get',
-            data: {
-                page: param,
-                albumId: '@Model.Id',
-            }, success: function (data) {
-                $('#storyList').html(data).fadeIn();
-            }, error: function (reponse) {
-                alert("error : " + reponse);
-            }
-        });
-    };
+        function ChangePage(param) {
+            $.ajax({
+                url: '/Albums/FilterPhotos',
+                type: 'get',
+                data: {
+                    page: param,
+                    albumId: '@Model.Id',
+                }, success: function (data) {
+                    $('#storyList').html(data).fadeIn();
+                }, error: function (reponse) {
+                    alert("error : " + reponse);
+                }
+            });
+        };
+
+        function RefreshStats() {
+            $.ajax({
+                url: '/Albums/RefreshStats',
+                type: 'get',
+                data: {
+                    albumId: '@Model.Id',
+                }, success: function (data) {
+                    $('#optionsNav').replaceWith(data);
+                    SetOptionNavH();
+                }, error: function (reponse) {
+                    console.log("error : " + reponse);
+                }
+            })
+        };
     </script>
 
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
 }

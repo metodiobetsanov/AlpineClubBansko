@@ -1,20 +1,26 @@
-﻿@{
-    Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+﻿@inject UserManager<User> UserManager
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    User user = await UserManager.GetUserAsync(User);
 }
 
-<h1>Manage your account</h1>
-
-<div>
-    <h4>Change your account settings</h4>
+<div class="container content">
+    <hr />
+    <h2 class="offset-1">Управление на профил</h2>
     <hr />
     <div class="row">
         <div class="col-md-3">
+            <div class="row">
+                <img src="@(string.IsNullOrEmpty(user.Avatar) ? "~/images/avatar.svg" : user.Avatar)" class="img-fluid img-thumbnail rounded-circle mx-auto mt-2 mb-2" id="avatar" />
+            </div>
+            <h2 class="text-center py-2">@user.UserName</h2>
             <partial name="_ManageNav" />
         </div>
-        <div class="col-md-9">
+        <div class="col-md-9 pb-5">
             @RenderBody()
         </div>
     </div>
+    <hr />
 </div>
 
 @section Scripts {

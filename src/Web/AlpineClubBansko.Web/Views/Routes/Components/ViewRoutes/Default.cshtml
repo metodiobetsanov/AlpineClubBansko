@@ -4,7 +4,6 @@
     int counter = 0;
 }
 
-
 <div class="col-12">
     <table class="table table-bordered table-striped">
         <thead>
@@ -25,20 +24,25 @@
             }
             else
             {
-            @foreach (var route in Model)
-            {
-                <tr>
-                    <th scope="row" class="text-center align-middle">@(++counter)</th>
-                    <td class="align-middle">@route.Title</td>
-                    <td class="align-middle d-none d-lg-table-cell">@route.RoutePoints</td>
-                    <td class="align-middle d-none d-lg-table-cell">@route.TimeNeeded</td>
-                    <td>
-                        <ul class="nav  align-content-center">
-                            <li class="nav-item"><a class="nav-link " asp-area="" asp-controller="Routes" asp-action="Details" asp-route-id="@route.Id">Разгледай</a></li>
-                        </ul>
-                    </td>
-                </tr>
-            }
+                @foreach (var route in Model)
+                {
+                    <tr>
+                        <th scope="row" class="text-center align-middle">@(++counter)</th>
+                        <td class="align-middle">@route.Title</td>
+                        <td class="align-middle d-none d-lg-table-cell">
+                            @if (route.Locations != null && route.Locations.Count > 0)
+                            {
+                                @route.Locations.OrderBy(l => l.CreatedOn).First().Name; <span>-></span> @route.Locations.OrderBy(l => l.CreatedOn).Last().Name;
+                            }
+                        </td>
+                        <td class="align-middle d-none d-lg-table-cell">@route.TimeNeeded</td>
+                        <td>
+                            <ul class="nav  align-content-center">
+                                <li class="nav-item"><a class="nav-link " asp-area="" asp-controller="Routes" asp-action="Details" asp-route-id="@route.Id">Разгледай</a></li>
+                            </ul>
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>

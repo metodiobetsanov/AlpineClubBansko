@@ -7,8 +7,6 @@ using AlpineClubBansko.Services.Models;
 using AlpineClubBansko.Services.Models.AlbumViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Moq;
 using Shouldly;
 using System;
 using System.Linq;
@@ -26,7 +24,6 @@ namespace AlpineClubBansko.Services.Tests
         public AlbumServiceTests()
         {
             var services = new ServiceCollection();
-            var mockService = new Mock<ICloudService>();
             services.AddDbContext<ApplicationDbContext>(opt =>
                 opt.UseInMemoryDatabase(Guid.NewGuid().ToString()));
             services.AddScoped<IAlbumService, AlbumService>();
@@ -41,6 +38,7 @@ namespace AlpineClubBansko.Services.Tests
             this.service = provider.GetService<IAlbumService>();
             this.albumRepo = provider.GetService<IRepository<Album>>();
         }
+
         [Fact]
         public void All_WithExistingData_ShouldReturnNull()
         {

@@ -1,6 +1,7 @@
 ﻿using AlpineClubBansko.Data.Models;
 using AlpineClubBansko.Services.Mapping.Contracts;
 using AlpineClubBansko.Services.Models.AlbumViewModels;
+using AlpineClubBansko.Services.Models.RouteViewModels;
 using MagicStrings;
 using System;
 using System.Collections.Generic;
@@ -31,11 +32,12 @@ namespace AlpineClubBansko.Services.Models.StoryViewModels
 
         public AlbumViewModel Album { get; set; }
 
+        public RouteViewModel Route { get; set; }
+
         public List<StoryCommentViewModel> Comments { get; set; }
 
         public List<LikedStories> Favorite { get; set; }
 
         public int Views { get; set; }
-
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AlpineClubBansko.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace AlpineClubBansko.Data
 {

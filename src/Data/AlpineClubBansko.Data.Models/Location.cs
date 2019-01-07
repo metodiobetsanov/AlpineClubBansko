@@ -1,16 +1,15 @@
-﻿using System.Runtime.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AlpineClubBansko.Data.Models
 {
-    [DataContract]
     public class Location : BaseEntity
     {
         public string Name { get; set; }
 
-        [DataMember]
+        [Column(TypeName = "decimal(11,8)")]
         public decimal Latitude { get; set; }
 
-        [DataMember]
+        [Column(TypeName = "decimal(11, 8)")]
         public decimal Longitude { get; set; }
 
         public string RouteId { get; set; }

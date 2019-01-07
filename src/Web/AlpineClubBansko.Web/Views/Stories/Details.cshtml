@@ -11,22 +11,35 @@
     <hr />
     <vc:story-options model="@Model"></vc:story-options>
     <hr />
+    @if (Model.Route != null)
+    {
+        <div class="row justify-content-center pt-3">
+            <span class="font-italic">Настоящата История е изживяна по Прехода <a asp-controller="Routes" asp-action="Details" asp-route-id="@Model.Route.Id">@Model.Route.Locations.OrderBy(l => l.CreatedOn).First().Name <span>-></span> @Model.Route.Locations.OrderBy(l => l.CreatedOn).Last().Name</a></span>
+        </div>
+        <hr />
+    }
+
     <div class="row pt-3">
         <div class="offset-md-2 col-12 col-md-8">
             @Html.Raw(Model.Content)
         </div>
     </div>
-    <hr />
-    <div class="row py-2">
-        @if (Model.Album != null)
-        {
-            
-        }
-        else
-        {
-            <div class="col-12 text-muted text-center font-italic">Авторът не е добавил Албум към историята!</div>
-        }
-    </div>
+
+    @if (Model.Album != null)
+    {
+        <hr />
+        <div class="row py-2">
+            <ul id="lightSlider" class="cs-hidden">
+                @foreach (var photo in Model.Album.Photos)
+                {
+                    <li data-thumb="@photo.ThumbnailUrl">
+                        <a asp-controller="Albums" asp-action="Details" asp-route-id="@photo.AlbumId"><img src="@photo.ThumbnailUrl" /></a>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+
     <hr />
     <div class="row py-2">
         @if (SignInManager.IsSignedIn(User))
@@ -42,6 +55,18 @@
 
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/lib/lightslider/dist/js/lightslider.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#lightSlider').lightSlider({
+                autoWidth: true,
+                loop: true,
+                onSliderLoad: function () {
+                    $('#lightSlider').removeClass('cs-hidden');
+                }
+            });
+        });
+    </script>
     <script>
 
         $(document).ready(function () {

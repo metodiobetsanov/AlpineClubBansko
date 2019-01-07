@@ -1,8 +1,19 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
+@import url('https://fonts.googleapis.com/css?family=Lora');
+
 #profileHeader {
     background-image: url('../images/28.jpg');
     background-size: cover;
+}
+
+#lightSlider {
+    max-height: 300px;
+}
+
+#avatar {
+    width: 200px;
+    height: 200px;
 }
 
 .row {
@@ -30,17 +41,19 @@ html {
 
 body {
     min-height: 100%;
+    background-color: #eae7dc;
     background-image: url('../images/pirin-648.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
 }
 
-footer {
-    background: white;
+header {
+    font-family: 'Lora', serif !important;
 }
 
 .content {
+    border-radius: 5px;
     min-height: 75vh;
     background: white;
     padding-top: 5px;
@@ -56,14 +69,12 @@ footer {
 }
 
 hr {
-    border-color: #6c757d;
-}
-
-.box-shadow {
-    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    border-color: #8e8d8a;
 }
 
 .options-nav {
+    padding-top: 10px;
+    padding-bottom: 10px;
     position: sticky;
     top: 0;
     z-index: 999;
@@ -133,6 +144,21 @@ p.text-story {
     background-size: auto;
     background-position-x: right;
     background-position-y: 20px;
+    background-repeat: no-repeat;
+}
+
+#secondSlide {
+    background: white;
+    background-image: url('../images/logo.svg');
+    background-size: auto;
+    background-position-x: left;
+    background-position-y: 20px;
+    background-repeat: no-repeat;
+}
+
+#thirdSlide {
+    background-image: url('../images/twentypinemountains.png');
+    background-size: contain;
     background-repeat: no-repeat;
 }
 
@@ -214,6 +240,7 @@ svg {
         -webkit-mask: url(#mask);
         mask: url(#mask);
     }
+
 @media (min-width: 425px) {
     figure {
         height: 175px;
@@ -237,7 +264,6 @@ svg {
         height: 400px;
     }
 }
-
 
 /* Links & Effects
 -------------------------------------------------- */

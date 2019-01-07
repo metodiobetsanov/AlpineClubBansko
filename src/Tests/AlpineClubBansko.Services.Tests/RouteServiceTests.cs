@@ -267,6 +267,70 @@ namespace AlpineClubBansko.Services.Tests
         }
 
         [Fact]
+        public void CreateLocationAsync_ShouldWork()
+        {
+            string title = "test";
+
+            User user = new User
+            {
+                UserName = "TestUser"
+            };
+
+            string test = this.service.CreateAsync(title, user).GetAwaiter().GetResult();
+
+            LocationViewModel location = new LocationViewModel
+            {
+                RouteId = test,
+            };
+
+            var result = this.service.CreateLocationAsync(location, user).GetAwaiter().GetResult();
+
+            result.ShouldBeTrue();
+
+            Route route = this.service.GetRouteById(test);
+            int locationsCount = route.Locations.Count;
+
+            locationsCount.ShouldBe(1);
+        }
+
+        [Fact]
+        public void DeleteLocationAsync_ShouldWork()
+        {
+            string title = "test";
+
+            User user = new User
+            {
+                UserName = "TestUser"
+            };
+
+            string test = this.service.CreateAsync(title, user).GetAwaiter().GetResult();
+
+            LocationViewModel location = new LocationViewModel
+            {
+                RouteId = test,
+            };
+
+            var result = this.service.CreateLocationAsync(location, user).GetAwaiter().GetResult();
+
+            result.ShouldBeTrue();
+
+            Route route = this.service.GetRouteById(test);
+            int locationsCount = route.Locations.Count;
+
+            locationsCount.ShouldBe(1);
+
+            string locId = route.Locations.ToList().First().Id;
+
+            result = this.service.DeleteLocationAsync(locId).GetAwaiter().GetResult();
+
+            result.ShouldBeTrue();
+
+            locationsCount = route.Locations.Count;
+
+            locationsCount.ShouldBe(0);
+        }
+
+        [Fact]
         public void CreateComment_ShouldWork()
         {
             string modelTitle = "TestCreate";
@@ -363,7 +427,7 @@ namespace AlpineClubBansko.Services.Tests
 
             routeViews = route.Views;
 
-            routeViews.ShouldBe(count+1);
+            routeViews.ShouldBe(count + 1);
         }
 
         [Fact]
@@ -413,28 +477,28 @@ namespace AlpineClubBansko.Services.Tests
             User user = new User();
             string test = "test";
 
-            Assert.Throws<ArgumentException>(() => 
+            Assert.Throws<ArgumentException>(() =>
                 this.service.CreateAsync(null, user).GetAwaiter().GetResult());
-            Assert.Throws<ArgumentException>(() => 
+            Assert.Throws<ArgumentException>(() =>
                 this.service.CreateAsync("", user).GetAwaiter().GetResult());
 
-            Assert.Throws<ArgumentNullException>(() => 
+            Assert.Throws<ArgumentNullException>(() =>
                 this.service.CreateAsync(test, null).GetAwaiter().GetResult());
         }
 
         [Fact]
         public void UpdateAsync_ShouldThrowException()
         {
-            Assert.Throws<ArgumentNullException>(() => 
+            Assert.Throws<ArgumentNullException>(() =>
                 this.service.UpdateAsync(null).GetAwaiter().GetResult());
         }
 
         [Fact]
         public void DeleteAsync_ShouldThrowException()
         {
-            Assert.Throws<ArgumentException>(() => 
+            Assert.Throws<ArgumentException>(() =>
                 this.service.DeleteAsync(null).GetAwaiter().GetResult());
-            Assert.Throws<ArgumentException>(() => 
+            Assert.Throws<ArgumentException>(() =>
                 this.service.DeleteAsync("").GetAwaiter().GetResult());
         }
 
@@ -448,8 +512,7 @@ namespace AlpineClubBansko.Services.Tests
                 this.service.CreateLocationAsync(location, null).GetAwaiter().GetResult());
 
             Assert.Throws<ArgumentNullException>(() =>
-                this.service.CreateLocationAsync( null, user).GetAwaiter().GetResult());
-
+                this.service.CreateLocationAsync(null, user).GetAwaiter().GetResult());
         }
 
         [Fact]
@@ -462,7 +525,6 @@ namespace AlpineClubBansko.Services.Tests
 
             Assert.Throws<ArgumentException>(() =>
                 this.service.DeleteLocationAsync(test).GetAwaiter().GetResult());
-
         }
 
         [Fact]
@@ -471,9 +533,9 @@ namespace AlpineClubBansko.Services.Tests
             User user = new User();
             string test = "test";
 
-            Assert.Throws<ArgumentException>(() => 
+            Assert.Throws<ArgumentException>(() =>
                 this.service.CreateCommentAsync(null, test, user).GetAwaiter().GetResult());
-            Assert.Throws<ArgumentException>(() => 
+            Assert.Throws<ArgumentException>(() =>
                 this.service.CreateCommentAsync("", test, user).GetAwaiter().GetResult());
 
             Assert.Throws<ArgumentException>(() =>

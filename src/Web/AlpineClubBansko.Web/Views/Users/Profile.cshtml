@@ -1,61 +1,61 @@
 ﻿@model AlpineClubBansko.Services.Models.UserViewModels.UserProfileViewModel
+@using AlpineClubBansko.Data.Models
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = Model.UserName;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<div class="row">
-    <div class="col-12 img-thumbnail text-center" id="profileHeader">
-        <div class="row">
-            <img src="~/images/avatar.svg" class="img-fluid img-thumbnail rounded-circle mx-auto mt-2 mb-2" id="avatar" />
+<div class="container content">
+    <div class="row ">
+        <div class="col-12 img-thumbnail text-center" id="profileHeader">
+            <div class="row">
+                <img src="@(string.IsNullOrEmpty(Model.Avatar) ? "~/images/avatar.svg" : Model.Avatar)" class="img-fluid img-thumbnail rounded-circle mx-auto mt-2 mb-2" id="avatar" />
+            </div>
+            <h2 class=" alert alert-light">@Model.FullName</h2>
         </div>
-        <h2 class=" alert alert-light">@Model.UserName</h2>
     </div>
-</div>
-<div class="container-fluid">
-    <div style="min-height: 400px;" class="p-3">
-        <nav>
-            <div class="nav nav-tabs  justify-content-center" id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#home-tab" role="tab" aria-controls="home-tab" aria-selected="True">
-                    Профил
-                </a>
-                <a class="nav-item nav-link" id="nav-activities-tab" data-toggle="tab" href="#activities-tab" role="tab" aria-controls="activities-tab" aria-selected="False">
-                    Събития <span class="badge badge-pill badge-info">100</span>
-                </a>
-                <a class="nav-item nav-link" id="nav-story-tab" data-toggle="tab" href="#story-tab" role="tab" aria-controls="story-tab" aria-selected="False">
-                    Истории <span class="badge badge-pill badge-info">@Model.Stories.Count</span>
-                </a>
-                <a class="nav-item nav-link" id="nav-route-tab" data-toggle="tab" href="#route-tab" role="tab" aria-controls="route-tab" aria-selected="False">
-                    Преходи <span class="badge badge-pill badge-info">100</span>
-                </a>
-                <a class="nav-item nav-link" id="nav-albums-tab" data-toggle="tab" href="#albums-tab" role="tab" aria-controls="photo-tab" aria-selected="False">
-                    Албуми <span class="badge badge-pill badge-info">@Model.Albums.Count</span>
-                </a>
-                <a class="nav-item nav-link" id="nav-comment-tab" data-toggle="tab" href="#comment-tab" role="tab" aria-controls="comment-tab" aria-selected="False">
-                    Коментари <span class="badge badge-pill badge-info">100</span>
-                </a>
-            </div>
-        </nav>
-        <div class="tab-content offset-md-1 col-md-10 mb-3 mt-3">
-            <br />
-            <div class="tab-pane fade show active" id="home-tab" role="tabpanel" aria-labelledby="home-tab">
-                @await Component.InvokeAsync("UserProfile", new { model = Model })
-            </div>
-            <div class="tab-pane fade" id="activities-tab" role="tabpanel" aria-labelledby="activities-tab">
-                activities
-            </div>
-            <div class="tab-pane fade" id="story-tab" role="tabpanel" aria-labelledby="story-tab">
-                @await Component.InvokeAsync("UserStories", new { model = Model })
-            </div>
-            <div class="tab-pane fade" id="route-tab" role="tabpanel" aria-labelledby="route-tab">
-                routes
-            </div>
-            <div class="tab-pane fade" id="albums-tab" role="tabpanel" aria-labelledby="albums-tab">
-                @await Component.InvokeAsync("UserAlbums", new { model = Model })
-            </div>
-            <div class="tab-pane fade" id="comment-tab" role="tabpanel" aria-labelledby="comment-tab">
-                comments
+    <div class="container">
+        <div style="min-height: 400px;" class="p-3 ">
+            <nav>
+                <div class="nav nav-tabs  justify-content-center" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#home-tab" role="tab" aria-controls="home-tab" aria-selected="True">
+                        Профил
+                    </a>
+                    <a class="nav-item nav-link" id="nav-story-tab" data-toggle="tab" href="#story-tab" role="tab" aria-controls="story-tab" aria-selected="False">
+                        Истории <span class="badge badge-pill badge-info">@Model.Stories.Count</span>
+                    </a>
+                    <a class="nav-item nav-link" id="nav-route-tab" data-toggle="tab" href="#route-tab" role="tab" aria-controls="route-tab" aria-selected="False">
+                        Преходи <span class="badge badge-pill badge-info">@Model.Routes.Count</span>
+                    </a>
+                    <a class="nav-item nav-link" id="nav-albums-tab" data-toggle="tab" href="#albums-tab" role="tab" aria-controls="photo-tab" aria-selected="False">
+                        Албуми <span class="badge badge-pill badge-info">@Model.Albums.Count</span>
+                    </a>
+                    @if (SignInManager.IsSignedIn(User) && UserManager.GetUserId(User) == Model.Id)
+                    {
+                        <a class="nav-item nav-link" asp-area="Identity" asp-page="/Account/Manage/Index">
+                            Промени
+                        </a>
+                    }
+                </div>
+            </nav>
+            <div class="tab-content offset-md-1 col-md-10 mb-3 mt-3">
+                <br />
+                <div class="tab-pane fade show active" id="home-tab" role="tabpanel" aria-labelledby="home-tab">
+                    <vc:user-profile model="@Model"></vc:user-profile>
+                </div>
+                <div class="tab-pane fade" id="story-tab" role="tabpanel" aria-labelledby="story-tab">
+                    <vc:user-stories model="@Model.Stories"></vc:user-stories>
+                </div>
+                <div class="tab-pane fade" id="route-tab" role="tabpanel" aria-labelledby="route-tab">
+                    <vc:user-routes model="@Model.Routes"></vc:user-routes>
+                </div>
+                <div class="tab-pane fade" id="albums-tab" role="tabpanel" aria-labelledby="albums-tab">
+                    <vc:user-albums model="@Model.Albums"></vc:user-albums>
+                </div>
             </div>
         </div>
     </div>
