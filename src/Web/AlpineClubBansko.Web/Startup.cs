@@ -119,7 +119,6 @@ namespace AlpineClubBansko.Web
                 context.Response.Headers.Add("X-Xss-Protection", "1");
                 context.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
                 context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-                context.Response.Headers.Add("Referrer-Policy", "no-referrer-when-downgrade");
                 await next();
             });
 
