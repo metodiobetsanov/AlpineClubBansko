@@ -20,7 +20,7 @@ namespace AlpineClubBansko.Services.Models.RouteViewModels
 
         [Display(Name = "Име на местност")]
         [Required(ErrorMessage = Validations.Required)]
-        [StringLength(20, ErrorMessage = Validations.StringLength, MinimumLength = 3)]
+        [StringLength(60, ErrorMessage = Validations.StringLength, MinimumLength = 3)]
         [DataMember]
         public string Name { get; set; }
 
