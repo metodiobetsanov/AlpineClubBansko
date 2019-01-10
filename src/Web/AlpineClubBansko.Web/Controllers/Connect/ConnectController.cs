@@ -15,12 +15,13 @@ namespace AlpineClubBansko.Web.Controllers.Connect
         private readonly ILogger<ConnectController> logger;
 
         public ConnectController(IConnectService connectService,
-            ILogger<ConnectController> logger,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            ILogger<ConnectController> logger)
             : base(userManager)
         {
             this.logger = logger;
             this.connectService = connectService;
+            this.CurrentController = this.GetType().Name;
         }
 
         //Connect and Disconnect for Route

@@ -2,27 +2,46 @@
 using AlpineClubBansko.Services.Contracts;
 using AlpineClubBansko.Services.Models;
 using AlpineClubBansko.Services.Models.HomeViewModels;
+using MagicStrings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
-namespace AlpineClubBansko.Web.Controllers.Home
+namespace AlpineClubBansko.Web.Controllers
 {
     public class HomeController : BaseController
     {
         private readonly IHomeService homeService;
+        private readonly ILogger<HomeController> logger;
 
         public HomeController(IHomeService homeService,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            ILogger<HomeController> logger)
             : base(userManager)
         {
+            this.logger = logger;
             this.homeService = homeService;
+            this.CurrentController = this.GetType().Name;
         }
 
         public IActionResult Index()
         {
-            HomeViewModel model = this.homeService.GetHomeViewModel();
-            return View(model);
+            try
+            {
+                HomeViewModel model = this.homeService.GetHomeViewModel();
+                return View(model);
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(string.Format(SetLog.Error,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            e.Message));
+
+                AddDangerNotification(string.Format(Notifications.Fail));
+                return Redirect("/Error");
+            }
         }
 
         public IActionResult Privacy()

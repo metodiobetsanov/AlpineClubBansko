@@ -1,0 +1,28 @@
+﻿@model List<AlpineClubBansko.Services.Models.StoryViewModels.StoryViewModel>
+@{
+    Layout = "~/Areas/Manage/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container">
+    <div class="row py-2">
+        <h4>Празни преходи</h4>
+        <hr class="py-2" />
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">История</th>
+                    <th scope="col">Описание</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var story in Model.OrderBy(r => r.Title))
+                {
+                    <tr>
+                        <td><a asp-area="" asp-controller="Stories" asp-action="Details" asp-route-id="@story.Id">@story.Title</a></td>
+                        <td>@(string.IsNullOrEmpty(story.Content) ? "Няма" : "Да" )</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

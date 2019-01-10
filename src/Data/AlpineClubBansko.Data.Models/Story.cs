@@ -11,6 +11,7 @@ namespace AlpineClubBansko.Data.Models
         public virtual Album Album { get; set; }
 
         public string RouteId { get; set; }
+
         public virtual Route Route { get; set; }
 
         public virtual ICollection<LikedStories> Favorite { get; set; }

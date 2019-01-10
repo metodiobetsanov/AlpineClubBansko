@@ -29,6 +29,7 @@ namespace AlpineClubBansko.Web.Controllers.Albums
             this.logger = logger;
             this.albumService = albumService;
             this.cloudService = cloudService;
+            this.CurrentController = this.GetType().Name;
         }
 
         [HttpGet]
@@ -110,7 +111,7 @@ namespace AlpineClubBansko.Web.Controllers.Albums
                 if (model == null)
                 {
                     AddWarningNotification(Notifications.NotFound);
-                    return Redirect("/Albums");
+                    return Redirect("/");
                 }
 
                 return View(model);
@@ -131,18 +132,21 @@ namespace AlpineClubBansko.Web.Controllers.Albums
         [Authorize]
         public IActionResult Update(string id)
         {
-            if (!CurrentUser.Albums.Any(a => a.Id == id))
+            if (!CurrentUser.Albums.Any(r => r.Id == id))
             {
-                logger.LogInformation(
+                if (!User.IsInRole("Administrator"))
+                {
+                    logger.LogInformation(
                         string.Format(SetLog.NotTheAuthor,
                             CurrentUser.UserName,
                             CurrentController,
                             id
                             ));
 
-                AddDangerNotification(string.Format(Notifications.OnlyAuthor));
+                    AddDangerNotification(string.Format(Notifications.OnlyAuthor));
 
-                Redirect($"/Albums/Details/{id}");
+                    return Redirect($"/Albums/Details/{id}");
+                }
             }
 
             try
@@ -172,23 +176,26 @@ namespace AlpineClubBansko.Web.Controllers.Albums
         [Authorize]
         public async Task<IActionResult> Update(AlbumViewModel model)
         {
-            if (CurrentUser.Id != this.TempData["AuthorId"].ToString())
+            if (!CurrentUser.Albums.Any(r => r.Id == model.Id))
             {
-                logger.LogInformation(
+                if (!User.IsInRole("Administrator"))
+                {
+                    logger.LogInformation(
                         string.Format(SetLog.NotTheAuthor,
                             CurrentUser.UserName,
                             CurrentController,
                             model.Id
                             ));
 
-                AddDangerNotification(string.Format(Notifications.NotTheAuthor, model.Title));
+                    AddDangerNotification(string.Format(Notifications.NotTheAuthor, model.Title));
 
-                Redirect($"/Albums/Details/{model.Id}");
+                    return Redirect($"/Albums/Details/{model.Id}");
+                }
             }
 
             try
             {
-                if (this.ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
                     await this.albumService.UpdateAsync(model);
 
@@ -203,8 +210,11 @@ namespace AlpineClubBansko.Web.Controllers.Albums
 
                     return Redirect($"/Albums/Details/{model.Id}");
                 }
-
-                return View(model);
+                else
+                {
+                    AddDangerNotification(string.Format(Notifications.Fail));
+                    return View(model);
+                }
             }
             catch (System.Exception e)
             {
@@ -223,23 +233,41 @@ namespace AlpineClubBansko.Web.Controllers.Albums
         [Authorize]
         public async Task<IActionResult> Delete(string id)
         {
-            if (!CurrentUser.Albums.Any(s => s.Id == id))
+            if (!CurrentUser.Albums.Any(r => r.Id == id))
             {
-                logger.LogInformation(
+                if (!User.IsInRole("Administrator"))
+                {
+                    logger.LogInformation(
                         string.Format(SetLog.NotTheAuthor,
                             CurrentUser.UserName,
                             CurrentController,
                             id
                             ));
 
-                AddDangerNotification(string.Format(Notifications.DeleteFail));
+                    AddDangerNotification(string.Format(Notifications.DeleteFail));
 
-                Redirect($"/Albums/Details/{id}");
+                    return Redirect($"/Albums/Details/{id}");
+                }
             }
 
             try
             {
-                await this.albumService.DeleteAsync(id);
+                var result = await this.albumService.DeleteAsync(id);
+
+                if (!result)
+                {
+                    AddDangerNotification(Notifications.Fail);
+                    return Redirect("/Albums");
+                }
+
+                logger.LogInformation(
+                        string.Format(SetLog.Delete,
+                            CurrentUser.UserName,
+                            CurrentController,
+                            id
+                            ));
+
+                AddSuccessNotification(Notifications.Delete);
 
                 return Redirect($"/Albums");
             }

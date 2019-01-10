@@ -1,0 +1,127 @@
+﻿@model AlpineClubBansko.Services.Models.WebDataViewModels.WebDataViewModel
+
+@{
+    Layout = "~/Areas/Manage/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="container">
+    <div class="row py-2">
+        <h4>Потребители</h4>
+        <hr class="py-2" />
+        <div class="card-deck col-12 ">
+            <div class="card col card-total">
+                <div class="card-body d-flex justify-content-between">
+                    <span>Всичко</span>
+                    <span>@Model.TotalUser</span>
+                </div>
+            </div>
+            <div class="card col card-month">
+                <div class="card-body d-flex justify-content-between">
+                    <span>За месеца</span>
+                    <span>@Model.NewUsersLastMonth</span>
+                </div>
+            </div>
+            <div class="card col card-week">
+                <div class="card-body d-flex justify-content-between">
+                    <span>Последните 7 дни</span>
+                    <span>@Model.NewUsersLastWeek</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row py-2">
+        <h4>Преходи</h4>
+        <hr class="py-2" />
+        <div class="card-deck col-12 ">
+            <div class="card col card-total">
+                <div class="card-body d-flex justify-content-between">
+                    <span>Всичко</span>
+                    <span>@Model.TotalRoutes</span>
+                </div>
+            </div>
+            <div class="card col card-month">
+                <div class="card-body d-flex justify-content-between">
+                    <span>За месеца</span>
+                    <span>@Model.NewRoutesLastMonth</span>
+                </div>
+            </div>
+            <div class="card col card-week">
+                <div class="card-body d-flex justify-content-between">
+                    <span>Последните 7 дни</span>
+                    <span>@Model.NewRoutesLastWeek</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row py-2">
+        <h4>Истории</h4>
+        <hr class="py-2" />
+        <div class="card-deck col-12 ">
+            <div class="card col card-total">
+                <div class="card-body d-flex justify-content-between">
+                    <span>Всичко</span>
+                    <span> @Model.TotalStories</span>
+                </div>
+            </div>
+            <div class="card col card-month">
+                <div class="card-body d-flex justify-content-between">
+                    <span>За месеца</span>
+                    <span>@Model.NewStoriesLastMonth</span>
+                </div>
+            </div>
+            <div class="card col card-week">
+                <div class="card-body d-flex justify-content-between">
+                    <span>Последните 7 дни</span>
+                    <span>@Model.NewStoriesLastWeek</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row py-2">
+        <h4>Албуми</h4>
+        <hr class="py-2" />
+        <div class="card-deck col-12 ">
+            <div class="card col card-total">
+                <div class="card-body d-flex justify-content-between">
+                    <span>Всичко</span>
+                    <span>@Model.TotalAlbums</span>
+                </div>
+            </div>
+            <div class="card col card-month">
+                <div class="card-body d-flex justify-content-between">
+                    <span>За месеца</span>
+                    <span>@Model.NewAlbumsLastMonth</span>
+                </div>
+            </div>
+            <div class="card col card-week">
+                <div class="card-body d-flex justify-content-between">
+                    <span>Последните 7 дни</span>
+                    <span>@Model.NewAlbumsLastWeek</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row py-2">
+        <h4>Снимки</h4>
+        <hr class="py-2" />
+        <div class="card-deck col-12 ">
+            <div class="card col card-total">
+                <div class="card-body d-flex justify-content-between">
+                    <span>Всичко</span>
+                    <span>@Model.TotalPhotos</span>
+                </div>
+            </div>
+            <div class="card col card-month">
+                <div class="card-body d-flex justify-content-between">
+                    <span>За месеца</span>
+                    <span>@Model.NewPhotosLastMonth</span>
+                </div>
+            </div>
+            <div class="card col card-week">
+                <div class="card-body d-flex justify-content-between">
+                    <span>Последните 7 дни</span>
+                    <span> @Model.NewPhotosLastWeek</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

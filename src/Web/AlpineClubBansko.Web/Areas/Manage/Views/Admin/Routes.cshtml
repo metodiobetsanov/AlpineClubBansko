@@ -1,0 +1,30 @@
+﻿@model List<AlpineClubBansko.Services.Models.RouteViewModels.RouteViewModel>
+@{
+    Layout = "~/Areas/Manage/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container">
+    <div class="row py-2">
+        <h4>Празни преходи</h4>
+        <hr class="py-2" />
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Преход</th>
+                    <th scope="col">Описание</th>
+                    <th scope="col">Маршрут</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var route in Model.OrderBy(r => r.Title))
+                {
+                    <tr>
+                        <td><a asp-area="" asp-controller="Routes" asp-action="Details" asp-route-id="@route.Id">@route.Title</a></td>
+                        <td>@(string.IsNullOrEmpty(route.Content) ? "Няма" : "Да" )</td>
+                        <td>@(route.Locations.Count() == 0 ? "Няма" : "Да" )</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

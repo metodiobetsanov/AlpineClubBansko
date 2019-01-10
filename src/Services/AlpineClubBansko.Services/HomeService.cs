@@ -33,6 +33,7 @@ namespace AlpineClubBansko.Services
                 .OrderBy(s => s.Favorite.Count)
                 .Take(5)
                 .ToList();
+
             if (model.TopStories != null && model.TopStories.Count > 0)
             {
                 model.TopStories.ForEach(s => s.Content = s.Content.StorySubstring(300));

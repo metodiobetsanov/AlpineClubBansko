@@ -87,11 +87,35 @@ namespace AlpineClubBansko.Services
             return result != 0;
         }
 
-        public async Task<bool> DeleteAsync(string storyId)
+        public async Task<bool> DeleteAsync(string routeId)
         {
-            ArgumentValidator.ThrowIfNullOrEmpty(storyId, nameof(storyId));
+            ArgumentValidator.ThrowIfNullOrEmpty(routeId, nameof(routeId));
 
-            Route route = this.routeRepository.All().FirstOrDefault(s => s.Id == storyId);
+            Route route = this.routeRepository.All().FirstOrDefault(s => s.Id == routeId);
+
+            if (route.Locations != null)
+            {
+                foreach (var item in route.Locations)
+                {
+                    this.locationRepository.Delete(item);
+                }
+            }
+
+            if (route.Comments != null)
+            {
+                foreach (var item in route.Comments)
+                {
+                    this.routeCommentRepository.Delete(item);
+                }
+            }
+
+            if (route.Favorite != null)
+            {
+                foreach (var item in route.Favorite)
+                {
+                    this.likedRoutesRepository.Delete(item);
+                }
+            }
 
             this.routeRepository.Delete(route);
 

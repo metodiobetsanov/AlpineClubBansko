@@ -30,6 +30,11 @@ namespace AlpineClubBansko.Services
             this.storageConfig = config.Value;
         }
 
+        public IQueryable<Photo> GetAllPhotos()
+        {
+            return this.photoRepository.All();
+        }
+
         public IEnumerable<PhotoViewModel> GetAllPhotosAsViewModels()
         {
             return this.photoRepository.All().To<PhotoViewModel>();
@@ -79,7 +84,7 @@ namespace AlpineClubBansko.Services
         public async Task<string> UploadAvatar(IFormFile file, string id)
         {
             var blobClient = this.GetClient();
-
+            var name = $"{id}.{file.FileName.Split(".").Last()}";
             var container = blobClient.GetContainerReference("avatars");
 
             await container.CreateIfNotExistsAsync();
@@ -93,7 +98,7 @@ namespace AlpineClubBansko.Services
             {
                 using (var fileStream = file.OpenReadStream())
                 {
-                    byte[] thumbnail;
+                    byte[] avatar;
 
                     using (var image = new MagickImage(fileStream))
                     {
@@ -101,16 +106,16 @@ namespace AlpineClubBansko.Services
                         size.IgnoreAspectRatio = false;
                         image.Resize(size);
                         image.Quality = 100;
-                        thumbnail = image.ToByteArray();
+                        avatar = image.ToByteArray();
                     }
 
-                    var imageBlob = container.GetBlockBlobReference(id);
-                    await imageBlob.UploadFromByteArrayAsync(thumbnail, 0, thumbnail.Count());
+                    var imageBlob = container.GetBlockBlobReference(name);
+                    await imageBlob.UploadFromByteArrayAsync(avatar, 0, avatar.Count());
 
-                    imageBlob = container.GetBlockBlobReference(id);
+                    imageBlob = container.GetBlockBlobReference(name);
                     if (await imageBlob.ExistsAsync())
                     {
-                        return $"https://acbimagestorage.blob.core.windows.net/avatars/{id}";
+                        return $"https://acbimagestorage.blob.core.windows.net/avatars/{name}";
                     }
                 }
             }
@@ -171,7 +176,7 @@ namespace AlpineClubBansko.Services
         {
             if (file.ContentType.Contains("image")) return true;
 
-            string[] formats = { ".jpg", ".png", ".gif", ".jpeg" };
+            string[] formats = { ".jpg", ".png", ".gif", ".jpeg", ".svg" };
 
             return formats.Any(item => file.FileName.EndsWith(item, StringComparison.OrdinalIgnoreCase));
         }
@@ -205,7 +210,7 @@ namespace AlpineClubBansko.Services
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> DeleteImageFromStorage(Photo photo)
+        private async Task<bool> DeleteImageFromStorage(Photo photo)
         {
             var blobClient = this.GetClient();
 

@@ -5,12 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20190103093556_CascadeDelete.cs" />
-    <Compile Remove="Migrations\20190103093556_CascadeDelete.Designer.cs" />
-    <Compile Remove="Migrations\20190105110428_DecimalPrecision2.cs" />
-    <Compile Remove="Migrations\20190105110428_DecimalPrecision2.Designer.cs" />
-    <Compile Remove="Migrations\20190105113013_DecimalPrecision3.cs" />
-    <Compile Remove="Migrations\20190105113013_DecimalPrecision3.Designer.cs" />
+    <Compile Remove="Migrations\20190108202211_ChangeOnDelete.cs" />
+    <Compile Remove="Migrations\20190108202211_ChangeOnDelete.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,15 +20,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Migrations\20190102092548_Initial.Designer.cs">
-      <DependentUpon>20190102092548_Initial.cs</DependentUpon>
+    <Compile Update="Migrations\20190108202450_ChangeOnDelete.Designer.cs">
+      <DependentUpon>20190108202450_ChangeOnDelete.cs</DependentUpon>
     </Compile>
-    <Compile Update="Migrations\20190102144933_AddedPlaceToAlbum.Designer.cs">
-      <DependentUpon>20190102144933_AddedPlaceToAlbum.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Migrations\20190105113345_DecimalPrecision2.Designer.cs">
-      <DependentUpon>20190105113345_DecimalPrecision2.cs</DependentUpon>
-    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

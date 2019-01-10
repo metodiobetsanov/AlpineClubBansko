@@ -1,5 +1,6 @@
 ﻿using AlpineClubBansko.Data.Contracts;
 using AlpineClubBansko.Data.Models;
+using AlpineClubBansko.Services.Common;
 using AlpineClubBansko.Services.Contracts;
 using AlpineClubBansko.Services.Mapping;
 using AlpineClubBansko.Services.Models.UserViewModels;
@@ -17,19 +18,27 @@ namespace AlpineClubBansko.Services
             this.usersRepository = usersRepository;
         }
 
+        public IQueryable<User> GetAllUsers()
+        {
+            return this.usersRepository.All();
+        }
+
         public IEnumerable<UserProfileViewModel> GetAllUsersAsViewModels()
         {
             return this.usersRepository.All().To<UserProfileViewModel>();
         }
 
-        public User GetUser(string id)
+        public User GetUserById(string userId)
         {
-            return this.usersRepository.GetById(id);
+            ArgumentValidator.ThrowIfNullOrEmpty(userId, nameof(userId));
+
+            return this.usersRepository.GetById(userId);
         }
 
-        public UserProfileViewModel GetUserById(string id)
+        public UserProfileViewModel GetUserByIdAsViewModel(string userId)
         {
-            return this.GetAllUsersAsViewModels().FirstOrDefault(a => a.Id == id);
+            ArgumentValidator.ThrowIfNullOrEmpty(userId, nameof(userId));
+            return this.GetAllUsersAsViewModels().FirstOrDefault(a => a.Id == userId);
         }
     }
 }

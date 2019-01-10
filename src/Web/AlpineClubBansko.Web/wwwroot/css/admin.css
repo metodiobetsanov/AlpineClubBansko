@@ -1,0 +1,14 @@
+﻿.card-total {
+    border-top: 5px solid;
+    border-color: #007bff;
+}
+
+.card-month {
+    border-top: 5px solid;
+    border-color: #fd7e14;
+}
+
+.card-week {
+    border-top: 5px solid;
+    border-color: #28a745;
+}

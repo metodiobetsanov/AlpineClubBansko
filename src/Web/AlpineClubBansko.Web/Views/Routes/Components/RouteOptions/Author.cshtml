@@ -65,12 +65,13 @@
             }
             <li class="nav-item d-none d-lg-block align-self-center"> || </li>
             <li class="nav-item">
-                <a class="nav-link del-link hvr-underline-from-center" asp-action="Delete" asp-route-id="@Model.Id"><i class="far fa-trash-alt"></i> Премахни</a>
+                <a class="nav-link del-link hvr-underline-from-center" href="#" data-toggle="modal" data-target="#confirmDelete"><i class="far fa-trash-alt"></i> Премахни</a>
             </li>
         </ul>
     </div>
 </div>
 
+<partial name="_ConfirmDelete" />
 <vc:create-route></vc:create-route>
 @await Component.InvokeAsync("RouteToAlbum", new { routeId = Model.Id })
 @await Component.InvokeAsync("RouteToStory", new { routeId = Model.Id })

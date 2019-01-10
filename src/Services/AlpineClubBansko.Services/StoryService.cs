@@ -90,6 +90,22 @@ namespace AlpineClubBansko.Services
 
             Story story = this.storyRepository.All().FirstOrDefault(s => s.Id == storyId);
 
+            if (story.Comments != null)
+            {
+                foreach (var item in story.Comments)
+                {
+                    this.storyCommentRepository.Delete(item);
+                }
+            }
+
+            if (story.Favorite != null)
+            {
+                foreach (var item in story.Favorite)
+                {
+                    this.likedStoriesRepository.Delete(item);
+                }
+            }
+
             this.storyRepository.Delete(story);
 
             var result = await this.storyRepository.SaveChangesAsync();

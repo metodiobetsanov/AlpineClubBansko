@@ -1,0 +1,31 @@
+﻿@model List<AlpineClubBansko.Services.Models.UserViewModels.UserProfileViewModel>
+
+@{
+    Layout = "~/Areas/Manage/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container">
+    <div class="row py-2">
+        <h4>Потребители</h4>
+        <hr class="py-2" />
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Потребител</th>
+                    <th scope="col">Регистриран на</th>
+                    <th scope="col">Точки</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.OrderBy(u => u.UserName))
+                {
+                    <tr>
+                        <td><a asp-area="" asp-controller="Users" asp-action="Profile" asp-route-id="@user.Id">@user.UserName</a></td>
+                        <td>@user.CreatedOn</td>
+                        <td>@user.Points</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

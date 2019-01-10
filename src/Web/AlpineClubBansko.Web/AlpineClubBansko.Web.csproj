@@ -44,13 +44,16 @@
     <Content Update="wwwroot\css\site.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\images\avatar.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 
   <ItemGroup>
     <Folder Include="Areas\Manage\Data\" />
     <Folder Include="Areas\Manage\Models\" />
-    <Folder Include="Areas\Manage\Views\Admin\" />
+    <Folder Include="Controllers\Data\" />
   </ItemGroup>
 
 </Project>

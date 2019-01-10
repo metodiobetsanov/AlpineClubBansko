@@ -35,6 +35,21 @@ namespace AlpineClubBansko.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Story>()
+                .HasOne(o => o.Route)
+                .WithOne(o => o.Story)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            builder.Entity<Album>()
+                .HasOne(o => o.Route)
+                .WithOne(o => o.Album)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            builder.Entity<Album>()
+                .HasOne(o => o.Story)
+                .WithOne(o => o.Album)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
             base.OnModelCreating(builder);
         }
     }

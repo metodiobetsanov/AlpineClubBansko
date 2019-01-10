@@ -1,7 +1,6 @@
 ﻿@model AlpineClubBansko.Services.Models.UserViewModels.UserProfileViewModel
 @using AlpineClubBansko.Data.Models
 @using Microsoft.AspNetCore.Identity
-
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 
@@ -13,7 +12,7 @@
     <div class="row ">
         <div class="col-12 img-thumbnail text-center" id="profileHeader">
             <div class="row">
-                <img src="@(string.IsNullOrEmpty(Model.Avatar) ? "~/images/avatar.svg" : Model.Avatar)" class="img-fluid img-thumbnail rounded-circle mx-auto mt-2 mb-2" id="avatar" />
+                <img src="@Model.Avatar" class="img-fluid img-thumbnail rounded-circle mx-auto mt-2 mb-2" id="avatar" />
             </div>
             <h2 class=" alert alert-light">@Model.FullName</h2>
         </div>

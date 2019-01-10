@@ -25,6 +25,7 @@ namespace AlpineClubBansko.Web.Controllers.Routes
         {
             this.logger = logger;
             this.routeService = routeService;
+            this.CurrentController = this.GetType().Name;
         }
 
         [HttpGet]
@@ -52,8 +53,7 @@ namespace AlpineClubBansko.Web.Controllers.Routes
         {
             try
             {
-                var result = this.routeService
-                    .GetAllRoutesAsViewModels()
+                var result = this.routeService.GetAllRoutesAsViewModels()
                     .Where(l => l.Locations != null && l.Locations.Count > 0)
                     .Select(r => r.Locations.OrderBy(l => l.CreatedOn).Last())
                     .ToList();
@@ -149,12 +149,12 @@ namespace AlpineClubBansko.Web.Controllers.Routes
         {
             try
             {
-                RouteViewModel route = this.routeService.GetRouteByIdAsViewModel(id);
+                var route = this.routeService.GetRouteByIdAsViewModel(id);
 
                 if (route == null)
                 {
                     AddWarningNotification(Notifications.NotFound);
-                    return Redirect("/Home/NotFound");
+                    return Redirect("/");
                 }
 
                 return View(route);
@@ -167,7 +167,7 @@ namespace AlpineClubBansko.Web.Controllers.Routes
                             e.Message));
                 AddDangerNotification(string.Format(Notifications.Fail));
 
-                return Redirect("/Albums");
+                return Redirect("/Routes");
             }
         }
 
@@ -175,19 +175,21 @@ namespace AlpineClubBansko.Web.Controllers.Routes
         [Authorize]
         public IActionResult Update(string id)
         {
-            if (!CurrentUser.Routes.Any(r => r.Id == id)
-                && !User.IsInRole("Administrator"))
+            if (!CurrentUser.Routes.Any(r => r.Id == id))
             {
-                logger.LogInformation(
-                        string.Format(SetLog.NotTheAuthor,
-                            CurrentUser.UserName,
-                            CurrentController,
-                            id
-                            ));
+                if (!User.IsInRole("Administrator"))
+                {
+                    logger.LogInformation(
+                            string.Format(SetLog.NotTheAuthor,
+                                CurrentUser.UserName,
+                                CurrentController,
+                                id
+                                ));
 
-                AddDangerNotification(string.Format(Notifications.OnlyAuthor));
+                    AddDangerNotification(string.Format(Notifications.OnlyAuthor));
 
-                Redirect($"/Routes/Details/{id}");
+                    return Redirect($"/Routes/Details/{id}");
+                }
             }
 
             try
@@ -210,7 +212,7 @@ namespace AlpineClubBansko.Web.Controllers.Routes
                             e.Message));
                 AddDangerNotification(string.Format(Notifications.Fail));
 
-                return Redirect("/Albums");
+                return Redirect("/Routes");
             }
         }
 
@@ -218,20 +220,23 @@ namespace AlpineClubBansko.Web.Controllers.Routes
         [Authorize]
         public async Task<IActionResult> Update(RouteViewModel model)
         {
-            if (!CurrentUser.Routes.Any(r => r.Id == model.Id)
-                || !User.IsInRole("Administrator"))
+            if (!CurrentUser.Routes.Any(r => r.Id == model.Id))
             {
-                logger.LogInformation(
-                        string.Format(SetLog.NotTheAuthor,
-                            CurrentUser.UserName,
-                            CurrentController,
-                            model.Id
-                            ));
+                if (!User.IsInRole("Administrator"))
+                {
+                    logger.LogInformation(
+                            string.Format(SetLog.NotTheAuthor,
+                                CurrentUser.UserName,
+                                CurrentController,
+                                model.Id
+                                ));
 
-                AddDangerNotification(string.Format(Notifications.NotTheAuthor, model.Title));
+                    AddDangerNotification(string.Format(Notifications.NotTheAuthor, model.Title));
 
-                Redirect($"/Routes/Details/{model.Id}");
+                    return Redirect($"/Routes/Details/{model.Id}");
+                }
             }
+
             try
             {
                 if (this.ModelState.IsValid)
@@ -254,7 +259,7 @@ namespace AlpineClubBansko.Web.Controllers.Routes
                 else
                 {
                     AddDangerNotification(string.Format(Notifications.Fail));
-                    return Redirect($"/Routes");
+                    return View(model);
                 }
             }
             catch (System.Exception e)
@@ -314,7 +319,7 @@ namespace AlpineClubBansko.Web.Controllers.Routes
                             e.Message));
                 AddDangerNotification(string.Format(Notifications.Fail));
 
-                return Redirect($"/Routes/Details{routeId}");
+                return Redirect($"/Routes/Details/{routeId}");
             }
         }
 
@@ -324,18 +329,20 @@ namespace AlpineClubBansko.Web.Controllers.Routes
         {
             if (!CurrentUser.Routes.Any(s => s.Id == id))
             {
-                logger.LogInformation(
-                        string.Format(SetLog.NotTheAuthor,
-                            CurrentUser.UserName,
-                            CurrentController,
-                            id
-                            ));
+                if (!User.IsInRole("Administrator"))
+                {
+                    logger.LogInformation(
+                            string.Format(SetLog.NotTheAuthor,
+                                CurrentUser.UserName,
+                                CurrentController,
+                                id
+                                ));
 
-                AddDangerNotification(string.Format(Notifications.DeleteFail));
+                    AddDangerNotification(string.Format(Notifications.DeleteFail));
 
-                Redirect($"/Routes/Details/{id}");
+                    return Redirect($"/Routes/Details/{id}");
+                }
             }
-
             try
             {
                 var result = await routeService.DeleteAsync(id);

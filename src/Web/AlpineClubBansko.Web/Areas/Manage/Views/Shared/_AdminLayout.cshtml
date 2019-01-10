@@ -1,0 +1,28 @@
+﻿@inject UserManager<User> UserManager
+@{
+    ViewData["Title"] = "Админ зона";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    User user = await UserManager.GetUserAsync(User);
+}
+
+<div class="container content">
+    <hr />
+    <h2 class="offset-1 font-italic">Добре дошли, админ @user.UserName</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-3">
+            <ul class="nav nav-pills flex-column">
+                <li class="nav-item"><a class="nav-link" asp-area="Manage" asp-controller="Admin" asp-action="Index">Начало</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="Manage" asp-controller="Admin" asp-action="Users">Потребители</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="Manage" asp-controller="Admin" asp-action="Routes">Преходи</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="Manage" asp-controller="Admin" asp-action="Stories">Истории</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="Manage" asp-controller="Admin" asp-action="Albums">Албуми</a></li>
+            </ul>
+            <hr />
+        </div>
+        <div class="col-md-9 pb-5">
+            @RenderBody()
+        </div>
+    </div>
+    <hr />
+</div>

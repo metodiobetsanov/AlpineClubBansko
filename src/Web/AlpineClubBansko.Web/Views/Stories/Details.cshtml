@@ -14,7 +14,7 @@
     @if (Model.Route != null)
     {
         <div class="row justify-content-center pt-3">
-            <span class="font-italic">Настоящата История е изживяна по Прехода <a asp-controller="Routes" asp-action="Details" asp-route-id="@Model.Route.Id">@Model.Route.Locations.OrderBy(l => l.CreatedOn).First().Name <span>-></span> @Model.Route.Locations.OrderBy(l => l.CreatedOn).Last().Name</a></span>
+            <span class="font-italic">Настоящата История е изживяна по Прехода <a asp-controller="Routes" asp-action="Details" asp-route-id="@Model.Route.Id">@Model.Route.Title</a></span>
         </div>
         <hr />
     }

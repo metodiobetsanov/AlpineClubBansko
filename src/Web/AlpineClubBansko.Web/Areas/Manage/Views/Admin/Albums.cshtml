@@ -1,0 +1,30 @@
+﻿@model List<AlpineClubBansko.Services.Models.AlbumViewModels.AlbumViewModel>
+@{
+    Layout = "~/Areas/Manage/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container">
+    <div class="row py-2">
+        <h4>Празни преходи</h4>
+        <hr class="py-2" />
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Име</th>
+                    <th scope="col">Описание</th>
+                    <th scope="col">Снимки</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var album in Model.OrderBy(r => r.Title))
+                {
+                    <tr>
+                        <td><a asp-area="" asp-controller="Albums" asp-action="Details" asp-route-id="@album.Id">@album.Title</a></td>
+                        <td>@(string.IsNullOrEmpty(album.Content) ? "Няма" : "Да" )</td>
+                        <td>@(album.Photos.Count() == 0 ? "Няма" : "Да" )</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

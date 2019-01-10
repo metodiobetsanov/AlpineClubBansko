@@ -1,0 +1,24 @@
+﻿<div id="confirmDelete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Внимание!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-2">
+                <div class="alert alert-warning" role="alert">
+                    <p class="text-justify">
+                        <span><i class="fas fa-exclamation-triangle"></i></span>
+                        <strong>След изтриването на тези данни, те няма да може да се възстановят!</strong>
+                        С цел избягване на нежелано изтриване Албум,История или Преход, то няма да въде изпълнено ако има свързани такива!
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="nav-link del-link hvr-underline-from-center" asp-action="Delete" asp-route-id="@Model.Id"><i class="far fa-trash-alt"></i> Сигурен съм</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -82,6 +82,7 @@ namespace AlpineClubBansko.Web
             services.AddScoped<IRouteService, RouteService>();
             services.AddScoped<IHomeService, HomeService>();
             services.AddScoped<IConnectService, ConnectService>();
+            services.AddScoped<IAdminService, AdminService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

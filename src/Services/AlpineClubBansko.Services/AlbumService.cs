@@ -100,6 +100,30 @@ namespace AlpineClubBansko.Services
 
             Album album = this.albumRepository.GetById(albumId);
 
+            if (album.Photos != null)
+            {
+                foreach (var item in album.Photos)
+                {
+                    await this.cloudService.DeleteImage(item.Id);
+                }
+            }
+
+            if (album.Comments != null)
+            {
+                foreach (var item in album.Comments)
+                {
+                    this.albumCommentRepository.Delete(item);
+                }
+            }
+
+            if (album.Favorite != null)
+            {
+                foreach (var item in album.Favorite)
+                {
+                    this.likedAlbumsRepository.Delete(item);
+                }
+            }
+
             this.albumRepository.Delete(album);
             var result = await this.albumRepository.SaveChangesAsync();
 

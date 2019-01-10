@@ -47,6 +47,7 @@ namespace AlpineClubBansko.Web.Middleware
                     UserName = "Owner",
                     Email = "owner@this.web",
                     EmailConfirmed = true,
+                    Avatar = "https://acbimagestorage.blob.core.windows.net/avatars/avatar.svg"
                 };
 
                 var result = await userManager.CreateAsync(user, "0wnerPassw0rd");

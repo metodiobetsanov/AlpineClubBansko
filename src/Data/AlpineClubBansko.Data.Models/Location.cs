@@ -13,6 +13,7 @@ namespace AlpineClubBansko.Data.Models
         public decimal Longitude { get; set; }
 
         public string RouteId { get; set; }
+
         public virtual Route Route { get; set; }
     }
 }

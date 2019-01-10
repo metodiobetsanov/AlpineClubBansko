@@ -15,9 +15,9 @@ namespace AlpineClubBansko.Web.Controllers
 
         public User CurrentUser => this.userManager.GetUserAsync(this.User).Result;
 
-        public string CurrentController => RouteData.Values["controller"].ToString();
+        public string CurrentController { get; set; }
 
-        public void AddUserNotification(string message)
+        public void AddNotification(string message)
         {
             this.TempData["notification"] = new string[] { "primary", message };
         }

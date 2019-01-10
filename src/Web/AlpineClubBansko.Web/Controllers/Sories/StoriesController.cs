@@ -25,6 +25,7 @@ namespace AlpineClubBansko.Web.Controllers.Stories
         {
             this.logger = logger;
             this.storyService = storyService;
+            this.CurrentController = this.GetType().Name;
         }
 
         [HttpGet]
@@ -106,7 +107,7 @@ namespace AlpineClubBansko.Web.Controllers.Stories
                 if (model == null)
                 {
                     AddWarningNotification(Notifications.NotFound);
-                    return Redirect("/Stories");
+                    return Redirect("/");
                 }
 
                 return View(model);
@@ -127,20 +128,22 @@ namespace AlpineClubBansko.Web.Controllers.Stories
         [Authorize]
         public IActionResult Update(string id)
         {
-            if (!CurrentUser.Stories.Any(s => s.Id == id))
+            if (!CurrentUser.Stories.Any(r => r.Id == id))
             {
-                logger.LogInformation(
+                if (!User.IsInRole("Administrator"))
+                {
+                    logger.LogInformation(
                         string.Format(SetLog.NotTheAuthor,
                             CurrentUser.UserName,
                             CurrentController,
                             id
                             ));
 
-                AddDangerNotification(string.Format(Notifications.OnlyAuthor));
+                    AddDangerNotification(string.Format(Notifications.OnlyAuthor));
 
-                Redirect($"/Stories/Details/{id}");
+                    return Redirect($"/Stories/Details/{id}");
+                }
             }
-
             try
             {
                 StoryViewModel model = this.storyService.GetStoryByIdAsViewModel(id);
@@ -170,20 +173,22 @@ namespace AlpineClubBansko.Web.Controllers.Stories
         [Authorize]
         public async Task<IActionResult> Update(StoryViewModel model)
         {
-            if (CurrentUser.Id != this.TempData["AuthorId"].ToString())
+            if (!CurrentUser.Stories.Any(r => r.Id == model.Id))
             {
-                logger.LogInformation(
+                if (!User.IsInRole("Administrator"))
+                {
+                    logger.LogInformation(
                         string.Format(SetLog.NotTheAuthor,
                             CurrentUser.UserName,
                             CurrentController,
                             model.Id
                             ));
 
-                AddDangerNotification(string.Format(Notifications.NotTheAuthor, model.Title));
+                    AddDangerNotification(string.Format(Notifications.NotTheAuthor, model.Title));
 
-                Redirect($"/Stories/Details/{model.Id}");
+                    return Redirect($"/Stories/Details/{model.Id}");
+                }
             }
-
             try
             {
                 if (this.ModelState.IsValid)
@@ -206,7 +211,7 @@ namespace AlpineClubBansko.Web.Controllers.Stories
                 else
                 {
                     AddDangerNotification(string.Format(Notifications.Fail));
-                    return Redirect($"/Stories");
+                    return View(model);
                 }
             }
             catch (System.Exception e)
@@ -226,18 +231,21 @@ namespace AlpineClubBansko.Web.Controllers.Stories
         [Authorize]
         public async Task<IActionResult> Delete(string id)
         {
-            if (!CurrentUser.Stories.Any(s => s.Id == id))
+            if (!CurrentUser.Stories.Any(r => r.Id == id))
             {
-                logger.LogInformation(
+                if (!User.IsInRole("Administrator"))
+                {
+                    logger.LogInformation(
                         string.Format(SetLog.NotTheAuthor,
                             CurrentUser.UserName,
                             CurrentController,
                             id
                             ));
 
-                AddDangerNotification(string.Format(Notifications.DeleteFail));
+                    AddDangerNotification(string.Format(Notifications.DeleteFail));
 
-                Redirect($"/Stories/Details/{id}");
+                    return Redirect($"/Stories/Details/{id}");
+                }
             }
 
             try
