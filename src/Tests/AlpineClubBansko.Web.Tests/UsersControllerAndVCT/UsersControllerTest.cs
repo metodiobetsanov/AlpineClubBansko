@@ -1,8 +1,7 @@
 ﻿using AlpineClubBansko.Data.Models;
 using AlpineClubBansko.Services.Contracts;
 using AlpineClubBansko.Services.Models.UserViewModels;
-using AlpineClubBansko.Web.Areas.Manage.Controllers.Users;
-using AlpineClubBansko.Web.Models;
+using AlpineClubBansko.Web.Controllers.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +11,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using Shouldly;
 using System;
-using System.Collections.Generic;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace AlpineClubBansko.Web.Tests.UsersControllerAndVCT
