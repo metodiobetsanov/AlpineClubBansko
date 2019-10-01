@@ -1,52 +1,81 @@
-# ASP.NET Core
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
-trigger:
-- master
-
 pool:
   vmImage: 'Ubuntu-16.04'
+  demands:
+    - npm
 
 variables:
   buildConfiguration: 'Release'
+  dotnetSdkVersion: '2.2.100'
 
 steps:
-- task: UseDotNet@2
-  displayName: 'Use .NET Core SDK 2.2.100'
+- task: DotNetCoreInstaller@0
+  displayName: 'Use .NET Core SDK $(dotnetSdkVersion)'
   inputs:
-    packageType: 'sdk'
-    version: '2.2.100'
+    version: '$(dotnetSdkVersion)'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Restore'
+  displayName: 'Restore project dependencies'
   inputs:
     command: 'restore'
     projects: 'src/Web/AlpineClubBansko.Web/AlpineClubBansko.Web.csproj'
-    feedsToUse: 'select'
+
+- task: SonarCloudPrepare@1
+  displayName: 'Prepare SonarCloud analysis'
+  inputs:
+    SonarCloud: 'SonarCloud connection 1'
+    organization: '$(organization)'
+    projectKey: '$(projectKey)'
+    projectName: '$(projectName)'
+    projectVersion: '$(Build.BuildNumber)'
+    extraProperties: |
+     sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/Coverage/coverage.opencover.xml
+     sonar.exclusions=**/wwwroot/lib/**/*
+
 - task: DotNetCoreCLI@2
-  displayName: 'Build'
+  displayName: 'Build the project - $(buildConfiguration)'
   inputs:
     command: 'build'
+    arguments: '--no-restore --configuration $(buildConfiguration)'
     projects: 'src/Web/AlpineClubBansko.Web/AlpineClubBansko.Web.csproj'
-    arguments: '--no-restore --configuration Release'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Run unit tests'
+  displayName: 'Install ReportGenerator'
+  inputs:
+    command: custom
+    custom: tool
+    arguments: 'install --global dotnet-reportgenerator-globaltool'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Run unit tests - $(buildConfiguration)'
   inputs:
     command: 'test'
-    arguments: '--no-build --configuration Release'
+    arguments: '--no-build --configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat="cobertura%2copencover" /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
     publishTestResults: true
-    projects: 'src/Tests/**/*.Tests.csproj'
+    projects: '**/*.Tests.csproj'
+
+- script: |
+    reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
+  displayName: 'Create code coverage report'
+
+- task: SonarCloudAnalyze@1
+  displayName: 'Run SonarCloud code analysis'
+
+- task: SonarCloudPublish@1
+  displayName: 'Publish SonarCloud quality gate results'
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage report'
+  inputs:
+    codeCoverageTool: 'cobertura'
+    summaryFileLocation: '$(Build.SourcesDirectory)/**/coverage.cobertura.xml'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Publish the project - Release'
+  displayName: 'Publish the project - $(buildConfiguration)'
   inputs:
     command: 'publish'
     projects: 'src/Web/AlpineClubBansko.Web/AlpineClubBansko.Web.csproj'
     publishWebProjects: false
-    arguments: '--no-build --configuration Release --output $(Build.ArtifactStagingDirectory)/Release'
+    arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
     zipAfterPublish: true
 
 - task: PublishBuildArtifacts@1
