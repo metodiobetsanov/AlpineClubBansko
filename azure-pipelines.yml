@@ -17,7 +17,7 @@ steps:
   displayName: 'Restore project dependencies'
   inputs:
     command: 'restore'
-    projects: 'src/Web/AlpineClubBansko.Web/AlpineClubBansko.Web.csproj'
+    projects: '**/*.csproj'
 
 - task: SonarCloudPrepare@1
   displayName: 'Prepare SonarCloud analysis'
@@ -36,7 +36,7 @@ steps:
   inputs:
     command: 'build'
     arguments: '--no-restore --configuration $(buildConfiguration)'
-    projects: 'src/Web/AlpineClubBansko.Web/AlpineClubBansko.Web.csproj'
+    projects: '**/*.Web.csproj'
 
 - task: DotNetCoreCLI@2
   displayName: 'Install ReportGenerator'
